@@ -1,55 +1,71 @@
 <template>
   <div id="console">
     <div id="backlight" v-bind:class="{ 'backlight-on': backlight, 'backlight-off': !backlight }"></div>
+
     <DateTime :value=wx.ts></DateTime>
-    <MoonIcon :value=wx.ts></MoonIcon>
+    <MoonIcon :value="hourly"></MoonIcon>
     <ForecastIcon/>
 
     <WindDirectionSvg :value=wx.wind_dir_at_hi_speed_last_10_min :outline=true></WindDirectionSvg>
     <WindDirectionSvg :value=wx.wind_dir_last :outline=false></WindDirectionSvg>
     <WindSpeed :value=wx.wind_speed_last :decimals=1 unit="MPH"></WindSpeed>
 
-    <Metric label="TEMP OUT" :top=109 :left=215 :width=80 :value=wx.temp :decimals=1 :sup=true unit="°F"></Metric>
-    <Metric label="HUM OUT" :top=109 :left=298 :width=62 :value=wx.hum :sup=true unit="%"></Metric>
-    <Metric label="BAROMETER" :top=109 :left=370 :width=105 :value=wx.bar_sea_level :decimals=2 :sup=false unit="inHg" :trend=bar_trend></Metric>
+    <Metric label="TEMP OUT" :value=wx.temp :top=109 :left=215 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
+    <Metric label="HUM OUT" :value=wx.hum :top=109 :left=298 :width=62 :sup=true unit="%"></Metric>
+    <Metric label="BAROMETER" :value=wx.bar_sea_level :top=109 :left=370 :width=105 :decimals=2 :sup=false unit="inHg" :trend=bar_trend></Metric>
 
-    <Metric label="FEELS LIKE" :top=164 :left=215 :width=80 :value=wx.thw_index :decimals=1 :sup=true unit="°F"></Metric>
-    <Metric label="DEW POINT" :top=164 :left=380 :width=80 :value=wx.dew_point :decimals=1 :sup=true unit="°F"></Metric>
+    <Metric label="FEELS LIKE" :value=wx.thw_index :top=164 :left=215 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
+    <Metric label="DEW POINT" :value=wx.dew_point :top=164 :left=380 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
 
-    <Metric label="DAILY RAIN" :top=225 :left=215 :width=70 :value="wx.rainfall_daily / 100" :decimals=2 unit="in"></Metric>
-    <Metric label="HOURLY RAIN" :top=225 :left=298 :width=80 :value="wx.rainfall_last_60_min / 100" :decimals=2 unit="in"></Metric>
-    <Metric label="RAIN RATE" :top=225 :left=400 :width=70 :value="wx.rain_rate_last / 100" :decimals=2 unit="in"></Metric>
+    <Metric label="DAILY RAIN" :value="wx.rainfall_daily / 100" :top=225 :left=215 :width=70 :decimals=2 unit="in"></Metric>
+    <Metric label="HOURLY RAIN" :value="wx.rainfall_last_60_min / 100" :top=225 :left=298 :width=80 :decimals=2 unit="in"></Metric>
+    <Metric label="RAIN RATE" :value="wx.rain_rate_last / 100" :top=225 :left=400 :width=70 :decimals=2 unit="in"></Metric>
 
-    <!-- Data Indicator -->
-    <transition name="fade">
-      <span class="message" style="top: 284px; right: 250px;">X</span>
-    </transition>
+    <!-- <div style="top: 209px; left: 68px; width: 132px; height: 62px; position: absolute;"> -->
+      <!-- <span class="units" style="font-size: 9px;">Last 24 hrs</span>
+      <span class="units" style="top: 197px; right: 530px; font-size: 9px;">Every 1 hr</span> -->
+      <LineGraph class="graph" :value=wx.wind_speed_last />
+      <!-- <span class="units" style="top: 273px; left: 68px; font-size: 8px;">Vertical Scale: 1</span> -->
+    <!-- </div> -->
+
+    <span class="message" style="top: 286px; right: 250px; position: absolute;"><i class="antenna" :class="{ 'antenna-on': antenna, 'antenna-off': !antenna }"></i></span>
+
+    <Ticker :messages="messages"/>
 
     <button v-on:click="toggleLight" class="button" style="top: 48px; left: 620px;"></button>
+    <WxDataService @wx="onWxData"/>
   </div>
 </template>
 
 <script>
 import DateTime from "./DateTime.vue"
 import ForecastIcon from "./ForecastIcon.vue"
-import MoonIcon from "./MoonIcon.vue"
+import LineGraph from "./LineGraph.vue"
 import Metric from "./Metric.vue"
-import WindSpeed from "./WindSpeed.vue"
+import MoonIcon from "./MoonIcon.vue"
+import Ticker from "./Ticker.vue"
 import WindDirectionSvg from "./WindDirectionSvg.vue"
+import WindSpeed from "./WindSpeed.vue"
+import WxDataService from "./WxDataService.vue"
 
 export default {
   name: "Console",
   components: {
     DateTime,
     ForecastIcon,
-    MoonIcon,
+    LineGraph,
     Metric,
+    MoonIcon,
+    Ticker,
+    WindDirectionSvg,
     WindSpeed,
-    WindDirectionSvg
+    WxDataService,
   },
   data() {
     return {
+      antenna: false,
       backlight: false,
+      messages: ["Hello World"],
       wx: {
         bar_sea_level: 0,
         bar_trend: 0,
@@ -75,23 +91,18 @@ export default {
       if (value < 0.00 && value > -0.02) return 37;
       if (value <= -0.02) return 74;
       return 0;
+    },
+    hourly() {
+      // Moon needs only hourly precision to reduce updates
+      let ts = this.wx.ts || 0;
+      return Math.round(ts / 3600) * 3600;
     }
   },
-  mounted() {
-    this.$mqtt.subscribe("weather/#")
-  },
   methods: {
-    toggleLight: function(event) { this.backlight = !this.backlight }
-  },
-  mqtt: {
-    "weather/#" (data, topic) {
-      try {
-        const wx = JSON.parse(data.toString());
-        console.log("mqtt:" + JSON.stringify(wx, null, 2));
+    toggleLight: function() { this.backlight = !this.backlight },
+    onWxData: function(wx) {
+        this.antenna = !this.antenna;
         this.wx = Object.assign({}, this.wx, wx);
-      } catch (e) {
-        console.log("mqtt:" + e + " (" + data.toString() + ")");
-      }
     }
   }
 }
@@ -116,12 +127,22 @@ export default {
   src: url("./fonts/digi.ttf")
 }
 
-.digital {
-    font-family: Digi, Arial;
-    color: #053D6C;
-    font-size: 32px;
-    font-weight: 400;
-    text-shadow: none;
+.antenna {
+    background-image: url("./images/antenna-icons.png");
+    background-repeat: no-repeat;
+    display: block;
+}
+
+.antenna-off {
+    width: 19px;
+    height: 20px;
+    background-position: -5px -5px;
+}
+
+.antenna-on {
+    width: 19px;
+    height: 20px;
+    background-position: -34px -5px;
 }
 
 .backlight-on, .backlight-off {
@@ -150,20 +171,37 @@ export default {
     cursor: pointer;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.digital {
+    font-family: Digi, Arial;
+    color: #053D6C;
+    font-size: 32px;
+    font-weight: 400;
+    text-shadow: none;
 }
 
-.fade-enter, .fade-leave-to {
+.slide-enter-active, .slide-leave-active  {
+  transition: all .6s ease;
+}
+
+.slide-enter, .slide-leave-to
+{
+  transform: translateY(-100%);
   opacity: 0;
+}
+
+.graph {
+  position: relative;
+  top: 210px;
+  left: 60px;
+  width: 142px;
+  height: 73px;
 }
 
 .message {
     font-family: Digi, Arial;
     color: #053D6C;
-    font-weight: 400;
     font-size: 20px;
+    font-weight: 400;
     text-shadow: none;
-    position: absolute;
 }
 </style>

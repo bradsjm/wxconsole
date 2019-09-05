@@ -1,10 +1,10 @@
 <template>
-  <div style="position: absolute;" v-bind:style="{ top: top + 'px', left: left + 'px', width: width + 'px' }">
-    <div class="label">{{ label }}</div>
-    <div class="digital metric">
-      <span v-if="trend" style="margin-top: 5px; right: 5px; display: block; position: absolute;" :style="style" class="units middle">&#8594;</span>
-      <span>{{ valueTween.toFixed(decimals) }}</span>
-      <span class="units" v-bind:class="{ super: sup }">&nbsp;{{ unit }}</span>
+  <div class="label center" style="position: absolute;" v-bind:style="{ top: top + 'px', left: left + 'px', width: width + 'px' }">
+    <div>{{ label }}</div>
+    <div>
+      <div v-if="trend" :style="style" class="trend">&#8594;</div>
+      <span class="digital">{{ valueTween.toFixed(decimals || 0) }}</span>
+      <span v-bind:class="{ super: sup }">&nbsp;{{ unit }}</span>
     </div>
   </div>
 </template>
@@ -15,9 +15,9 @@ import VueMixinTween from 'vue-mixin-tween';
 export default {
   name: "Metric",
   props: {
-    top: Number,
-    left: Number,
-    width: Number,
+    top: [Number, String],
+    left: [Number, String],
+    width: [Number, String],
     label: String,
     value: Number,
     decimals: Number,
@@ -27,8 +27,9 @@ export default {
   },
   computed: {
     style () {
+      let trend = this.trend;
       return {
-        transform: 'rotate(' + this.trend + 'deg)'
+        transform: 'rotate(' + trend + 'deg)'
       }
     }
   },
@@ -42,7 +43,7 @@ export default {
     VueMixinTween('value', 250)
   ],
   watch: {
-    value: function(val) {
+    value: function(oldValue, newValue) {
       this.count++;
       const differential = (newValue - this.mean) / this.count;
       this.mean = this.mean + differential;
@@ -52,32 +53,30 @@ export default {
 </script>
 
 <style>
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.super {
+  vertical-align: top;
+  line-height: 20px;
+}
+
 .label {
   font-family: Arial;
   font-size: 11px;
   font-weight: bold;
   text-shadow: none;
-  text-align: center;
   color: #053D6C;
 }
 
-.metric {
-  text-align: right;
-}
-
-.super {
-  vertical-align: super;
-}
-
-.middle {
-  vertical-align: middle
-}
-
-.units {
-  font-family: Arial;
-  font-size: 11px;
-  font-weight: normal;
-  text-shadow: none;
-  color: #053D6C;
+.trend {
+  margin-top: 3px;
+  right: 5px;
+  position: absolute;
 }
 </style>

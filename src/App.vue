@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Console from "./components/Console/Console.vue"
+import Console from "@/components/Console/Console.vue"
 
 export default {
   name: "app",
