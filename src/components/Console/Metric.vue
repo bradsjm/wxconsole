@@ -2,7 +2,7 @@
   <div style="position: absolute;" v-bind:style="{ top: top + 'px', left: left + 'px', width: width + 'px' }">
     <div class="label">{{ label }}</div>
     <div class="digital metric">
-      <span class="units middle">{{ trend | flag }}</span>
+      <span v-if="trend" style="margin-top: 5px; right: 5px; display: block; position: absolute;" :style="style" class="units middle">&#8594;</span>
       <span>{{ valueTween.toFixed(decimals) }}</span>
       <span class="units" v-bind:class="{ super: sup }">&nbsp;{{ unit }}</span>
     </div>
@@ -13,7 +13,7 @@
 import VueMixinTween from 'vue-mixin-tween';
 
 export default {
-  name: "Temperature",
+  name: "Metric",
   props: {
     top: Number,
     left: Number,
@@ -25,15 +25,29 @@ export default {
     sup: Boolean,
     trend: Number
   },
-  filters: {
-    flag: function(value) {
-      if (value > 0) return "\u2197";
-      if (value < 0) return "\u2198";
+  computed: {
+    style () {
+      return {
+        transform: 'rotate(' + this.trend + 'deg)'
+      }
+    }
+  },
+  data() {
+    return {
+      count: 0,
+      mean: 0
     }
   },
   mixins: [
-    VueMixinTween('value', 1000)
-  ]
+    VueMixinTween('value', 250)
+  ],
+  watch: {
+    value: function(val) {
+      this.count++;
+      const differential = (newValue - this.mean) / this.count;
+      this.mean = this.mean + differential;
+    }
+  }
 }
 </script>
 

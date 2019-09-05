@@ -1,7 +1,8 @@
 <template>
   <div style="position: absolute; top: 75px; left: 60px; width: 140px;">
     <div class="label left">WIND</div>
-    <div class="digital center" style="padding-top: 30px;">{{ valueTween.toFixed(decimals) }}</div>
+    <div class="digital center" style="padding-top: 25px;">{{ valueTween.toFixed(decimals) }}</div>
+    <div class="line" :style="{ width: Math.min(60, valueTween) + 'px' }"></div>
     <div class="label center" style="padding-top: 7px;">{{ unit }}</div>
   </div>
 </template>
@@ -18,7 +19,7 @@ export default {
     unit: String
   },
   mixins: [
-    VueMixinTween('value', 1000)
+    VueMixinTween('value', 1500)
   ]
 }
 </script>
@@ -40,4 +41,8 @@ export default {
   color: #053D6C;
 }
 
+.line {
+  border-bottom: 2px dotted black;
+  margin-left: 40px;
+}
 </style>

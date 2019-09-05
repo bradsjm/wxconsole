@@ -1,5 +1,5 @@
 <template>
-  <span id="datetime" class="digital-small">{{ value | format }}</span>
+  <span v-if="value > 0" id="datetime" class="digital-small">{{ value | format }}</span>
 </template>
 
 <script>
