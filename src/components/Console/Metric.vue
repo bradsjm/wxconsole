@@ -1,21 +1,21 @@
 <template>
   <div
-    class="label center"
-    style="position: absolute;"
+    class="label center tiny"
     :style="{ top: top, left: left, width: width }"
   >
-    <div>{{ label }}</div>
-    <div>
-      <div
-        v-if="trend"
-        :style="style"
-        class="trend"
-      >
-        &#8594;
-      </div>
-      <span class="digital">{{ valueTween.toFixed(decimals || 0) }}</span>
-      <span :class="{ super: sup }">&nbsp;{{ unit }}</span>
+    {{ label }}
+    <span class="digital large">{{ valueTween.toFixed(decimals || 0) }}</span>
+    <div
+      v-if="trend"
+      :style="style"
+      class="trend"
+    >
+      &#8594;
     </div>
+    <span
+      :class="{ super: sup }"
+      v-html="unit"
+    />
   </div>
 </template>
 
@@ -26,15 +26,15 @@ export default {
   name: "Metric",
   props: {
     top: {
-      type: [Number, String],
+      type: String,
       required: true
     },
     left: {
-      type: [Number, String],
+      type: String,
       required: true
     },
     width: {
-      type: [Number, String],
+      type: String,
       required: true
     },
     label: {
@@ -90,30 +90,13 @@ export default {
 </script>
 
 <style>
-.center {
-  text-align: center;
-}
-
-.right {
-  text-align: right;
-}
-
 .super {
   vertical-align: top;
   line-height: 20px;
 }
 
-.label {
-  font-family: Arial;
-  font-size: 11px;
-  font-weight: bold;
-  text-shadow: none;
-  color: #053D6C;
-}
-
 .trend {
-  margin-top: 3px;
-  right: 5px;
-  position: absolute;
+  top: 15px;
+  right: 15px;
 }
 </style>

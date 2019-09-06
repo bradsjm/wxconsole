@@ -1,15 +1,25 @@
 <template>
-  <span
+  <div
     v-if="value > 0"
-    id="datetime"
-    class="digital-small"
-  >{{ value | format }}</span>
+    :style="{ top: top, left: left }"
+    class="digital small"
+  >
+    {{ value | format }}
+  </div>
 </template>
 
 <script>
 export default {
   name: "DateTime",
   props: {
+    top: {
+      type: String,
+      required: true
+    },
+    left: {
+      type: String,
+      required: true
+    },
     value: {
       type: Number,
       required: true
@@ -32,17 +42,4 @@ export default {
 </script>
 
 <style>
-#datetime {
-  top: 68px;
-  right: 260px;
-}
-
-.digital-small {
-    font-family: Digi, Arial;
-    color: #053D6C;
-    font-size: 18px;
-    font-weight: 400;
-    text-shadow: none;
-    position: absolute;
-}
 </style>

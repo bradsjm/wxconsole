@@ -1,6 +1,6 @@
 <template>
   <div
-    id="forecastIcon"
+    :style="{ top: top, left: left }"
     :class="sprite"
   />
 </template>
@@ -9,6 +9,14 @@
 export default {
   name: "ForecastIcon",
   props: {
+    top: {
+      type: String,
+      required: true
+    },
+    left: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {

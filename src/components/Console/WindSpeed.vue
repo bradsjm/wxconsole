@@ -1,21 +1,20 @@
 <template>
-  <div style="position: absolute; top: 75px; left: 60px; width: 140px;">
-    <div class="label left">
+  <div
+    style="width: 100%; height: 100%;"
+    :style="{ top: top, left: left }"
+  >
+    <div class="label tiny">
       WIND
     </div>
     <div
-      class="digital center"
-      style="padding-top: 25px;"
+      class="digital center large"
+      style="top: 42px; width: 100%;"
     >
       {{ valueTween.toFixed(decimals) }}
     </div>
     <div
-      class="line"
-      :style="{ width: Math.min(60, valueTween) + 'px' }"
-    />
-    <div
-      class="label center"
-      style="padding-top: 7px;"
+      class="label center tiny"
+      style="top: 80px; width: 100%;"
     >
       {{ unit }}
     </div>
@@ -29,6 +28,14 @@ import TWEEN from '@tweenjs/tween.js';
 export default {
   name: "WindSpeed",
   props: {
+    top: {
+      type: String,
+      required: true
+    },
+    left: {
+      type: String,
+      required: true
+    },
     value: {
       type: Number,
       required: true
@@ -48,25 +55,5 @@ export default {
 }
 </script>
 
-<style scoped>
-.left {
-  text-align: left;
-}
-
-.center {
-  text-align: center;
-}
-
-.label {
-  font-family: Arial;
-  font-size: 11px;
-  font-weight: bold;
-  text-shadow: none;
-  color: #053D6C;
-}
-
-.line {
-  border-bottom: 2px dotted black;
-  margin-left: 40px;
-}
+<style>
 </style>

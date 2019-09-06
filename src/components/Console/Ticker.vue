@@ -1,16 +1,14 @@
 <template>
   <div
     class="ticker"
-    style="top: 284px; left: 70px; position: absolute;"
+    :style="{ top: top, left: left }"
   >
-    <transition-group name="fade">
-      <li
-        v-for="m in display"
-        :key="m"
-      >
-        {{ m }}
-      </li>
-    </transition-group>
+    <li
+      v-for="m in display"
+      :key="m"
+    >
+      {{ m }}
+    </li>
   </div>
 </template>
 
@@ -18,6 +16,14 @@
 export default {
   name: "Ticker",
   props: {
+    top: {
+      type: String,
+      required: true
+    },
+    left: {
+      type: String,
+      required: true
+    },
     messages: {
       type: Array,
       required: true

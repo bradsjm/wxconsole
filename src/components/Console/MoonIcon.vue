@@ -1,6 +1,7 @@
 <template>
   <div
-    id="moonIcon"
+    v-if="value > 0"
+    :style="{ top: top, left: left }"
     :class="sprite"
   />
 </template>
@@ -11,6 +12,14 @@ export default {
   props: {
     value: {
      type: Number,
+      required: true
+    },
+    top: {
+      type: String,
+      required: true
+    },
+    left: {
+      type: String,
       required: true
     }
   },
@@ -38,12 +47,6 @@ export default {
 </script>
 
 <style>
-#moonIcon {
-  top: 68px;
-  left: 265px;
-  position: absolute;
-}
-
 .m0, .m1, .m2, .m3, .m4, .m5, .m6, .m7 {
     background: url('./images/moon-icons.png') no-repeat;
 }
