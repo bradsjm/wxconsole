@@ -1,6 +1,9 @@
 <template>
   <div style="top: 86px; left: 80px; position: absolute;">
-    <svg width="100" height="100">
+    <svg
+      width="100"
+      height="100"
+    >
       <g :transform="transform">
         <path
           :fill="fill"
@@ -18,8 +21,14 @@ import VueMixinTween from "vue-mixin-tween";
 export default {
   name: "WindDirectionSvg",
   props: {
-    value: Number,
-    outline: Boolean
+    value: {
+      type: Number,
+      required: true
+    },
+    outline: {
+      type: Boolean,
+      required: false
+    }
   },
   computed: {
     transform () {

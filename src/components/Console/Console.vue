@@ -1,39 +1,136 @@
 <template>
   <div id="console">
-    <div id="backlight" v-bind:class="{ 'backlight-on': backlight, 'backlight-off': !backlight }"></div>
+    <div
+      id="backlight"
+      :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }"
+    />
 
-    <DateTime :value=time></DateTime>
-    <MoonIcon :value=time></MoonIcon>
-    <ForecastIcon/>
+    <DateTime :value="time" />
+    <MoonIcon :value="time" />
+    <ForecastIcon />
 
-    <WindDirectionSvg :value=wx.wind_dir_at_hi_speed_last_10_min :outline=true></WindDirectionSvg>
-    <WindDirectionSvg :value=wx.wind_dir_last :outline=false></WindDirectionSvg>
-    <WindSpeed :value=wx.wind_speed_last :decimals=1 unit="MPH"></WindSpeed>
+    <WindDirectionSvg
+      :value="wx.wind_dir_at_hi_speed_last_10_min"
+      :outline="true"
+    />
+    <WindDirectionSvg
+      :value="wx.wind_dir_last"
+      :outline="false"
+    />
+    <WindSpeed
+      :value="wx.wind_speed_last"
+      :decimals="1"
+      unit="MPH"
+    />
 
-    <Metric label="TEMP OUT" :value=wx.temp :top=109 :left=215 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
-    <Metric label="HUM OUT" :value=wx.hum :top=109 :left=298 :width=62 :sup=true unit="%"></Metric>
-    <Metric label="BAROMETER" :value=wx.bar_sea_level :top=109 :left=370 :width=105 :decimals=2 :sup=false unit="inHg" :trend=bar_trend></Metric>
+    <Metric
+      label="TEMP OUT"
+      :value="wx.temp"
+      top="109px"
+      left="215px"
+      width="80px"
+      :decimals="1"
+      :sup="true"
+      unit="°F"
+    />
+    <Metric
+      label="HUM OUT"
+      :value="wx.hum"
+      top="109px"
+      left="298px"
+      width="62px"
+      :sup="true"
+      unit="%"
+    />
+    <Metric
+      label="BAROMETER"
+      :value="wx.bar_sea_level"
+      top="109px"
+      left="370px"
+      width="105px"
+      :decimals="2"
+      :sup="false"
+      unit="inHg"
+      :trend="bar_trend"
+    />
 
-    <Metric label="FEELS LIKE" :value=wx.thw_index :top=164 :left=215 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
-    <Metric label="DEW POINT" :value=wx.dew_point :top=164 :left=380 :width=80 :decimals=1 :sup=true unit="°F"></Metric>
+    <Metric
+      label="FEELS LIKE"
+      :value="wx.thw_index"
+      top="164px"
+      left="215px"
+      width="80px"
+      :decimals="1"
+      :sup="true"
+      unit="°F"
+    />
+    <Metric
+      label="DEW POINT"
+      :value="wx.dew_point"
+      top="164px"
+      left="380px"
+      width="80px"
+      :decimals="1"
+      :sup="true"
+      unit="°F"
+    />
 
-    <Metric label="DAILY RAIN" :value="wx.rainfall_daily / 100" :top=225 :left=215 :width=70 :decimals=2 unit="in"></Metric>
-    <Metric label="HOURLY RAIN" :value="wx.rainfall_last_60_min / 100" :top=225 :left=298 :width=80 :decimals=2 unit="in"></Metric>
-    <Metric label="RAIN RATE" :value="wx.rain_rate_last / 100" :top=225 :left=400 :width=70 :decimals=2 unit="in"></Metric>
+    <Metric
+      label="DAILY RAIN"
+      :value="wx.rainfall_daily / 100"
+      top="225px"
+      left="215px"
+      width="70px"
+      :decimals="2"
+      unit="in"
+    />
+    <Metric
+      label="HOURLY RAIN"
+      :value="wx.rainfall_last_60_min / 100"
+      top="225px"
+      left="298px"
+      width="80px"
+      :decimals="2"
+      unit="in"
+    />
+    <Metric
+      label="RAIN RATE"
+      :value="wx.rain_rate_last / 100"
+      top="225px"
+      left="400px"
+      width="70px"
+      :decimals="2"
+      unit="in"
+    />
 
     <!-- <div style="top: 209px; left: 68px; width: 132px; height: 62px; position: absolute;"> -->
-      <!-- <span class="units" style="font-size: 9px;">Last 24 hrs</span>
+    <!-- <span class="units" style="font-size: 9px;">Last 24 hrs</span>
       <span class="units" style="top: 197px; right: 530px; font-size: 9px;">Every 1 hr</span> -->
-      <LineGraph class="graph" label="Wind Speed" :value=wx.wind_speed_last :seconds=60 />
-      <!-- <span class="units" style="top: 273px; left: 68px; font-size: 8px;">Vertical Scale: 1</span> -->
+    <LineGraph
+      class="graph"
+      label="Wind Speed"
+      :value="wx.wind_speed_last"
+      :seconds="60"
+    />
+    <!-- <span class="units" style="top: 273px; left: 68px; font-size: 8px;">Vertical Scale: 1</span> -->
     <!-- </div> -->
 
-    <span class="message" style="top: 286px; right: 250px; position: absolute;"><i class="antenna" :class="{ 'antenna-on': antenna, 'antenna-off': !antenna }"></i></span>
+    <span
+      class="message"
+      style="top: 286px; right: 250px; position: absolute;"
+    ><i
+      class="antenna"
+      :class="{ 'antenna-on': antenna, 'antenna-off': !antenna }"
+    /></span>
 
-    <Ticker :messages="messages"/>
+    <Ticker :messages="messages" />
 
-    <button v-on:click="toggleLight" class="button" style="top: 48px; left: 620px;"></button>
-    <WxDataService @wx="onWxData"/>
+    <button
+      @click="toggleLight"
+      class="button"
+      style="top: 48px; left: 620px;"
+    />
+    <WxDataService @wx="onWxData" />
   </div>
 </template>
 
@@ -65,7 +162,7 @@ export default {
     return {
       antenna: false,
       backlight: false,
-      messages: ["Hello World"],
+      messages: ["Hello World","Testing line 2","Test 3"],
       wx: {
         bar_sea_level: 0,
         bar_trend: 0,
@@ -124,7 +221,7 @@ export default {
 
 @font-face {
   font-family: Digi;
-  src: url("./fonts/digi.ttf")
+  src: url("./fonts/digi.woff")
 }
 
 .antenna {
@@ -177,6 +274,7 @@ export default {
     font-size: 32px;
     font-weight: 400;
     text-shadow: none;
+    font-variant-numeric: tabular-nums;
 }
 
 .slide-enter-active, .slide-leave-active  {

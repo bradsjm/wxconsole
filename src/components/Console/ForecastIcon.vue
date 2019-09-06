@@ -1,5 +1,8 @@
 <template>
-  <div id="forecastIcon" v-bind:class="sprite"></div>
+  <div
+    id="forecastIcon"
+    :class="sprite"
+  />
 </template>
 
 <script>

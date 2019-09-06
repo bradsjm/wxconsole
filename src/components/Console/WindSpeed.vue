@@ -1,25 +1,49 @@
 <template>
   <div style="position: absolute; top: 75px; left: 60px; width: 140px;">
-    <div class="label left">WIND</div>
-    <div class="digital center" style="padding-top: 25px;">{{ valueTween.toFixed(decimals) }}</div>
-    <div class="line" :style="{ width: Math.min(60, valueTween) + 'px' }"></div>
-    <div class="label center" style="padding-top: 7px;">{{ unit }}</div>
+    <div class="label left">
+      WIND
+    </div>
+    <div
+      class="digital center"
+      style="padding-top: 25px;"
+    >
+      {{ valueTween.toFixed(decimals) }}
+    </div>
+    <div
+      class="line"
+      :style="{ width: Math.min(60, valueTween) + 'px' }"
+    />
+    <div
+      class="label center"
+      style="padding-top: 7px;"
+    >
+      {{ unit }}
+    </div>
   </div>
 </template>
 
 <script>
 import VueMixinTween from 'vue-mixin-tween';
+import TWEEN from '@tweenjs/tween.js';
 
 export default {
   name: "WindSpeed",
   props: {
-    label: String,
-    value: Number,
-    decimals: Number,
-    unit: String
+    value: {
+      type: Number,
+      required: true
+    },
+    decimals: {
+      type: Number,
+      default: 0
+    },
+    unit: {
+      type: String,
+      default: "MPH"
+    }
   },
   mixins: [
-    VueMixinTween('value', 1500)
+    VueMixinTween('value', 1500, TWEEN.Easing.Exponential.InOut)
   ]
 }
 </script>

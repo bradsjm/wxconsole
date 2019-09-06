@@ -1,12 +1,19 @@
 <template>
-  <span v-if="value > 0" id="datetime" class="digital-small">{{ value | format }}</span>
+  <span
+    v-if="value > 0"
+    id="datetime"
+    class="digital-small"
+  >{{ value | format }}</span>
 </template>
 
 <script>
 export default {
   name: "DateTime",
   props: {
-    value: Number
+    value: {
+      type: Number,
+      required: true
+    }
   },
   filters: {
     format: function (value) {

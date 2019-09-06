@@ -1,12 +1,18 @@
 <template>
-  <div id="moonIcon" v-bind:class="sprite"></div>
+  <div
+    id="moonIcon"
+    :class="sprite"
+  />
 </template>
 
 <script>
 export default {
   name: "MoonIcon",
   props: {
-     value: Number
+    value: {
+     type: Number,
+      required: true
+    }
   },
   computed: {
     sprite: function() {

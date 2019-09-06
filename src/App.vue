@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <Console/>
+    <Console />
   </div>
 </template>
 
 <script>
-import Console from "@/components/Console/Console.vue"
+import Console from "@/components/Console/Console.vue";
 
 export default {
-  name: "app",
+  name: "App",
   components: {
     Console
   }
-}
+};
 </script>
 
 <style>

@@ -6,9 +6,18 @@ export default {
   extends: Line,
   name: "LineGraph",
   props: {
-    value: Number,
-    seconds: Number,
-    label: String
+    value: {
+      type: Number,
+      required: true
+    },
+    seconds: {
+      type: Number,
+      default: 10000
+    },
+    label: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
@@ -49,6 +58,9 @@ export default {
               time: {
                 tooltipFormat: 'LTS'
               },
+              gridLines: {
+                display: false
+              },
               ticks: {
                 display: false
               }
@@ -56,6 +68,9 @@ export default {
           ],
           yAxes: [
             {
+              gridLines: {
+                display: false
+              },
               ticks: {
                 display: false
               }
@@ -81,24 +96,33 @@ export default {
       }
     };
   },
+  watch:
+  {
+    value: function(oldValue, newValue){
+      this.data.datasets[0].data.push({
+        x: Date.now(),
+        y: newValue
+      })
+    }
+  },
   created() {
     // Configure real time data push
-    let vm = this;
+    //let vm = this;
     this.options.scales.xAxes[0].realtime =
     {
       duration: this.seconds * 1000 || 10000,
       delay: 3000,
-      refresh: 2500,
-      onRefresh: function(chart) {
-        chart.data.datasets[0].data.push({
-            x: Date.now(),
-            y: vm.value
-        })
-      }
+      // refresh: 2500,
+      // onRefresh: function(chart) {
+      //   chart.data.datasets[0].data.push({
+      //       x: Date.now(),
+      //       y: vm.value
+      //   })
+      //}
     }
   },
   mounted() {
     this.renderChart(this.data, this.options);
-  }
+  },
 };
 </script>

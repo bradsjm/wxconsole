@@ -1,10 +1,20 @@
 <template>
-  <div class="label center" style="position: absolute;" v-bind:style="{ top: top + 'px', left: left + 'px', width: width + 'px' }">
+  <div
+    class="label center"
+    style="position: absolute;"
+    :style="{ top: top, left: left, width: width }"
+  >
     <div>{{ label }}</div>
     <div>
-      <div v-if="trend" :style="style" class="trend">&#8594;</div>
+      <div
+        v-if="trend"
+        :style="style"
+        class="trend"
+      >
+        &#8594;
+      </div>
       <span class="digital">{{ valueTween.toFixed(decimals || 0) }}</span>
-      <span v-bind:class="{ super: sup }">&nbsp;{{ unit }}</span>
+      <span :class="{ super: sup }">&nbsp;{{ unit }}</span>
     </div>
   </div>
 </template>
@@ -15,15 +25,42 @@ import VueMixinTween from 'vue-mixin-tween';
 export default {
   name: "Metric",
   props: {
-    top: [Number, String],
-    left: [Number, String],
-    width: [Number, String],
-    label: String,
-    value: Number,
-    decimals: Number,
-    unit: String,
-    sup: Boolean,
-    trend: Number
+    top: {
+      type: [Number, String],
+      required: true
+    },
+    left: {
+      type: [Number, String],
+      required: true
+    },
+    width: {
+      type: [Number, String],
+      required: true
+    },
+    label: {
+      type: String,
+      required: true
+    },
+    value: {
+      type: Number,
+      required: true
+    },
+    decimals: {
+      type: Number,
+      default: 0
+    },
+    unit: {
+      type: String,
+      default: ""
+    },
+    sup: {
+      type: Boolean,
+      required: false
+    },
+    trend: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
     style () {
