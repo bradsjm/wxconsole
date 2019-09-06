@@ -11,7 +11,7 @@ export default {
   filters: {
     format: function (value) {
       if (!value) return '';
-      const date = new Date(value * 1000);
+      const date = new Date(value);
       return date.toLocaleDateString(undefined, {
           month: 'numeric',
           day: '2-digit',

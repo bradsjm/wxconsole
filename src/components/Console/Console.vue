@@ -2,8 +2,8 @@
   <div id="console">
     <div id="backlight" v-bind:class="{ 'backlight-on': backlight, 'backlight-off': !backlight }"></div>
 
-    <DateTime :value=wx.ts></DateTime>
-    <MoonIcon :value="hourly"></MoonIcon>
+    <DateTime :value=time></DateTime>
+    <MoonIcon :value=time></MoonIcon>
     <ForecastIcon/>
 
     <WindDirectionSvg :value=wx.wind_dir_at_hi_speed_last_10_min :outline=true></WindDirectionSvg>
@@ -24,7 +24,7 @@
     <!-- <div style="top: 209px; left: 68px; width: 132px; height: 62px; position: absolute;"> -->
       <!-- <span class="units" style="font-size: 9px;">Last 24 hrs</span>
       <span class="units" style="top: 197px; right: 530px; font-size: 9px;">Every 1 hr</span> -->
-      <LineGraph class="graph" :value=wx.wind_speed_last />
+      <LineGraph class="graph" label="Wind Speed" :value=wx.wind_speed_last :seconds=60 />
       <!-- <span class="units" style="top: 273px; left: 68px; font-size: 8px;">Vertical Scale: 1</span> -->
     <!-- </div> -->
 
@@ -92,10 +92,10 @@ export default {
       if (value <= -0.02) return 74;
       return 0;
     },
-    hourly() {
-      // Moon needs only hourly precision to reduce updates
+    time() {
+      // Convert to per minute precision to reduce updates
       let ts = this.wx.ts || 0;
-      return Math.round(ts / 3600) * 3600;
+      return (Math.round(ts / 60) * 60) * 1000;
     }
   },
   methods: {

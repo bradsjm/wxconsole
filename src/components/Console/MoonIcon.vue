@@ -10,7 +10,7 @@ export default {
   },
   computed: {
     sprite: function() {
-      let date = new Date(this.value * 1000);
+      let date = new Date(this.value);
       let year = date.getFullYear();
       let month = date.getMonth();
       let day = date.getDate();
