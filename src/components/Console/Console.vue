@@ -14,7 +14,7 @@
       <DateTime
         :value="now"
         top="8px"
-        left="275px"
+        left="280px"
       />
       <!-- Anemometer -->
       <div style="top: 10px; left: 15px; width: 120px; height: 125px;">
@@ -28,14 +28,14 @@
         <WindDirection
           :value="wx.wind_dir_at_hi_speed_last_10_min"
           :outline="true"
-          top="15px"
-          left="12px"
+          top="14px"
+          left="11px"
         />
         <WindDirection
           :value="wx.wind_dir_last"
           :outline="false"
-          top="15px"
-          left="12px"
+          top="14px"
+          left="11px"
         />
       </div>
       <!-- Line 1: Temperature and Barometric Pressure -->
@@ -119,26 +119,38 @@
         unit="in"
       />
 
-      <!-- <div style="top: 209px; left: 68px; width: 132px; height: 62px; position: absolute;"> -->
-      <!-- <span class="units" style="font-size: 9px;">Last 24 hrs</span>
-      <span class="units" style="top: 197px; right: 530px; font-size: 9px;">Every 1 hr</span>-->
+      <!-- Line Graph -->
+      <div
+        class="label"
+        style="top: 135px; left: 14px; font-size: 9px;"
+      >
+        Last minute
+      </div>
+      <div
+        class="label"
+        style="top: 135px; right: 285px; font-size: 9px;"
+      >
+        Every 2s
+      </div>
       <LineGraph
         class="graph"
         label="Wind Speed"
         :value="wx.wind_speed_last"
         :seconds="60"
       />
-      <!-- <span class="units" style="top: 273px; left: 68px; font-size: 8px;">Vertical Scale: 1</span> -->
-      <!-- </div> -->
-
+      <div
+        class="label"
+        style="top: 211px; left: 14px; font-size: 8px;"
+      >
+        Vertical Scale: 1x
+      </div>
       <div
         class="digital medium antenna"
         style="top: 223px; right: 10px;"
         :class="{ 'antenna-on': antenna, 'antenna-off': !antenna }"
       />
-
       <Ticker
-        top="224px"
+        top="223px"
         left="13px"
         :messages="messages"
       />
@@ -180,7 +192,7 @@ export default {
   data() {
     return {
       antenna: false,
-      backlight: false,
+      backlight: true,
       messages: ["Hello World", "Testing line 2", "Test 3"],
       wx: {
         bar_sea_level: 0,
@@ -322,8 +334,8 @@ export default {
 
 .graph {
   top: 149px;
-  left: 7px;
-  width: 143px;
+  left: 5px;
+  width: 145px;
   height: 73px;
 }
 </style>

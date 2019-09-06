@@ -34,6 +34,7 @@ export default {
       },
       options: {
         maintainAspectRatio: false,
+        responsive: true,
         elements: {
           point: {
             borderColor: "black",

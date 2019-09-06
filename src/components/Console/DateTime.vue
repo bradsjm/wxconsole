@@ -9,6 +9,7 @@
 </template>
 
 <script>
+
 export default {
   name: "DateTime",
   props: {
@@ -29,13 +30,10 @@ export default {
     format: function (value) {
       if (!value) return '';
       const date = new Date(value);
-      return date.toLocaleDateString(undefined, {
-          month: 'numeric',
-          day: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-      })
+      const dateOptions = { day: '2-digit', month: 'numeric', year: 'numeric' };
+      const timeOptions = { hour12: true, hour: '2-digit', minute:'2-digit' };
+      return date.toLocaleDateString([], dateOptions) + " " +
+             date.toLocaleTimeString([], timeOptions);
     }
   }
 }
