@@ -4,7 +4,8 @@
     :style="{ top: top, left: left, width: width }"
   >
     {{ label }}
-    <span class="digital large">{{ valueTween.toFixed(decimals || 0) }}</span>
+    <br>
+    <span class="digital large">{{ display }}</span>
     <div
       v-if="trend"
       :style="style"
@@ -63,6 +64,12 @@ export default {
     }
   },
   computed: {
+    display() {
+      var m = this.valueTween.toFixed(this.decimals || 0);
+      if (!this.value)
+        m = m.replace(/0/g, "-");
+      return m;
+    },
     style () {
       let trend = this.trend;
       return {

@@ -5,9 +5,11 @@
       <ForecastIcon
         top="8px"
         left="160px"
+        :icon="forecast.currently ? forecast.currently.icon : ''"
       />
       <MoonIcon
         :value="now"
+        icon="first-quarter"
         top="8px"
         left="220px"
       />
@@ -19,20 +21,20 @@
       <!-- Anemometer -->
       <div style="top: 10px; left: 15px; width: 120px; height: 125px;">
         <WindSpeed
-          :value="wx.wind_speed_last"
+          :value="wx.wind_speed_last||0"
           :decimals="1"
           unit="MPH"
           top="0px"
           left="0px"
         />
         <WindDirection
-          :value="wx.wind_dir_at_hi_speed_last_10_min"
+          :value="wx.wind_dir_at_hi_speed_last_10_min||0"
           :outline="true"
           top="14px"
           left="11px"
         />
         <WindDirection
-          :value="wx.wind_dir_last"
+          :value="wx.wind_dir_last||0"
           :outline="false"
           top="14px"
           left="11px"
@@ -41,7 +43,7 @@
       <!-- Line 1: Temperature and Barometric Pressure -->
       <Metric
         label="TEMP OUT"
-        :value="wx.temp"
+        :value="wx.temp||0"
         top="50px"
         left="160px"
         width="80px"
@@ -51,7 +53,7 @@
       />
       <Metric
         label="HUM OUT"
-        :value="wx.hum"
+        :value="wx.hum||0"
         top="50px"
         left="240px"
         width="80px"
@@ -60,7 +62,7 @@
       />
       <Metric
         label="BAROMETER"
-        :value="wx.bar_sea_level"
+        :value="wx.bar_sea_level||0"
         top="50px"
         left="320px"
         width="105px"
@@ -72,7 +74,7 @@
       <!-- Line 2: Feels like and Dew Point -->
       <Metric
         label="FEELS LIKE"
-        :value="wx.thw_index"
+        :value="wx.thw_index||0"
         top="105px"
         left="160px"
         width="80px"
@@ -82,18 +84,28 @@
       />
       <Metric
         label="DEW POINT"
-        :value="wx.dew_point"
+        :value="wx.dew_point||0"
         top="105px"
-        left="320px"
-        width="105px"
+        left="240px"
+        width="80px"
         :decimals="1"
         :sup="true"
         unit="&nbsp;&deg;F"
       />
+      <Metric
+        label="STORM WATCH"
+        :value="forecast.currently ? forecast.currently.nearestStormDistance : 0"
+        top="105px"
+        left="320px"
+        width="105px"
+        :decimals="1"
+        :sup="false"
+        unit="&nbsp;mi"
+      />
       <!-- Line 3: Rain Gauge -->
       <Metric
         label="DAILY RAIN"
-        :value="wx.rainfall_daily / 100"
+        :value="wx.rainfall_daily||0 / 100"
         top="160px"
         left="160px"
         width="80px"
@@ -102,7 +114,7 @@
       />
       <Metric
         label="HOURLY RAIN"
-        :value="wx.rainfall_last_60_min / 100"
+        :value="wx.rainfall_last_60_min||0 / 100"
         top="160px"
         left="240px"
         width="80px"
@@ -111,7 +123,7 @@
       />
       <Metric
         label="RAIN RATE"
-        :value="wx.rain_rate_last / 100"
+        :value="wx.rain_rate_last||0 / 100"
         top="160px"
         left="320px"
         width="105px"
@@ -135,14 +147,14 @@
       <LineGraph
         class="graph"
         label="Wind Speed"
-        :value="wx.wind_speed_last"
+        :value="wx.wind_speed_last||0"
         :seconds="60"
       />
       <div
         class="label"
         style="top: 211px; left: 14px; font-size: 8px;"
       >
-        Vertical Scale: 1x
+        Vertical Scale: Auto
       </div>
       <div
         class="digital medium antenna"
@@ -152,7 +164,8 @@
       <Ticker
         top="223px"
         left="13px"
-        :messages="messages"
+        :forecast="forecast"
+        :wx="wx"
       />
     </div>
     <button
@@ -161,7 +174,10 @@
       style="top: 28px; left: 600px;"
     />
 
-    <WxDataService @wx="onWxData" />
+    <WxMqttService
+      @forecast="onForecast"
+      @weather="onWeather"
+    />
   </div>
 </template>
 
@@ -170,11 +186,11 @@ import DateTime from "./DateTime.vue";
 import ForecastIcon from "./ForecastIcon.vue";
 import LineGraph from "./LineGraph.vue";
 import Metric from "./Metric.vue";
-import MoonIcon from "./MoonIcon.vue";
+import MoonIcon from "./MoonIcon2.vue";
 import Ticker from "./Ticker.vue";
 import WindDirection from "./WindDirection.vue";
 import WindSpeed from "./WindSpeed.vue";
-import WxDataService from "./WxDataService.vue";
+import WxMqttService from "./WxMqttService.vue";
 
 export default {
   name: "Console",
@@ -187,28 +203,14 @@ export default {
     Ticker,
     WindDirection,
     WindSpeed,
-    WxDataService
+    WxMqttService
   },
   data() {
     return {
       antenna: false,
       backlight: true,
-      messages: ["Hello World", "Testing line 2", "Test 3"],
-      wx: {
-        bar_sea_level: 0,
-        bar_trend: 0,
-        dew_point: 0,
-        hum: 0,
-        rainfall_daily: 0,
-        rainfall_last_60_min: 0,
-        rain_rate_last: 0,
-        temp: 0,
-        ts: 0,
-        thw_index: 0,
-        wind_dir_last: 0,
-        wind_dir_at_hi_speed_last_10_min: 0,
-        wind_speed_last: 0
-      }
+      forecast: {},
+      wx: {}
     };
   },
   computed: {
@@ -230,9 +232,13 @@ export default {
     toggleLight: function() {
       this.backlight = !this.backlight;
     },
-    onWxData: function(wx) {
+    onWeather: function(wx) {
       this.antenna = !this.antenna;
       this.wx = Object.assign({}, this.wx, wx);
+    },
+    onForecast: function(forecast) {
+      this.antenna = !this.antenna;
+      this.forecast = forecast;
     }
   }
 };

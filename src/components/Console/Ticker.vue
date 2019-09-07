@@ -24,24 +24,58 @@ export default {
       type: String,
       required: true
     },
-    messages: {
-      type: Array,
+    forecast: {
+      type: Object,
+      required: true
+    },
+    wx: {
+      type: Object,
       required: true
     }
   },
   data() {
     return {
-      display: this.messages.slice(0, 2)
+      messages: []
     }
+  },
+  computed:
+  {
+      display: function() { return this.messages.slice(0, 2) }
   },
   timers: {
     scroll: { time: 4000, autostart: true, repeat: true }
   },
   methods: {
+    build()
+    {
+      var msgs = [];
+      if (this.forecast.currently) {
+        const current = this.forecast.currently;
+        msgs.push(
+          "Currently it's " + current.summary,
+          "The nearest storm: " + current.nearestStormDistance.tofixed(1)
+                            + " miles "
+                            + this.direction(current.nearestStormBearing),
+          "Chance of rain: " + current.precipProbability.tofixed() * 100 + "%",
+          "Cloud cover: " + current.cloudCover.tofixed() * 100 + "%",
+          "Visibility: " + current.visibility.tofixed(1) + " miles",
+          "UV index: " + current.uvIndex,
+          "Ozone level: " + current.ozone
+        );
+      }
+
+      return msgs;
+    },
+    direction: function(bearing) {
+      const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+      const val = Math.floor((bearing / 22.5) + 0.5);
+      return arr[(val % 16)];
+    },
     scroll() {
-      if (this.messages) {
-        this.messages.push(this.messages.shift());
-        this.display = this.messages.slice(0, 2)
+      if (this.messages.length) {
+        this.messages.shift();
+      } else {
+        this.messages = this.build();
       }
     }
   }

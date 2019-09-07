@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="value > 0"
     :style="{ top: top, left: left }"
     class="digital small"
   >
