@@ -53,12 +53,12 @@ export default {
         const current = this.forecast.currently;
         msgs.push(
           "Currently it's " + current.summary,
-          "The nearest storm: " + current.nearestStormDistance.tofixed(1)
+          "The nearest storm: " + current.nearestStormDistance.toFixed(1)
                             + " miles "
                             + this.direction(current.nearestStormBearing),
-          "Chance of rain: " + current.precipProbability.tofixed() * 100 + "%",
-          "Cloud cover: " + current.cloudCover.tofixed() * 100 + "%",
-          "Visibility: " + current.visibility.tofixed(1) + " miles",
+          "Chance of rain: " + current.precipProbability.toFixed() * 100 + "%",
+          "Cloud cover: " + current.cloudCover.toFixed() * 100 + "%",
+          "Visibility: " + current.visibility.toFixed(1) + " miles",
           "UV index: " + current.uvIndex,
           "Ozone level: " + current.ozone
         );

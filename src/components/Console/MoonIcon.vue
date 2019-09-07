@@ -7,6 +7,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>New Moon</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -22,6 +23,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Waxing Crescent</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -39,6 +41,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>First Quarter</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -55,6 +58,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Waxing Gibbous</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -71,6 +75,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Full Moon</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -87,6 +92,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Waning Gibbous</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -103,6 +109,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Last Quarter</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -119,6 +126,7 @@
       height="100"
       viewBox="35 35 90 90"
     >
+      <title>Waning Crescent</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"

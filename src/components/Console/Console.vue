@@ -9,7 +9,6 @@
       />
       <MoonIcon
         :ts="now"
-        icon="first-quarter"
         top="8px"
         left="220px"
       />
@@ -86,7 +85,7 @@
         label="DEW POINT"
         :value="wx.dew_point||0"
         top="105px"
-        left="240px"
+        left="242px"
         width="80px"
         :decimals="1"
         :sup="true"
@@ -98,7 +97,7 @@
         top="105px"
         left="320px"
         width="105px"
-        :decimals="1"
+        :decimals="0"
         :sup="false"
         unit="&nbsp;mi"
       />

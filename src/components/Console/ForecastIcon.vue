@@ -6,6 +6,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Clear Sky</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -31,6 +32,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Clear Night Sky</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -48,6 +50,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Partly Cloudy</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -74,6 +77,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Party Cloudy Night</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -113,6 +117,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Rain</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -132,6 +137,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Sleet</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -156,6 +162,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Snow</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -179,6 +186,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Windy</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -203,6 +211,7 @@
       height="100"
       viewBox="25 25 125 125"
     >
+      <title>Fog</title>
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
