@@ -67,7 +67,7 @@ export default {
       return msgs;
     },
     direction: function(bearing) {
-      const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+      const arr = ["NORTH", "NNE", "NE", "ENE", "EAST", "ESE", "SE", "SSE", "SOUTH", "SSW", "SW", "WSW", "WEST", "WNW", "NW", "NNW"];
       const val = Math.floor((bearing / 22.5) + 0.5);
       return arr[(val % 16)];
     },
