@@ -8,13 +8,13 @@
         :icon="forecast.currently ? forecast.currently.icon : ''"
       />
       <MoonIcon
-        :value="now"
+        :ts="now"
         icon="first-quarter"
         top="8px"
         left="220px"
       />
       <DateTime
-        :value="now"
+        :ts="now"
         top="8px"
         left="280px"
       />
@@ -186,7 +186,7 @@ import DateTime from "./DateTime.vue";
 import ForecastIcon from "./ForecastIcon.vue";
 import LineGraph from "./LineGraph.vue";
 import Metric from "./Metric.vue";
-import MoonIcon from "./MoonIcon2.vue";
+import MoonIcon from "./MoonIcon.vue";
 import Ticker from "./Ticker.vue";
 import WindDirection from "./WindDirection.vue";
 import WindSpeed from "./WindSpeed.vue";

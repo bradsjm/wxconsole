@@ -3,7 +3,7 @@
     :style="{ top: top, left: left }"
     class="digital small"
   >
-    {{ value | format }}
+    {{ ts | format }}
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
       type: String,
       required: true
     },
-    value: {
+    ts: {
       type: Number,
       required: true
     }
