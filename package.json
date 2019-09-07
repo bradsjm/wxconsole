@@ -13,6 +13,7 @@
     "chartjs-plugin-streaming": "^1.8.0",
     "core-js": "^2.6.9",
     "moment": "^2.24.0",
+    "suncalc": "^1.8.0",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",
     "vue-mixin-tween": "^0.1.3",

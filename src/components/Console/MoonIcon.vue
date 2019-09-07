@@ -1,5 +1,8 @@
 <template>
-  <div :style="{ top: top, left: left }">
+  <div
+    v-if="ts"
+    :style="{ top: top, left: left }"
+  >
     <!-- New Moon -->
     <svg
       v-if="icon == 0"
@@ -141,6 +144,8 @@
 </template>
 
 <script>
+import SunCalc from 'suncalc'
+
 export default {
   name: "MoonIcon",
   props: {
@@ -159,22 +164,17 @@ export default {
   },
   computed: {
     icon: function() {
-      let date = new Date(this.ts);
-      let year = date.getFullYear();
-      let month = date.getMonth();
-      let day = date.getDate();
-      if (month < 3) {
-        year--;
-        month += 12;
-      }
-      ++month;
-      var jd = (365.25 * year) + (30.6 * month) + day - 694039.09; // jd is total days elapsed
-      jd /= 29.5305882; // divide by the moon cycle
-      var b = parseInt(jd); // int(jd) -> b, take integer part of jd
-      jd -= b; // subtract integer part to leave fractional part of original jd
-      b = Math.round(jd * 8); // scale fraction from 0-8 and round
-      if (b >= 8) b = 0; // 0 and 8 are the same so turn 8 into 0
-      return b;
+      const date = new Date(this.ts);
+      const moon = SunCalc.getMoonIllumination(date);
+      const phase = Math.floor(moon.phase * 100);
+      if (phase == 0) return 0;
+      if (phase < 25) return 1;
+      if (phase == 25) return 2;
+      if (phase < 50) return 3;
+      if (phase == 50) return 4;
+      if (phase < 75) return 5;
+      if (phase == 75) return 6;
+      return 7;
     }
   }
 }
