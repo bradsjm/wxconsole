@@ -51,7 +51,7 @@
         </div>
         <!-- Line 1: Temperature and Barometric Pressure -->
         <Metric
-          top="50px"
+          top="43px"
           left="160px"
           width="80px"
           label="TEMP OUT"
@@ -62,7 +62,7 @@
           :sup="true"
         />
         <Metric
-          top="50px"
+          top="43px"
           left="240px"
           width="80px"
           label="HUM OUT"
@@ -72,7 +72,7 @@
           :sup="true"
         />
         <Metric
-          top="50px"
+          top="43px"
           left="320px"
           width="105px"
           label="BAROMETER"
@@ -85,7 +85,7 @@
         />
         <!-- Line 2: Feels like and Dew Point -->
         <Metric
-          top="105px"
+          top="99px"
           left="160px"
           width="80px"
           label="FEELS LIKE"
@@ -96,7 +96,7 @@
           :sup="true"
         />
         <Metric
-          top="105px"
+          top="99px"
           left="242px"
           width="80px"
           label="DEW POINT"
@@ -107,7 +107,7 @@
           :sup="true"
         />
         <Metric
-          top="105px"
+          top="99px"
           left="320px"
           width="105px"
           label="STORM WATCH"
@@ -120,7 +120,7 @@
         />
         <!-- Line 3: Rain Gauge -->
         <Metric
-          top="160px"
+          top="155px"
           left="160px"
           width="80px"
           label="DAILY RAIN"
@@ -130,7 +130,7 @@
           :decimals="2"
         />
         <Metric
-          top="160px"
+          top="155px"
           left="240px"
           width="80px"
           label="HOURLY RAIN"
@@ -140,7 +140,7 @@
           :decimals="2"
         />
         <Metric
-          top="160px"
+          top="155px"
           left="320px"
           width="105px"
           label="RAIN RATE"

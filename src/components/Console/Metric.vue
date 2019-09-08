@@ -1,10 +1,9 @@
 <template>
   <div
-    class="center tiny"
+    class="center"
     :style="{ top: top, left: left, width: width }"
   >
-    <span class="label">{{ label }}</span>
-    <br>
+    <span class="label tiny">{{ label }}<br></span>
     <span class="digital large">{{ display }}</span>
     <div
       v-if="trend"
@@ -14,7 +13,7 @@
       &#x21E1;
     </div>
     <span
-      class="label"
+      class="label tiny"
       :class="{ super: sup }"
       v-html="unit"
     />

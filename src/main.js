@@ -3,6 +3,9 @@ import App from "./App.vue"
 import VueMqtt from "vue-mqtt"
 import VueTimers from "vue-timers"
 import VueAppInsights from "vue-app-insights";
+import vueSmoothScroll from 'vue-smoothscroll';
+
+Vue.use(vueSmoothScroll);
 
 Vue.use(VueMqtt, "wss://soldier.cloudmqtt.com:35692", {
   username: "wx",
