@@ -47,7 +47,9 @@ export default {
       return this.outline ? "none" : "rgb(5,61,108)";
     }
   },
-  mixins: [VueMixinTween("value", 2500)]
+  mixins: [
+    VueMixinTween("value", 2500)
+  ]
 };
 </script>
 

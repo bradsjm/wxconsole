@@ -10,11 +10,12 @@ export default {
     this.$mqtt.unsubscribe([ "weather/#", "darksky/#" ]);
   },
   timers: {
-    ping: { time: 600, autostart: true, repeat: true }
+    ping: { time: 600 * 1000, autostart: true, repeat: true }
   },
   methods: {
     ping: function() {
-      this.$mqtt.publish("command/real_time", { duration: 1200 });
+      this.$mqtt.publish("command/real_time",
+        JSON.stringify({ duration: 1200 }));
     }
   },
   mqtt: {

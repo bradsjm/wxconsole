@@ -71,9 +71,8 @@ export default {
       return m;
     },
     style () {
-      let trend = this.trend;
       return {
-        transform: 'rotate(' + trend + 'deg)'
+        transform: 'rotate(' + this.trend + 'deg)'
       }
     }
   },

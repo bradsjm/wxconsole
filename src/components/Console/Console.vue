@@ -92,8 +92,10 @@
         unit="&nbsp;&deg;F"
       />
       <Metric
+        v-if="forecast.currently"
         label="STORM WATCH"
-        :value="forecast.currently ? forecast.currently.nearestStormDistance : 0"
+        :value="forecast.currently.nearestStormDistance||0"
+        :trend="forecast.currently.nearestStormBearing-45||0"
         top="105px"
         left="320px"
         width="105px"
@@ -190,6 +192,7 @@ import Ticker from "./Ticker.vue";
 import WindDirection from "./WindDirection.vue";
 import WindSpeed from "./WindSpeed.vue";
 import WxMqttService from "./WxMqttService.vue";
+import Filter from "./filters/wind.js"
 
 export default {
   name: "Console",
@@ -239,6 +242,9 @@ export default {
       this.antenna = !this.antenna;
       this.forecast = forecast;
     }
+  },
+  filters: {
+    direction: Filter.direction
   }
 };
 </script>

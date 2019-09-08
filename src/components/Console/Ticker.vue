@@ -53,7 +53,7 @@ export default {
         const current = this.forecast.currently;
         msgs.push(
           "Currently it's " + current.summary,
-          "The nearest storm: " + current.nearestStormDistance.toFixed(1)
+          "Nearest storm: " + current.nearestStormDistance.toFixed(1)
                             + " miles "
                             + this.direction(current.nearestStormBearing),
           "Chance of rain: " + current.precipProbability.toFixed() * 100 + "%",

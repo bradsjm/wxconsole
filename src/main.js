@@ -5,8 +5,8 @@ import VueTimers from "vue-timers"
 import VueAppInsights from "vue-app-insights";
 
 Vue.use(VueMqtt, "wss://soldier.cloudmqtt.com:35692", {
-  username: "jvjicacs",
-  password: "DXKkp3QETwt_",
+  username: "wx",
+  password: "wx",
   clientId: "WebClient-" + parseInt(Math.random() * 100000)
 })
 
