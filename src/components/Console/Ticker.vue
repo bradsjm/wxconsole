@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: "Ticker",
   props: {
@@ -24,11 +26,15 @@ export default {
       type: String,
       required: true
     },
-    forecast: {
+    current: {
       type: Object,
       required: true
     },
-    wx: {
+    now: {
+      type: Object,
+      required: true
+    },
+    today: {
       type: Object,
       required: true
     }
@@ -49,18 +55,28 @@ export default {
     build()
     {
       var msgs = [];
-      if (this.forecast.currently) {
-        const current = this.forecast.currently;
+      if (this.current && this.today) {
         msgs.push(
-          "Currently it's " + current.summary,
-          "Nearest storm: " + current.nearestStormDistance.toFixed(1)
-                            + " miles "
-                            + this.direction(current.nearestStormBearing),
-          "Chance of rain: " + current.precipProbability.toFixed() * 100 + "%",
-          "Cloud cover: " + current.cloudCover.toFixed() * 100 + "%",
-          "Visibility: " + current.visibility.toFixed(1) + " miles",
-          "UV index: " + current.uvIndex,
-          "Ozone level: " + current.ozone
+          "Currently it's " + this.current.summary,
+          "Forecast Low today: " + this.today.temperatureLow.toFixed() + "F at " + moment.unix(this.today.temperatureLowTime).format("LT"),
+          "Forecast High today: " + this.today.temperatureHigh.toFixed() + "F at " + moment.unix(this.today.temperatureHighTime).format("LT"),
+          "Cloud cover: " + this.current.cloudCover.toFixed() * 100 + "%",
+          "Visibility: " + this.current.visibility.toFixed(1) + " miles",
+          "UV index: " + this.current.uvIndex,
+          "Ozone level: " + this.current.ozone
+        );
+
+        if (this.current.precipProbability)
+          msgs.push(
+            "chance of " + this.current.precipType + ": " + this.current.precipProbability.toFixed() * 100 + "%"
+          );
+
+        if (this.current.nearestStormDistance)
+          msgs.push(
+            "Nearest storm: " + this.current.nearestStormDistance.toFixed(0)
+            + " miles ("
+            + this.direction(this.current.nearestStormBearing)
+            + ")",
         );
       }
 

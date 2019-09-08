@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="ts"
     :style="{ top: top, left: left }"
   >
     <!-- New Moon -->
@@ -164,7 +163,7 @@ export default {
   },
   computed: {
     icon: function() {
-      const date = new Date(this.ts);
+      const date = new Date(this.ts * 1000);
       const moon = SunCalc.getMoonIllumination(date);
       const phase = Math.floor(moon.phase * 100);
       if (phase == 0) return 0;

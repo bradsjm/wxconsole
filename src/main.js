@@ -6,8 +6,7 @@ import VueAppInsights from "vue-app-insights";
 
 Vue.use(VueMqtt, "wss://soldier.cloudmqtt.com:35692", {
   username: "wx",
-  password: "wx",
-  clientId: "WebClient-" + parseInt(Math.random() * 100000)
+  password: "wx"
 })
 
 Vue.use(VueAppInsights, {

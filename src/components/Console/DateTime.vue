@@ -1,13 +1,15 @@
 <template>
   <div
+    v-if="ts"
     :style="{ top: top, left: left }"
     class="digital small"
   >
-    {{ ts | format }}
+    {{ ts | formatDate(format) }}
   </div>
 </template>
 
 <script>
+import moment from 'moment';
 
 export default {
   name: "DateTime",
@@ -23,16 +25,15 @@ export default {
     ts: {
       type: Number,
       required: true
+    },
+    format: {
+      type: String,
+      default: "L LT"
     }
   },
   filters: {
-    format: function (value) {
-      if (!value) return '';
-      const date = new Date(value);
-      const dateOptions = { day: '2-digit', month: 'numeric', year: 'numeric' };
-      const timeOptions = { hour12: true, hour: '2-digit', minute:'2-digit' };
-      return date.toLocaleDateString([], dateOptions) + " " +
-             date.toLocaleTimeString([], timeOptions);
+    formatDate: function (value, format) {
+      return moment.unix(value).format(format);
     }
   }
 }

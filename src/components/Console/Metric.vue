@@ -1,19 +1,20 @@
 <template>
   <div
-    class="label center tiny"
+    class="center tiny"
     :style="{ top: top, left: left, width: width }"
   >
-    {{ label }}
+    <span class="label">{{ label }}</span>
     <br>
     <span class="digital large">{{ display }}</span>
     <div
       v-if="trend"
-      :style="style"
-      class="trend"
+      :style="rotate"
+      class="digital trend"
     >
-      &#8594;
+      &#x21E1;
     </div>
     <span
+      class="label"
       :class="{ super: sup }"
       v-html="unit"
     />
@@ -70,7 +71,7 @@ export default {
         m = m.replace(/0/g, "-");
       return m;
     },
-    style () {
+    rotate () {
       return {
         transform: 'rotate(' + this.trend + 'deg)'
       }
@@ -104,5 +105,7 @@ export default {
 .trend {
   top: 15px;
   right: 15px;
+  font-size: 12px;
+  font-weight: bolder;
 }
 </style>

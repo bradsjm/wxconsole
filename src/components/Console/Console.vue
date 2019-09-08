@@ -1,185 +1,187 @@
 <template>
-  <div id="console">
-    <div :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }">
-      <!-- Indicators -->
-      <ForecastIcon
-        top="8px"
-        left="160px"
-        :icon="forecast.currently ? forecast.currently.icon : ''"
-      />
-      <MoonIcon
-        :ts="now"
-        top="8px"
-        left="220px"
-      />
-      <DateTime
-        :ts="now"
-        top="8px"
-        left="280px"
-      />
-      <!-- Anemometer -->
-      <div style="top: 10px; left: 15px; width: 120px; height: 125px;">
-        <WindSpeed
-          :value="wx.wind_speed_last||0"
+  <WeatherData>
+    <div
+      id="console"
+      slot-scope="{ now, current, today, indicator }"
+    >
+      <div :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }">
+        <!-- Indicators -->
+        <ForecastIcon
+          top="8px"
+          left="160px"
+          :icon="current.icon||''"
+        />
+        <MoonIcon
+          :ts="now.ts||0"
+          top="8px"
+          left="220px"
+        />
+        <DateTime
+          :ts="current.time||0"
+          top="8px"
+          left="270px"
+        />
+        <!-- Anemometer -->
+        <div
+          style="top: 10px; left: 15px; width: 120px; height: 125px;"
+        >
+          <WindSpeed
+            :value="now.wind_speed_last||0"
+            :decimals="1"
+            unit="MPH"
+            top="0px"
+            left="0px"
+          />
+          <WindDirection
+            :value="now.wind_dir_at_hi_speed_last_10_min||0"
+            :outline="true"
+            top="14px"
+            left="11px"
+          />
+          <WindDirection
+            :value="now.wind_dir_last||0"
+            :outline="false"
+            top="14px"
+            left="11px"
+          />
+        </div>
+        <!-- Line 1: Temperature and Barometric Pressure -->
+        <Metric
+          label="TEMP OUT"
+          :value="now.temp||0"
+          top="50px"
+          left="160px"
+          width="80px"
           :decimals="1"
-          unit="MPH"
-          top="0px"
-          left="0px"
+          :sup="true"
+          unit="&nbsp;&deg;F"
         />
-        <WindDirection
-          :value="wx.wind_dir_at_hi_speed_last_10_min||0"
-          :outline="true"
-          top="14px"
-          left="11px"
+        <Metric
+          label="HUM OUT"
+          :value="now.hum||0"
+          top="50px"
+          left="240px"
+          width="80px"
+          :sup="true"
+          unit="&nbsp;%"
         />
-        <WindDirection
-          :value="wx.wind_dir_last||0"
-          :outline="false"
-          top="14px"
-          left="11px"
+        <Metric
+          label="BAROMETER"
+          :value="now.bar_sea_level||0"
+          top="50px"
+          left="320px"
+          width="105px"
+          :decimals="2"
+          :sup="false"
+          unit="inHg"
+          :trend="now.bar_trend | trend"
         />
-      </div>
-      <!-- Line 1: Temperature and Barometric Pressure -->
-      <Metric
-        label="TEMP OUT"
-        :value="wx.temp||0"
-        top="50px"
-        left="160px"
-        width="80px"
-        :decimals="1"
-        :sup="true"
-        unit="&nbsp;&deg;F"
-      />
-      <Metric
-        label="HUM OUT"
-        :value="wx.hum||0"
-        top="50px"
-        left="240px"
-        width="80px"
-        :sup="true"
-        unit="&nbsp;%"
-      />
-      <Metric
-        label="BAROMETER"
-        :value="wx.bar_sea_level||0"
-        top="50px"
-        left="320px"
-        width="105px"
-        :decimals="2"
-        :sup="false"
-        unit="inHg"
-        :trend="bar_trend"
-      />
-      <!-- Line 2: Feels like and Dew Point -->
-      <Metric
-        label="FEELS LIKE"
-        :value="wx.thw_index||0"
-        top="105px"
-        left="160px"
-        width="80px"
-        :decimals="1"
-        :sup="true"
-        unit="&nbsp;&deg;F"
-      />
-      <Metric
-        label="DEW POINT"
-        :value="wx.dew_point||0"
-        top="105px"
-        left="242px"
-        width="80px"
-        :decimals="1"
-        :sup="true"
-        unit="&nbsp;&deg;F"
-      />
-      <Metric
-        v-if="forecast.currently"
-        label="STORM WATCH"
-        :value="forecast.currently.nearestStormDistance||0"
-        :trend="forecast.currently.nearestStormBearing-45||0"
-        top="105px"
-        left="320px"
-        width="105px"
-        :decimals="0"
-        :sup="false"
-        unit="&nbsp;mi"
-      />
-      <!-- Line 3: Rain Gauge -->
-      <Metric
-        label="DAILY RAIN"
-        :value="wx.rainfall_daily||0 / 100"
-        top="160px"
-        left="160px"
-        width="80px"
-        :decimals="2"
-        unit="in"
-      />
-      <Metric
-        label="HOURLY RAIN"
-        :value="wx.rainfall_last_60_min||0 / 100"
-        top="160px"
-        left="240px"
-        width="80px"
-        :decimals="2"
-        unit="in"
-      />
-      <Metric
-        label="RAIN RATE"
-        :value="wx.rain_rate_last||0 / 100"
-        top="160px"
-        left="320px"
-        width="105px"
-        :decimals="2"
-        unit="in"
-      />
+        <!-- Line 2: Feels like and Dew Point -->
+        <Metric
+          label="FEELS LIKE"
+          :value="now.thw_index||0"
+          top="105px"
+          left="160px"
+          width="80px"
+          :decimals="1"
+          :sup="true"
+          unit="&nbsp;&deg;F"
+        />
+        <Metric
+          label="DEW POINT"
+          :value="now.dew_point||0"
+          top="105px"
+          left="242px"
+          width="80px"
+          :decimals="1"
+          :sup="true"
+          unit="&nbsp;&deg;F"
+        />
+        <Metric
+          label="STORM WATCH"
+          :value="current.nearestStormDistance||0"
+          :trend="current.nearestStormBearing||0"
+          top="105px"
+          left="320px"
+          width="105px"
+          :decimals="0"
+          :sup="false"
+          unit="&nbsp;mi"
+        />
+        <!-- Line 3: Rain Gauge -->
+        <Metric
+          label="DAILY RAIN"
+          :value="now.rainfall_daily||0 / 100"
+          top="160px"
+          left="160px"
+          width="80px"
+          :decimals="2"
+          unit="in"
+        />
+        <Metric
+          label="HOURLY RAIN"
+          :value="now.rainfall_last_60_min||0 / 100"
+          top="160px"
+          left="240px"
+          width="80px"
+          :decimals="2"
+          unit="in"
+        />
+        <Metric
+          label="RAIN RATE"
+          :value="now.rain_rate_last||0 / 100"
+          top="160px"
+          left="320px"
+          width="105px"
+          :decimals="2"
+          unit="in"
+        />
 
-      <!-- Line Graph -->
-      <div
-        class="label"
-        style="top: 135px; left: 14px; font-size: 9px;"
-      >
-        Last minute
+        <!-- Line Graph -->
+        <div
+          class="label"
+          style="top: 135px; left: 14px; font-size: 9px;"
+        >
+          Last minute
+        </div>
+        <div
+          class="label"
+          style="top: 135px; right: 285px; font-size: 9px;"
+        >
+          Every 2s
+        </div>
+        <LineGraph
+          class="graph"
+          label="Wind Speed"
+          :value="now.wind_speed_last||0"
+          :seconds="60"
+        />
+        <div
+          class="label"
+          style="top: 211px; left: 14px; font-size: 8px;"
+        >
+          Vertical Scale: Auto
+        </div>
+        <div
+          class="digital medium antenna"
+          style="top: 223px; right: 10px;"
+          :class="{ 'antenna-on': indicator, 'antenna-off': !indicator }"
+        />
+        <Ticker
+          top="223px"
+          left="13px"
+          :now="now"
+          :current="current"
+          :today="today"
+        />
       </div>
-      <div
-        class="label"
-        style="top: 135px; right: 285px; font-size: 9px;"
-      >
-        Every 2s
-      </div>
-      <LineGraph
-        class="graph"
-        label="Wind Speed"
-        :value="wx.wind_speed_last||0"
-        :seconds="60"
-      />
-      <div
-        class="label"
-        style="top: 211px; left: 14px; font-size: 8px;"
-      >
-        Vertical Scale: Auto
-      </div>
-      <div
-        class="digital medium antenna"
-        style="top: 223px; right: 10px;"
-        :class="{ 'antenna-on': antenna, 'antenna-off': !antenna }"
-      />
-      <Ticker
-        top="223px"
-        left="13px"
-        :forecast="forecast"
-        :wx="wx"
+      <button
+        @click="toggleLight"
+        class="button"
+        style="top: 28px; left: 600px;"
       />
     </div>
-    <button
-      @click="toggleLight"
-      class="button"
-      style="top: 28px; left: 600px;"
-    />
-
-    <WxMqttService
-      @forecast="onForecast"
-      @weather="onWeather"
-    />
-  </div>
+  </weatherdata>
 </template>
 
 <script>
@@ -191,8 +193,7 @@ import MoonIcon from "./MoonIcon.vue";
 import Ticker from "./Ticker.vue";
 import WindDirection from "./WindDirection.vue";
 import WindSpeed from "./WindSpeed.vue";
-import WxMqttService from "./WxMqttService.vue";
-import Filter from "./filters/wind.js"
+import WeatherData from "./WeatherData.vue";
 
 export default {
   name: "Console",
@@ -205,46 +206,32 @@ export default {
     Ticker,
     WindDirection,
     WindSpeed,
-    WxMqttService
+    WeatherData
   },
   data() {
     return {
-      antenna: false,
-      backlight: true,
-      forecast: {},
-      wx: {}
+      backlight: true
     };
   },
-  computed: {
-    bar_trend() {
-      const value = this.wx.bar_trend || 0;
-      if (value >= 0.02) return -16;
-      if (value > 0.0 && value < 0.02) return -37;
-      if (value < 0.0 && value > -0.02) return 37;
-      if (value <= -0.02) return 74;
-      return 0;
+  filters: {
+    trend(value) {
+      // Trend direction (0 is up, 90 is steady, 180 is down)
+      if (value <= -0.02) return 37;
+      if (value > -0.02 && value < 0.00) return 74;
+      if (value == 0) return 90;
+      if (value > 0.00 && value < 0.02) return 127;
+      if (value >= 0.02) return 164;
+      return 90;
     },
-    now() {
+    now(ts) {
       // Convert to per minute precision to reduce updates
-      const ts = this.wx.ts || 0;
-      return Math.round(ts / 60) * 60000;
+      return Math.round(ts / 60) * 60;
     }
   },
   methods: {
     toggleLight: function() {
       this.backlight = !this.backlight;
-    },
-    onWeather: function(wx) {
-      this.antenna = !this.antenna;
-      this.wx = Object.assign({}, this.wx, wx);
-    },
-    onForecast: function(forecast) {
-      this.antenna = !this.antenna;
-      this.forecast = forecast;
     }
-  },
-  filters: {
-    direction: Filter.direction
   }
 };
 </script>
@@ -266,7 +253,8 @@ export default {
   position: absolute;
 }
 
-.backlight-on, .backlight-off {
+.backlight-on,
+.backlight-off {
   background: url("./images/console-display.png") no-repeat;
   left: 36px;
   top: 48px;
