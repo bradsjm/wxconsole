@@ -131,7 +131,7 @@
         />
         <Metric
           top="155px"
-          left="240px"
+          left="245px"
           width="80px"
           label="HOURLY RAIN"
           unit="in"
@@ -184,10 +184,10 @@
         <Ticker
           top="223px"
           left="13px"
-          v-if="now.loaded && current.loaded && today.loaded"
-          :now="now"
+          v-if="current.loaded && today.loaded && now.loaded"
           :current="current"
           :today="today"
+          :now="now"
         />
       </div>
       <button
@@ -231,8 +231,8 @@ export default {
   filters: {
     trend(value) {
       // Trend direction (0 is up, 90 is steady, 180 is down)
-      if (value <= -0.02) return 37;
-      if (value > -0.02 && value < 0.00) return 74;
+      if (value <= -0.02) return 16;
+      if (value > -0.02 && value < 0.00) return 53;
       if (value == 0) return 90;
       if (value > 0.00 && value < 0.02) return 127;
       if (value >= 0.02) return 164;

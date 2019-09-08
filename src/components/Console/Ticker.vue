@@ -1,14 +1,43 @@
 <template>
   <div
     ref="view"
-    class="ticker"
+    class="tickerbox digital medium"
     :style="{ top: top, left: left }"
   >
-    <li
-      v-for="m in messages"
-      :key="m"
-    >
-      {{ m }}
+    <!-- Special Messages -->
+    <li v-if="holdyourhat">
+      <b>HOLD ON TO YOUR HAT!</b>
+    </li>
+    <li v-if="kiteflying">
+      <b>IT'S KITE FLYING WEATHER!</b>
+    </li>
+    <li v-if="windChillAdvisory">
+      <b>WIND CHILL ADVISORY!</b>
+    </li>
+    <li v-if="heatAdvisory">
+      <b>HEAT ADVISORY!</b>
+    </li>
+    <li v-if="rainingCatsAndDogs">
+      IT'S RAINING CATS AND DOGS!
+    </li>
+    <!-- Current Conditions -->
+    <li>Currently it's {{ current.summary }}</li>
+    <li>Cloud cover: {{ current.cloudCover.toFixed() * 100 }}%</li>
+    <li>Visibility: {{ current.visibility.toFixed(1) }} miles</li>
+    <li v-if="current.uvIndex">
+      UV Index: {{ current.uvIndex }} - {{ current.uvIndex | uvIndexLevel }}
+    </li>
+    <li v-if="current.ozone">
+      Ozone level: {{ current.ozone.toFixed() }} - {{ current.ozone | ozoneLevel }}
+    </li>
+    <!-- Forecasted Conditions -->
+    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ today.temperatureLowTime | moment("LT") }}</li>
+    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ today.temperatureHighTime | moment("LT") }}</li>
+    <li v-if="current.precipProbability">
+      Chance of {{ current.precipType }}: {{ current.precipProbability.toFixed() * 100 }}%
+    </li>
+    <li v-if="current.nearestStormDistance">
+      Nearest storm: {{ current.nearestStormDistance }} miles ({{ current.nearestStormBearing | direction }})
     </li>
   </div>
 </template>
@@ -27,15 +56,19 @@ export default {
       type: String,
       required: true
     },
+    speed: {
+      type: Number,
+      default: 500
+    },
     current: {
       type: Object,
       required: true
     },
-    now: {
+    today: {
       type: Object,
       required: true
     },
-    today: {
+    now: {
       type: Object,
       required: true
     }
@@ -46,63 +79,60 @@ export default {
       position: 0
     };
   },
+  computed: {
+    holdyourhat() {
+      return (
+        this.now.wind_speed_avg_last_1_min >= 25 &&
+        this.now.wind_speed_avg_last_1_min < 40
+      );
+    },
+    kiteflying() {
+      return (
+        this.now.wind_speed_avg_last_1_min >= 25 &&
+        this.now.wind_speed_avg_last_1_min < 40 &&
+        this.now.wind_chill < 80 &&
+        this.now.wind_chill > 60 &&
+        this.now.rainfall_last_60_min == 0
+      );
+    },
+    windChillAdvisory() {
+      return (
+        this.now.wind_chill <= -30 && this.now.wind_speed_avg_last_1_min >= 10
+      );
+    },
+    heatAdvisory() {
+      return this.now.heat_index >= 105;
+    },
+    rainingCatsAndDogs() {
+      return this.now.rain_rate_last >= 30;
+    }
+  },
   timers: {
     scroll: { time: 4000, autostart: true, repeat: true }
   },
   watch: {
     position: function(oldValue, newValue) {
       const ctx = this.$refs["view"];
-      this.$SmoothScroll(newValue * 23, 500, null, ctx, 'y');
+      const items = Array.from(ctx.children);
+      const height = items
+        .slice(0, newValue)
+        .reduce((total, item) => total + item.scrollHeight, 0);
+      this.$SmoothScroll(height, this.speed, null, ctx, "y");
     }
   },
   methods: {
     scroll() {
-      this.position++;
-      if (this.position >= this.messages.length){
-        this.position = 0;
-        this.build();
+      let pos = this.position + 1;
+      let total = this.$refs["view"].children.length;
+      if (pos >= total) {
+        pos = 0;
       }
-    },
-    build() {
-      var msgs = [];
-      if (this.current && this.today) {
-        msgs.push(
-          "Currently it's " + this.current.summary,
-          "Forecast Low today: " +
-            this.today.temperatureLow.toFixed() +
-            "F at " +
-            moment.unix(this.today.temperatureLowTime).format("LT"),
-          "Forecast High today: " +
-            this.today.temperatureHigh.toFixed() +
-            "F at " +
-            moment.unix(this.today.temperatureHighTime).format("LT"),
-          "Cloud cover: " + this.current.cloudCover.toFixed() * 100 + "%",
-          "Visibility: " + this.current.visibility.toFixed(1) + " miles",
-          "UV index: " + this.current.uvIndex,
-          "Ozone level: " + this.current.ozone
-        );
-
-        if (this.current.precipProbability)
-          msgs.push(
-            "chance of " +
-              this.current.precipType +
-              ": " +
-              this.current.precipProbability.toFixed() * 100 +
-              "%"
-          );
-
-        if (this.current.nearestStormDistance)
-          msgs.push(
-            "Nearest storm: " +
-              this.current.nearestStormDistance.toFixed(0) +
-              " miles (" +
-              this.direction(this.current.nearestStormBearing) +
-              ")"
-          );
-      }
-
-      this.messages = msgs;
-      this.scroll();
+      this.position = pos;
+    }
+  },
+  filters: {
+    moment: function(value, format) {
+      return moment.unix(value).format(format);
     },
     direction: function(bearing) {
       const arr = [
@@ -125,13 +155,43 @@ export default {
       ];
       const val = Math.floor(bearing / 22.5 + 0.5);
       return arr[val % 16];
+    },
+    uvIndexLevel: function(level) {
+      switch (level) {
+        case 0:
+          return "";
+        case 1:
+        case 2:
+          return "Low";
+        case 3:
+        case 4:
+        case 5:
+          return "Moderate";
+        case 6:
+        case 7:
+          return "High";
+        case 8:
+        case 9:
+        case 10:
+          return "Very High";
+        default:
+          return "Extreme";
+      }
+    },
+    ozoneLevel: function(level) {
+      if (level <= 50) return "Good";
+      if (level <= 100) return "Moderate";
+      if (level <= 150) return "Potentially Unhealthy";
+      if (level <= 200) return "Unhealthy";
+      if (level <= 300) return "Very Unhealthy";
+      return "Hazardous";
     }
   }
 };
 </script>
 
 <style>
-.ticker {
+.tickerbox {
   height: 20px;
   width: 380px;
   overflow: hidden;
@@ -139,12 +199,7 @@ export default {
   list-style: none;
 }
 
-.ticker li {
-  font-family: Digi, Arial;
-  color: #053d6c;
-  font-weight: 400;
-  font-size: 20px;
-  text-shadow: none;
+.tickerbox li {
   height: 23px;
 }
 </style>
