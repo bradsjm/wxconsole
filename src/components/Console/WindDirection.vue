@@ -7,7 +7,8 @@
       <g :transform="transform">
         <path
           :fill="fill"
-          stroke="#000000"
+          stroke="black"
+          stroke-dasharray="1"
           d="M 34 0 L 49 -5 C 45 -2 45 2 49 5 L 34 0"
         />
       </g>

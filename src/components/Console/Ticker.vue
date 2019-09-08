@@ -22,8 +22,8 @@
     </li>
     <!-- Current Conditions -->
     <li>Currently it's {{ current.summary }}</li>
-    <li>Cloud cover: {{ current.cloudCover.toFixed() * 100 }}%</li>
-    <li>Visibility: {{ current.visibility.toFixed(1) }} miles</li>
+    <li>Cloud cover: {{ (current.cloudCover * 100).toFixed() }}%</li>
+    <li>Visibility: {{ current.visibility.toFixed() }} miles</li>
     <li v-if="current.uvIndex">
       UV Index: {{ current.uvIndex }} - {{ current.uvIndex | uvIndexLevel }}
     </li>
@@ -34,7 +34,7 @@
     <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ today.temperatureLowTime | moment("LT") }}</li>
     <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ today.temperatureHighTime | moment("LT") }}</li>
     <li v-if="current.precipProbability">
-      Chance of {{ current.precipType }}: {{ current.precipProbability.toFixed() * 100 }}%
+      Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
     <li v-if="current.nearestStormDistance">
       Nearest storm: {{ current.nearestStormDistance }} miles ({{ current.nearestStormBearing | direction }})
