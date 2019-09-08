@@ -6,9 +6,15 @@ export default {
   data() {
     return {
       indicator: false,
-      current: {},
-      now: {},
-      today: {}
+      current: {
+        loaded: false
+      },
+      now: {
+        loaded: false
+      },
+      today: {
+        loaded: false
+      }
     };
   },
   render() {
@@ -45,6 +51,8 @@ export default {
         this.$timer.restart("reset");
         const wx = JSON.parse(data.toString());
         this.now = Object.assign({}, this.now, wx);
+        const count = Object.keys(this.now).length;
+        this.now.loaded = count >= 51;
       } catch (e) {
         // eslint-disable-next-line
         console.warn(topic + ": " + e + " (" + data.toString() + ")");
@@ -55,13 +63,16 @@ export default {
         this.indicator = true;
         this.$timer.restart("reset");
         const darksky = JSON.parse(data.toString());
+        const count = Object.keys(darksky).length;
         switch (topic)
         {
           case "darksky/currently":
             this.current = darksky;
+            this.current.loaded = count >= 19;
             break;
           case "darksky/today":
             this.today = darksky;
+            this.today.loaded = count >= 39;
         }
       } catch (e) {
         // eslint-disable-next-line

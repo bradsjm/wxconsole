@@ -9,132 +9,145 @@
         <ForecastIcon
           top="8px"
           left="160px"
-          :icon="current.icon||''"
+          v-if="current.loaded"
+          :icon="current.icon"
         />
         <MoonIcon
-          :ts="now.ts||0"
           top="8px"
           left="220px"
+          v-if="now.loaded"
+          :ts="now.ts"
         />
         <DateTime
-          :ts="current.time||0"
           top="8px"
           left="270px"
+          v-if="now.loaded"
+          :ts="now.ts"
         />
         <!-- Anemometer -->
         <div
           style="top: 10px; left: 15px; width: 120px; height: 125px;"
+          v-if="now.loaded"
         >
           <WindSpeed
-            :value="now.wind_speed_last||0"
-            :decimals="1"
             unit="MPH"
             top="0px"
             left="0px"
+            :value="now.wind_speed_last"
+            :decimals="1"
           />
           <WindDirection
-            :value="now.wind_dir_at_hi_speed_last_10_min||0"
+            top="14px"
+            left="11px"
+            :value="now.wind_dir_at_hi_speed_last_10_min"
             :outline="true"
-            top="14px"
-            left="11px"
           />
           <WindDirection
-            :value="now.wind_dir_last||0"
-            :outline="false"
             top="14px"
             left="11px"
+            :value="now.wind_dir_last"
+            :outline="false"
           />
         </div>
         <!-- Line 1: Temperature and Barometric Pressure -->
         <Metric
-          label="TEMP OUT"
-          :value="now.temp||0"
           top="50px"
           left="160px"
           width="80px"
+          label="TEMP OUT"
+          unit="&nbsp;&deg;F"
+          v-if="now.loaded"
+          :value="now.temp"
           :decimals="1"
           :sup="true"
-          unit="&nbsp;&deg;F"
         />
         <Metric
-          label="HUM OUT"
-          :value="now.hum||0"
           top="50px"
           left="240px"
           width="80px"
-          :sup="true"
+          label="HUM OUT"
           unit="&nbsp;%"
+          v-if="now.loaded"
+          :value="now.hum"
+          :sup="true"
         />
         <Metric
-          label="BAROMETER"
-          :value="now.bar_sea_level||0"
           top="50px"
           left="320px"
           width="105px"
+          label="BAROMETER"
+          unit="inHg"
+          v-if="now.loaded"
+          :value="now.bar_sea_level"
           :decimals="2"
           :sup="false"
-          unit="inHg"
           :trend="now.bar_trend | trend"
         />
         <!-- Line 2: Feels like and Dew Point -->
         <Metric
-          label="FEELS LIKE"
-          :value="now.thw_index||0"
           top="105px"
           left="160px"
           width="80px"
+          label="FEELS LIKE"
+          unit="&nbsp;&deg;F"
+          v-if="now.loaded"
+          :value="now.thw_index"
           :decimals="1"
           :sup="true"
-          unit="&nbsp;&deg;F"
         />
         <Metric
-          label="DEW POINT"
-          :value="now.dew_point||0"
           top="105px"
           left="242px"
           width="80px"
+          label="DEW POINT"
+          unit="&nbsp;&deg;F"
+          v-if="now.loaded"
+          :value="now.dew_point"
           :decimals="1"
           :sup="true"
-          unit="&nbsp;&deg;F"
         />
         <Metric
-          label="STORM WATCH"
-          :value="current.nearestStormDistance||0"
-          :trend="current.nearestStormBearing||0"
           top="105px"
           left="320px"
           width="105px"
+          label="STORM WATCH"
+          unit="&nbsp;mi"
+          v-if="current.loaded"
+          :value="current.nearestStormDistance"
+          :trend="current.nearestStormBearing"
           :decimals="0"
           :sup="false"
-          unit="&nbsp;mi"
         />
         <!-- Line 3: Rain Gauge -->
         <Metric
-          label="DAILY RAIN"
-          :value="now.rainfall_daily||0 / 100"
           top="160px"
           left="160px"
           width="80px"
-          :decimals="2"
+          label="DAILY RAIN"
           unit="in"
+          v-if="now.loaded"
+          :value="now.rainfall_daily / 100"
+          :decimals="2"
         />
         <Metric
-          label="HOURLY RAIN"
-          :value="now.rainfall_last_60_min||0 / 100"
           top="160px"
           left="240px"
           width="80px"
-          :decimals="2"
+          label="HOURLY RAIN"
           unit="in"
+          v-if="now.loaded"
+          :value="now.rainfall_last_60_min / 100"
+          :decimals="2"
         />
         <Metric
-          label="RAIN RATE"
-          :value="now.rain_rate_last||0 / 100"
           top="160px"
           left="320px"
           width="105px"
-          :decimals="2"
+          label="RAIN RATE"
           unit="in"
+          v-if="now.loaded"
+          :value="now.rain_rate_last / 100"
+          :decimals="2"
         />
 
         <!-- Line Graph -->
@@ -153,7 +166,8 @@
         <LineGraph
           class="graph"
           label="Wind Speed"
-          :value="now.wind_speed_last||0"
+          v-if="now.loaded"
+          :value="now.wind_speed_last"
           :seconds="60"
         />
         <div
@@ -170,6 +184,7 @@
         <Ticker
           top="223px"
           left="13px"
+          v-if="now.loaded && current.loaded && today.loaded"
           :now="now"
           :current="current"
           :today="today"
