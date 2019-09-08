@@ -4,9 +4,18 @@ export default {
   render: () => null,
   mounted() {
     this.$mqtt.subscribe([ "weather/#", "darksky/#" ]);
+    this.ping();
   },
   destroyed() {
     this.$mqtt.unsubscribe([ "weather/#", "darksky/#" ]);
+  },
+  timers: {
+    ping: { time: 600, autostart: true, repeat: true }
+  },
+  methods: {
+    ping: function() {
+      this.$mqtt.publish("command/real_time", { duration: 1200 });
+    }
   },
   mqtt: {
     "weather/#" (data, topic) {
