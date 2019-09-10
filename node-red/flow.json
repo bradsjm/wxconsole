@@ -1,0 +1,655 @@
+[
+    {
+        "id": "49236fc1.be095",
+        "type": "tab",
+        "label": "Weather Station",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "50b20884.15b328",
+        "type": "udp in",
+        "z": "49236fc1.be095",
+        "name": "Weather Data Stream",
+        "iface": "",
+        "port": "22222",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "f1078fe2.3455a"
+            ]
+        ]
+    },
+    {
+        "id": "94117af6.0f8d08",
+        "type": "debug",
+        "z": "49236fc1.be095",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 610,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7a68a01.0994c6",
+        "type": "inject",
+        "z": "49236fc1.be095",
+        "name": "Every 15 minutes",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "960",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "x": 130,
+        "y": 860,
+        "wires": [
+            [
+                "c8845962.d06e6"
+            ]
+        ]
+    },
+    {
+        "id": "d69a0e77.5e2eb8",
+        "type": "http request",
+        "z": "49236fc1.be095",
+        "name": "Req Real Time Push",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://10.10.10.220/v1/real_time?duration=3600",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 360,
+        "y": 800,
+        "wires": [
+            [
+                "da5d4ce0.9b4b4"
+            ]
+        ]
+    },
+    {
+        "id": "f1078fe2.3455a",
+        "type": "json",
+        "z": "49236fc1.be095",
+        "name": "Parse JSON string",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 350,
+        "y": 40,
+        "wires": [
+            [
+                "8dca5f0e.70d808"
+            ]
+        ]
+    },
+    {
+        "id": "e63b4053.dcd72",
+        "type": "split",
+        "z": "49236fc1.be095",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 430,
+        "y": 160,
+        "wires": [
+            [
+                "839f99e7.7c8d88"
+            ]
+        ]
+    },
+    {
+        "id": "57baedfc.d72bf4",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.ts",
+                "pt": "msg",
+                "to": "ts",
+                "tot": "flow"
+            },
+            {
+                "t": "move",
+                "p": "payload.conditions",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 100,
+        "wires": [
+            [
+                "a743e9c0.4c6d7"
+            ]
+        ]
+    },
+    {
+        "id": "930213d4.a5c98",
+        "type": "mqtt out",
+        "z": "49236fc1.be095",
+        "name": "Publish weather/Live",
+        "topic": "vantage/live",
+        "qos": "0",
+        "retain": "false",
+        "broker": "44f24082.844728",
+        "x": 360,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4b78f0b7.ab4598",
+        "type": "http request",
+        "z": "49236fc1.be095",
+        "name": "Req Conditions",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://10.10.10.220/v1/current_conditions",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 340,
+        "y": 360,
+        "wires": [
+            [
+                "6dadffdf.91fe7"
+            ]
+        ]
+    },
+    {
+        "id": "506ff08e.a26f3",
+        "type": "inject",
+        "z": "49236fc1.be095",
+        "name": "Every minute",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "61",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "4b78f0b7.ab4598"
+            ]
+        ]
+    },
+    {
+        "id": "5aadabf6.27a3cc",
+        "type": "debug",
+        "z": "49236fc1.be095",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 590,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "a75a820c.9a0f08",
+        "type": "split",
+        "z": "49236fc1.be095",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 310,
+        "y": 540,
+        "wires": [
+            [
+                "d533075e.9c80f8"
+            ]
+        ]
+    },
+    {
+        "id": "435a76e5.b04218",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.data.ts",
+                "pt": "msg",
+                "to": "ts",
+                "tot": "flow"
+            },
+            {
+                "t": "move",
+                "p": "payload.data.conditions",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 480,
+        "wires": [
+            [
+                "a75a820c.9a0f08"
+            ]
+        ]
+    },
+    {
+        "id": "9de098dd.f4d378",
+        "type": "mqtt out",
+        "z": "49236fc1.be095",
+        "name": "Publish vantage/current_conditions",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "44f24082.844728",
+        "x": 400,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "d533075e.9c80f8",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.ts",
+                "pt": "msg",
+                "to": "ts",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "$string('vantage/current_conditions/' & payload.data_structure_type)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 600,
+        "wires": [
+            [
+                "9de098dd.f4d378",
+                "5aadabf6.27a3cc"
+            ]
+        ]
+    },
+    {
+        "id": "839f99e7.7c8d88",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.ts",
+                "pt": "msg",
+                "to": "ts",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "930213d4.a5c98",
+                "94117af6.0f8d08"
+            ]
+        ]
+    },
+    {
+        "id": "a743e9c0.4c6d7",
+        "type": "rbe",
+        "z": "49236fc1.be095",
+        "name": "",
+        "func": "rbei",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "property": "payload",
+        "x": 310,
+        "y": 160,
+        "wires": [
+            [
+                "e63b4053.dcd72"
+            ]
+        ]
+    },
+    {
+        "id": "6dadffdf.91fe7",
+        "type": "switch",
+        "z": "49236fc1.be095",
+        "name": "Check payload is JSON",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "istype",
+                "v": "object",
+                "vt": "object"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 370,
+        "y": 420,
+        "wires": [
+            [
+                "435a76e5.b04218"
+            ]
+        ]
+    },
+    {
+        "id": "8dca5f0e.70d808",
+        "type": "switch",
+        "z": "49236fc1.be095",
+        "name": "Check payload is JSON",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "istype",
+                "v": "object",
+                "vt": "object"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 40,
+        "wires": [
+            [
+                "57baedfc.d72bf4"
+            ]
+        ]
+    },
+    {
+        "id": "c8845962.d06e6",
+        "type": "http request",
+        "z": "49236fc1.be095",
+        "name": "Req Current Forecast",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "https://api.darksky.net/forecast/30d21a2ff7fe9a90e969847007766027/27.9378,-82.4521?exclude=minutely,hourly,flags",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 360,
+        "y": 860,
+        "wires": [
+            [
+                "f2469475.36a82"
+            ]
+        ]
+    },
+    {
+        "id": "f2469475.36a82",
+        "type": "switch",
+        "z": "49236fc1.be095",
+        "name": "Check payload is JSON",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "istype",
+                "v": "object",
+                "vt": "object"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 370,
+        "y": 920,
+        "wires": [
+            [
+                "110a246d.ebd624",
+                "10167dca.67f46a",
+                "3cfc4746.7c2378"
+            ]
+        ]
+    },
+    {
+        "id": "110a246d.ebd624",
+        "type": "debug",
+        "z": "49236fc1.be095",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 610,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "1245697.88f4117",
+        "type": "mqtt out",
+        "z": "49236fc1.be095",
+        "name": "Publish darksky",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "44f24082.844728",
+        "x": 600,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "d76e13b7.b503c8",
+        "type": "mqtt in",
+        "z": "49236fc1.be095",
+        "name": "Subscribe real_time",
+        "topic": "command/real_time",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "44f24082.844728",
+        "x": 130,
+        "y": 740,
+        "wires": [
+            [
+                "74af44c8.3fa0f4"
+            ]
+        ]
+    },
+    {
+        "id": "74af44c8.3fa0f4",
+        "type": "delay",
+        "z": "49236fc1.be095",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 340,
+        "y": 740,
+        "wires": [
+            [
+                "d69a0e77.5e2eb8"
+            ]
+        ]
+    },
+    {
+        "id": "da5d4ce0.9b4b4",
+        "type": "debug",
+        "z": "49236fc1.be095",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 610,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "10167dca.67f46a",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "Currently",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "darksky/currently",
+                "tot": "str"
+            },
+            {
+                "t": "move",
+                "p": "payload.currently",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 980,
+        "wires": [
+            [
+                "1245697.88f4117"
+            ]
+        ]
+    },
+    {
+        "id": "3cfc4746.7c2378",
+        "type": "change",
+        "z": "49236fc1.be095",
+        "name": "Today",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "darksky/today",
+                "tot": "str"
+            },
+            {
+                "t": "move",
+                "p": "payload.daily.data[0]",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 1020,
+        "wires": [
+            [
+                "6423898e.3da9b8"
+            ]
+        ]
+    },
+    {
+        "id": "6423898e.3da9b8",
+        "type": "rbe",
+        "z": "49236fc1.be095",
+        "name": "",
+        "func": "rbei",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "property": "payload",
+        "x": 430,
+        "y": 1020,
+        "wires": [
+            [
+                "1245697.88f4117"
+            ]
+        ]
+    },
+    {
+        "id": "44f24082.844728",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "CloudMQTT",
+        "broker": "soldier.cloudmqtt.com",
+        "port": "15692",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]
