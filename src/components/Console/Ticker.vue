@@ -21,7 +21,7 @@
       IT'S RAINING CATS AND DOGS!
     </li>
     <!-- Current Conditions -->
-    <li>Currently it's {{ current.summary }}</li>
+    <li>Currently: {{ current.summary }}</li>
     <li>Cloud cover: {{ (current.cloudCover * 100).toFixed() }}%</li>
     <li>Visibility: {{ current.visibility.toFixed() }} miles</li>
     <li v-if="current.uvIndex">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import moment from "moment";
+// import moment from "moment";
 
 export default {
   name: "Ticker",
@@ -131,9 +131,9 @@ export default {
     }
   },
   filters: {
-    moment: function(value, format) {
-      return moment.unix(value).format(format);
-    },
+    // moment: function(value, format) {
+    //   return moment.unix(value).format(format);
+    // },
     direction: function(bearing) {
       const arr = [
         "NORTH",

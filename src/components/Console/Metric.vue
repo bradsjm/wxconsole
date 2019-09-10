@@ -72,25 +72,26 @@ export default {
     },
     rotate () {
       return {
-        transform: 'rotate(' + this.trend + 'deg)'
+        transform: 'rotate(' + this.trendTween + 'deg)'
       }
     }
   },
   data() {
     return {
-      count: 0,
-      mean: 0
+      // count: 0,
+      // mean: 0
     }
   },
   mixins: [
-    VueMixinTween('value', 250)
+    VueMixinTween('value', 250),
+    VueMixinTween('trend', 1000)
   ],
   watch: {
-    value: function(oldValue, newValue) {
-      this.count++;
-      const differential = (newValue - this.mean) / this.count;
-      this.mean = this.mean + differential;
-    }
+    // value: function(oldValue, newValue) {
+    //   this.count++;
+    //   const differential = (newValue - this.mean) / this.count;
+    //   this.mean = this.mean + differential;
+    // }
   }
 }
 </script>

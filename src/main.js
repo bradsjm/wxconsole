@@ -1,22 +1,23 @@
-import Vue from "vue"
 import App from "./App.vue"
-import VueMqtt from "vue-mqtt"
-import VueTimers from "vue-timers"
+import Vue from "vue"
 import VueAppInsights from "vue-app-insights";
+import vueMoment from 'vue-moment';
+import VueMqtt from "vue-mqtt"
 import vueSmoothScroll from 'vue-smoothscroll';
+import VueTimers from "vue-timers"
 
+Vue.use(vueMoment);
 Vue.use(vueSmoothScroll);
-
-Vue.use(VueMqtt, "wss://soldier.cloudmqtt.com:35692", {
-  username: "wx",
-  password: "wx"
-})
+Vue.use(VueTimers)
 
 Vue.use(VueAppInsights, {
   id: "da0e976e-34ce-45c6-969a-054033350567"
 });
 
-Vue.use(VueTimers)
+Vue.use(VueMqtt, "wss://soldier.cloudmqtt.com:35692", {
+  username: "wx",
+  password: "wx"
+})
 
 Vue.config.productionTip = false
 
