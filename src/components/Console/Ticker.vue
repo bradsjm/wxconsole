@@ -75,7 +75,6 @@ export default {
   },
   data() {
     return {
-      messages: [],
       position: 0
     };
   },

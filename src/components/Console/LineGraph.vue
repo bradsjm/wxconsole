@@ -12,7 +12,7 @@ export default {
     },
     seconds: {
       type: Number,
-      default: 10000
+      default: 60
     },
     label: {
       type: String,
@@ -91,7 +91,9 @@ export default {
         },
         plugins: {
           streaming: {
-            frameRate: 15
+            frameRate: 15,
+            duration: this.seconds * 1000,
+            delay: 2500
           }
         }
       }
@@ -104,22 +106,6 @@ export default {
         x: Date.now(),
         y: newValue
       })
-    }
-  },
-  created() {
-    // Configure real time data push
-    //let vm = this;
-    this.options.scales.xAxes[0].realtime =
-    {
-      duration: this.seconds * 1000 || 10000,
-      delay: 3000,
-      // refresh: 2500,
-      // onRefresh: function(chart) {
-      //   chart.data.datasets[0].data.push({
-      //       x: Date.now(),
-      //       y: vm.value
-      //   })
-      //}
     }
   },
   mounted() {
