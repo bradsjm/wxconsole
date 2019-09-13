@@ -5,25 +5,27 @@
       slot-scope="{ now, current, today, indicator }"
     >
       <div :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }">
-        <!-- Indicators -->
-        <ForecastIcon
-          top="8px"
-          left="160px"
-          v-if="current.loaded"
-          :icon="current.icon"
-        />
-        <MoonIcon
-          top="8px"
-          left="220px"
-          v-if="now.loaded"
-          :ts="now.ts"
-        />
-        <DateTime
-          top="8px"
-          left="270px"
-          v-if="now.loaded"
-          :ts="now.ts"
-        />
+        <div
+          style="top: 8px; left: 160px; width: 260px;"
+          v-if="now.loaded && current.loaded"
+        >
+          <!-- Indicators -->
+          <ForecastIcon
+            top="0px"
+            left="0px"
+            :icon="current.icon"
+          />
+          <MoonIcon
+            top="0px"
+            left="60px"
+            :ts="now.ts"
+          />
+          <DateTime
+            top="0px"
+            left="110px"
+            :ts="now.ts"
+          />
+        </div>
         <!-- Anemometer -->
         <div
           style="top: 10px; left: 15px; width: 120px; height: 125px;"
@@ -49,105 +51,10 @@
             :outline="false"
           />
         </div>
-        <!-- Line 1: Temperature and Barometric Pressure -->
-        <Metric
-          top="43px"
-          left="160px"
-          width="80px"
-          label="TEMP OUT"
-          unit="&nbsp;&deg;F"
-          v-if="now.loaded"
-          :value="now.temp"
-          :decimals="1"
-          :sup="true"
-        />
-        <Metric
-          top="43px"
-          left="240px"
-          width="80px"
-          label="HUM OUT"
-          unit="&nbsp;%"
-          v-if="now.loaded"
-          :value="now.hum"
-          :sup="true"
-        />
-        <Metric
-          top="43px"
-          left="320px"
-          width="105px"
-          label="BAROMETER"
-          unit="inHg"
-          v-if="now.loaded"
-          :value="now.bar_sea_level"
-          :decimals="2"
-          :sup="false"
-          :trend="now.bar_trend | trend"
-        />
-        <!-- Line 2: Feels like and Dew Point -->
-        <Metric
-          top="99px"
-          left="160px"
-          width="80px"
-          label="FEELS LIKE"
-          unit="&nbsp;&deg;F"
-          v-if="now.loaded"
-          :value="now.thw_index"
-          :decimals="1"
-          :sup="true"
-        />
-        <Metric
-          top="99px"
-          left="242px"
-          width="80px"
-          label="DEW POINT"
-          unit="&nbsp;&deg;F"
-          v-if="now.loaded"
-          :value="now.dew_point"
-          :decimals="1"
-          :sup="true"
-        />
-        <Metric
-          top="99px"
-          left="320px"
-          width="105px"
-          label="STORM WATCH"
-          unit="&nbsp;mi"
-          v-if="current.loaded"
-          :value="current.nearestStormDistance"
-          :trend="current.nearestStormBearing"
-          :decimals="0"
-          :sup="false"
-        />
-        <!-- Line 3: Rain Gauge -->
-        <Metric
-          top="155px"
-          left="160px"
-          width="80px"
-          label="DAILY RAIN"
-          unit="in"
-          v-if="now.loaded"
-          :value="now.rainfall_daily / 100"
-          :decimals="2"
-        />
-        <Metric
-          top="155px"
-          left="245px"
-          width="80px"
-          label="HOURLY RAIN"
-          unit="in"
-          v-if="now.loaded"
-          :value="now.rainfall_last_60_min / 100"
-          :decimals="2"
-        />
-        <Metric
-          top="155px"
-          left="320px"
-          width="105px"
-          label="RAIN RATE"
-          unit="in"
-          v-if="now.loaded"
-          :value="now.rain_rate_last / 100"
-          :decimals="2"
+        <!-- Metric Display -->
+        <CurrentMetrics
+          :now="now"
+          :current="current"
         />
         <!-- Line Graph -->
         <div
@@ -207,10 +114,10 @@
 </template>
 
 <script>
+import CurrentMetrics from "./CurrentMetrics.vue";
 import DateTime from "./DateTime.vue";
 import ForecastIcon from "./ForecastIcon.vue";
 import LineGraph from "./LineGraph.vue";
-import Metric from "./Metric.vue";
 import MoonIcon from "./MoonIcon.vue";
 import Ticker from "./Ticker.vue";
 import WindDirection from "./WindDirection.vue";
@@ -220,10 +127,10 @@ import WeatherData from "./WeatherData.vue";
 export default {
   name: "Console",
   components: {
+    CurrentMetrics,
     DateTime,
     ForecastIcon,
     LineGraph,
-    Metric,
     MoonIcon,
     Ticker,
     WindDirection,
@@ -236,15 +143,6 @@ export default {
     };
   },
   filters: {
-    trend(value) {
-      // Trend direction (0 is up, 90 is steady, 180 is down)
-      if (value <= -0.02) return 16;
-      if (value > -0.02 && value < 0.0) return 53;
-      if (value == 0) return 90;
-      if (value > 0.0 && value < 0.02) return 127;
-      if (value >= 0.02) return 164;
-      return 90;
-    },
     now(ts) {
       // Convert to per minute precision to reduce updates
       return Math.round(ts / 60) * 60;

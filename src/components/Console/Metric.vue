@@ -103,7 +103,7 @@ export default {
 }
 
 .trend {
-  top: 15px;
+  top: 20px;
   right: 15px;
   font-size: 12px;
   font-weight: bolder;
