@@ -149,7 +149,6 @@
           :value="now.rain_rate_last / 100"
           :decimals="2"
         />
-
         <!-- Line Graph -->
         <div
           class="label"
@@ -176,11 +175,19 @@
         >
           Vertical Scale: Auto
         </div>
+        <!-- Data Indicator -->
         <div
-          class="digital medium antenna"
+          class="antenna"
           style="top: 223px; right: 10px;"
-          :class="{ 'antenna-on': indicator, 'antenna-off': !indicator }"
         />
+        <transition name="fade">
+          <div
+            v-show="indicator"
+            class="antenna antenna-on"
+            style="top: 223px; right: 10px;"
+          />
+        </transition>
+        <!-- Information Ticker -->
         <Ticker
           top="223px"
           left="13px"
@@ -232,9 +239,9 @@ export default {
     trend(value) {
       // Trend direction (0 is up, 90 is steady, 180 is down)
       if (value <= -0.02) return 16;
-      if (value > -0.02 && value < 0.00) return 53;
+      if (value > -0.02 && value < 0.0) return 53;
       if (value == 0) return 90;
-      if (value > 0.00 && value < 0.02) return 127;
+      if (value > 0.0 && value < 0.02) return 127;
       if (value >= 0.02) return 164;
       return 90;
     },
@@ -290,17 +297,12 @@ export default {
 .antenna {
   background: url("./images/antenna-icons.png") no-repeat;
   display: block;
-}
-
-.antenna-off {
   width: 19px;
   height: 20px;
   background-position: -5px -5px;
 }
 
 .antenna-on {
-  width: 19px;
-  height: 20px;
   background-position: -34px -5px;
 }
 

@@ -34,7 +34,7 @@ export default {
   },
   timers: {
     ping: { time: pingMinutes * 60000, autostart: true, repeat: true },
-    reset: { time: 2000 }
+    reset: { time: 1500 }
   },
   methods: {
     ping: function() {

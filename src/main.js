@@ -6,6 +6,8 @@ import VueMqtt from "vue-mqtt"
 import vueSmoothScroll from 'vue-smoothscroll';
 import VueTimers from "vue-timers"
 
+require('vue2-animate/dist/vue2-animate.min.css')
+
 Vue.use(vueMoment);
 Vue.use(vueSmoothScroll);
 Vue.use(VueTimers)
