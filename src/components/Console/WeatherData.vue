@@ -6,14 +6,15 @@ export default {
   data() {
     return {
       indicator: false,
+      map: new Map(),
       current: {
-        loaded: false
+        ready: false
       },
       now: {
-        loaded: false
+        ready: false
       },
       today: {
-        loaded: false
+        ready: false
       }
     };
   },
@@ -40,6 +41,10 @@ export default {
     ping: function() {
       this.$mqtt.publish("command/real_time");
     },
+    pulse: function() {
+      this.indicator = true;
+      this.$timer.restart("reset");
+    },
     reset: function() {
       this.indicator = false;
     }
@@ -47,12 +52,11 @@ export default {
   mqtt: {
     "vantage/#"(data, topic) {
       try {
-        this.indicator = true;
-        this.$timer.restart("reset");
+        this.pulse();
         const wx = JSON.parse(data.toString());
+        this.map.set(wx.data_structure_type, true);
         this.now = Object.assign({}, this.now, wx);
-        const count = Object.keys(this.now).length;
-        this.now.loaded = count >= 51;
+        this.now.ready = this.map.has(1) && this.map.has(3) && this.map.has(4);
       } catch (e) {
         // eslint-disable-next-line
         console.warn(topic + ": " + e + " (" + data.toString() + ")");
@@ -60,19 +64,16 @@ export default {
     },
     "darksky/#"(data, topic) {
       try {
-        this.indicator = true;
-        this.$timer.restart("reset");
+        this.pulse();
         const darksky = JSON.parse(data.toString());
-        const count = Object.keys(darksky).length;
-        switch (topic)
-        {
+        switch (topic) {
           case "darksky/currently":
             this.current = darksky;
-            this.current.loaded = count >= 19;
+            this.current.ready = darksky.hasOwnProperty("time");
             break;
           case "darksky/today":
             this.today = darksky;
-            this.today.loaded = count >= 39;
+            this.today.ready = darksky.hasOwnProperty("time");
         }
       } catch (e) {
         // eslint-disable-next-line

@@ -7,7 +7,7 @@
       <div :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }">
         <div
           style="top: 8px; left: 160px; width: 260px;"
-          v-if="now.loaded && current.loaded"
+          v-if="now.ready && current.ready"
         >
           <!-- Indicators -->
           <ForecastIcon
@@ -29,7 +29,7 @@
         <!-- Anemometer -->
         <div
           style="top: 10px; left: 15px; width: 120px; height: 125px;"
-          v-if="now.loaded"
+          v-if="now.ready"
         >
           <WindSpeed
             unit="MPH"
@@ -72,7 +72,7 @@
         <LineGraph
           class="graph"
           label="Wind Speed"
-          v-if="now.loaded"
+          v-if="now.ready"
           :value="now.wind_speed_last"
           :seconds="60"
         />
@@ -98,7 +98,7 @@
         <Ticker
           top="223px"
           left="13px"
-          v-if="current.loaded && today.loaded && now.loaded"
+          v-if="current.ready && today.ready && now.ready"
           :current="current"
           :today="today"
           :now="now"

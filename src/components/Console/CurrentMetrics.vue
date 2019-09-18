@@ -1,5 +1,5 @@
 <template>
-  <div v-if="current.loaded && now.loaded">
+  <div v-if="current.ready && now.ready">
     <!-- Line 1: Temperature and Barometric Pressure -->
     <Metric
       top="43px"
