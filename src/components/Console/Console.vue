@@ -152,6 +152,16 @@ export default {
     toggleLight: function() {
       this.backlight = !this.backlight;
     }
+  },
+  watch: {
+    backlight(newState) {
+      localStorage.backlight = newState;
+    }
+  },
+  mounted() {
+    if (localStorage.backlight) {
+      this.backlight = localStorage.backlight == "true";
+    }
   }
 };
 </script>

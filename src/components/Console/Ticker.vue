@@ -36,8 +36,8 @@
     <li v-if="current.precipProbability">
       Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
-    <li v-if="current.nearestStormDistance">
-      Nearest storm: {{ current.nearestStormDistance }} miles ({{ current.nearestStormBearing | direction }})
+    <li v-if="current.nearestStormDistance > 0">
+      Nearest storm: {{ current.nearestStormDistance }} miles away (headed {{ current.nearestStormBearing | direction }})
     </li>
   </div>
 </template>
@@ -110,7 +110,7 @@ export default {
     scroll: { time: 4000, autostart: true, repeat: true }
   },
   watch: {
-    position: function(oldValue, newValue) {
+    position(newValue) {
       const ctx = this.$refs["view"];
       const items = Array.from(ctx.children);
       const height = items

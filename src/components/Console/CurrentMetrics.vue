@@ -79,7 +79,7 @@
       width="80px"
       label="HOURLY RAIN"
       unit="in"
-      :value="now.rainfall_last_60_min / 100"
+      :value="now.rain_60_min / 100"
       :decimals="2"
     />
     <Metric

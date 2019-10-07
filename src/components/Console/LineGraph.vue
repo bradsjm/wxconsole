@@ -101,7 +101,7 @@ export default {
   },
   watch:
   {
-    value: function(oldValue, newValue){
+    value(newValue){
       this.data.datasets[0].data.push({
         x: Date.now(),
         y: newValue
