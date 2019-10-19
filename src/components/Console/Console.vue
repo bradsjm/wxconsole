@@ -36,7 +36,6 @@
             top="0px"
             left="0px"
             :value="now.wind_speed_last"
-            :decimals="1"
           />
           <WindDirection
             top="14px"
@@ -159,7 +158,12 @@ export default {
 <style>
 @font-face {
   font-family: Digi;
-  src: url("./fonts/digi.woff");
+  src: url("./fonts/digi.woff2");
+}
+
+@font-face {
+  font-family: DigiMono;
+  src: url("./fonts/digi-mono.woff2");
 }
 
 #console {
@@ -223,7 +227,11 @@ export default {
 .digital {
   font-family: Digi;
   color: #053d6c;
-  font-variant-numeric: tabular-nums;
+}
+
+.digital-mono {
+  font-family: DigiMono;
+  color: #053d6c;
 }
 
 .center {

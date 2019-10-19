@@ -7,8 +7,8 @@
       WIND
     </div>
     <div
-      class="digital center large"
-      style="top: 42px; width: 100%;"
+      class="digital-mono center large"
+      style="top: 38px; width: 100%;"
     >
       {{ valueTween.toFixed(decimals) }}
     </div>
@@ -40,13 +40,14 @@ export default {
       type: Number,
       required: true
     },
-    decimals: {
-      type: Number,
-      default: 0
-    },
     unit: {
       type: String,
       default: "MPH"
+    }
+  },
+  computed: {
+    decimals() {
+      return this.valueTween < 9 ? 1 : 0;
     }
   },
   mixins: [
