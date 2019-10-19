@@ -5,12 +5,10 @@
 </template>
 
 <script>
-import Console from "@/components/Console/Console.vue";
-
 export default {
   name: "App",
   components: {
-    Console
+    Console: () => import("@/components/Console/Console.vue")
   }
 };
 </script>

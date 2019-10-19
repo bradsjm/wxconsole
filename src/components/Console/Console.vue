@@ -114,28 +114,18 @@
 </template>
 
 <script>
-import CurrentMetrics from "./CurrentMetrics.vue";
-import DateTime from "./DateTime.vue";
-import ForecastIcon from "./ForecastIcon.vue";
-import LineGraph from "./LineGraph.vue";
-import MoonIcon from "./MoonIcon.vue";
-import Ticker from "./Ticker.vue";
-import WindDirection from "./WindDirection.vue";
-import WindSpeed from "./WindSpeed.vue";
-import WeatherData from "./WeatherData.vue";
-
 export default {
   name: "Console",
   components: {
-    CurrentMetrics,
-    DateTime,
-    ForecastIcon,
-    LineGraph,
-    MoonIcon,
-    Ticker,
-    WindDirection,
-    WindSpeed,
-    WeatherData
+    CurrentMetrics: () => import("./CurrentMetrics.vue"),
+    DateTime: () => import("./DateTime.vue"),
+    ForecastIcon: () => import("./ForecastIcon.vue"),
+    LineGraph: () => import("./LineGraph.vue"),
+    MoonIcon: () => import("./MoonIcon.vue"),
+    Ticker: () => import("./Ticker.vue"),
+    WindDirection: () => import("./WindDirection.vue"),
+    WindSpeed: () => import("./WindSpeed.vue"),
+    WeatherData: () => import("./WeatherData.vue")
   },
   data() {
     return {

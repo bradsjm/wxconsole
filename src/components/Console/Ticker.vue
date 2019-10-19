@@ -37,7 +37,7 @@
       Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
     <li v-if="current.nearestStormDistance > 0">
-      Nearest storm: {{ current.nearestStormDistance }} miles away (headed {{ current.nearestStormBearing | direction }})
+      Nearest storm: {{ current.nearestStormDistance }} miles away
     </li>
   </div>
 </template>
@@ -130,9 +130,6 @@ export default {
     }
   },
   filters: {
-    // moment: function(value, format) {
-    //   return moment.unix(value).format(format);
-    // },
     direction: function(bearing) {
       const arr = [
         "NORTH",

@@ -59,9 +59,7 @@
       label="STORM WATCH"
       unit="&nbsp;mi"
       :value="current.nearestStormDistance"
-      :trend="current.nearestStormBearing"
       :decimals="0"
-      :sup="false"
     />
     <!-- Line 3: Rain Gauge -->
     <Metric
@@ -70,7 +68,7 @@
       width="80px"
       label="DAILY RAIN"
       unit="in"
-      :value="now.rainfall_daily / 100"
+      :value="(now.rainfall_daily || 0) / 100"
       :decimals="2"
     />
     <Metric
@@ -79,7 +77,7 @@
       width="80px"
       label="HOURLY RAIN"
       unit="in"
-      :value="now.rain_60_min / 100"
+      :value="(now.rain_60_min || 0) / 100"
       :decimals="2"
     />
     <Metric
@@ -95,12 +93,10 @@
 </template>
 
 <script>
-import Metric from "./Metric.vue";
-
 export default {
   name: "ConsoleNow",
   components: {
-    Metric
+    Metric: () => import("./Metric.vue")
   },
   props: {
     now: {
