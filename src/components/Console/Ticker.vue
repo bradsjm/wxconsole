@@ -31,8 +31,8 @@
       Ozone level: {{ current.ozone.toFixed() }} - {{ ozoneLevel(current.ozone) }}
     </li>
     <!-- Forecasted Conditions -->
-    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ moment(today.temperatureLowTime, "LT") }}</li>
-    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ moment(today.temperatureHighTime, "LT") }}</li>
+    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ format(today.temperatureLowTime) }}</li>
+    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ format(today.temperatureHighTime) }}</li>
     <li v-if="current.precipProbability">
       Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-// import moment from "moment";
+import moment from 'moment'
 
 export default {
   name: "Ticker",
@@ -107,7 +107,7 @@ export default {
     }
   },
   timers: {
-    scroll: { time: 4000, autostart: true, repeat: true }
+    //scroll: { time: 4000, autostart: true, repeat: true }
   },
   watch: {
     position(newValue) {
@@ -120,6 +120,9 @@ export default {
     }
   },
   methods: {
+    format(ts) {
+      return moment(ts).format("LT")
+    },
     scroll() {
       let pos = this.position + 1;
       let total = this.$refs["view"].children.length;
