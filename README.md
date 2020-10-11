@@ -1,6 +1,10 @@
 # wxconsole
 
-## Project setup
+Virtual Weather Console for Weather Link Live with real-time updates via MQTT pub/sub. Uses Node Red flow to push WLL UDP broadcasts to MQTT.
+
+See demonstration of my current weatherstation at http://wxconsole.nrgup.cloud/
+
+## Frontend Project setup
 ```
 npm install
 ```

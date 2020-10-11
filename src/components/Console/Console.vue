@@ -33,18 +33,19 @@
           unit="MPH"
           top="0px"
           left="0px"
-          :value="now.wind_speed_last"
+          :value="now.wind_speed_last || 0"
         />
         <WindDirection
           top="14px"
           left="11px"
-          :value="now.wind_dir_at_hi_speed_last_10_min"
+          :value="now.wind_dir_at_hi_speed_last_10_min || 0"
           :outline="true"
         />
         <WindDirection
+          v-if="'wind_dir_last' in now"
           top="14px"
           left="11px"
-          :value="now.wind_dir_last"
+          :value="now.wind_dir_last || 0"
           :outline="false"
         />
       </div>
@@ -144,9 +145,9 @@ export default {
     "daviswx/001D0A710CBF/#"(data, topic) {
       try {
         const key = topic.split("/").pop()
-        this.now[key] = /\d+/.test(data) ? Number(data) : data;
+        this.now[key] = /^\d/.test(data) ? Number(data) : data;
         this.pulse();
-        this.now.ready = true;
+        this.now.ready = "ts" in this.now;
       } catch (e) {
         // eslint-disable-next-line
         console.warn(topic + ": " + e + " (" + data.toString() + ")");
