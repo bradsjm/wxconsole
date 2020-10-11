@@ -69,11 +69,11 @@ export default {
         switch (topic) {
           case "darksky/currently":
             this.current = darksky;
-            this.current.ready = darksky.hasOwnProperty("time");
+            this.current.ready = "time" in darksky;
             break;
           case "darksky/today":
             this.today = darksky;
-            this.today.ready = darksky.hasOwnProperty("time");
+            this.today.ready = "time" in darksky;
         }
       } catch (e) {
         // eslint-disable-next-line

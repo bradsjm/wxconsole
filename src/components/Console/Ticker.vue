@@ -25,14 +25,14 @@
     <li>Cloud cover: {{ (current.cloudCover * 100).toFixed() }}%</li>
     <li>Visibility: {{ current.visibility.toFixed() }} miles</li>
     <li v-if="current.uvIndex">
-      UV Index: {{ current.uvIndex }} - {{ current.uvIndex | uvIndexLevel }}
+      UV Index: {{ current.uvIndex }} - {{ uvIndexLevel(current.uvIndex) }}
     </li>
     <li v-if="current.ozone">
-      Ozone level: {{ current.ozone.toFixed() }} - {{ current.ozone | ozoneLevel }}
+      Ozone level: {{ current.ozone.toFixed() }} - {{ ozoneLevel(current.ozone) }}
     </li>
     <!-- Forecasted Conditions -->
-    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ today.temperatureLowTime | moment("LT") }}</li>
-    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ today.temperatureHighTime | moment("LT") }}</li>
+    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ moment(today.temperatureLowTime, "LT") }}</li>
+    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ moment(today.temperatureHighTime, "LT") }}</li>
     <li v-if="current.precipProbability">
       Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
@@ -127,9 +127,7 @@ export default {
         pos = 0;
       }
       this.position = pos;
-    }
-  },
-  filters: {
+    },
     direction: function(bearing) {
       const arr = [
         "NORTH",

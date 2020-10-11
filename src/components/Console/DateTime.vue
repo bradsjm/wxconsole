@@ -4,7 +4,7 @@
     :style="{ top: top, left: left }"
     class="digital small"
   >
-    {{ ts | formatDate(format) }}
+    {{ formatDate(ts, format) }}
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
       default: "L LT"
     }
   },
-  filters: {
+  methods: {
     formatDate: function (value, format) {
       return moment.unix(value).format(format);
     }

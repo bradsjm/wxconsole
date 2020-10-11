@@ -29,7 +29,7 @@
       :value="now.bar_sea_level"
       :decimals="2"
       :sup="false"
-      :trend="now.bar_trend | trend"
+      :trend="trend(now.bar_trend)"
     />
     <!-- Line 2: Feels like and Dew Point -->
     <Metric
@@ -108,7 +108,7 @@ export default {
       required: true
     }
   },
-  filters: {
+  methods: {
     trend(value) {
       // Trend direction (0 is up, 90 is steady, 180 is down)
       if (value <= -0.02) return 16;

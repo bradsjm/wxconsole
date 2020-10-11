@@ -77,22 +77,12 @@ export default {
     }
   },
   data() {
-    return {
-      // count: 0,
-      // mean: 0
-    }
+    return {}
   },
   mixins: [
     VueMixinTween('value', 250),
     VueMixinTween('trend', 1000)
-  ],
-  watch: {
-    // value: function(oldValue, newValue) {
-    //   this.count++;
-    //   const differential = (newValue - this.mean) / this.count;
-    //   this.mean = this.mean + differential;
-    // }
-  }
+  ]
 }
 </script>
 

@@ -131,12 +131,6 @@ export default {
       backlight: true
     };
   },
-  filters: {
-    now(ts) {
-      // Convert to per minute precision to reduce updates
-      return Math.round(ts / 60) * 60;
-    }
-  },
   methods: {
     toggleLight: function() {
       this.backlight = !this.backlight;
