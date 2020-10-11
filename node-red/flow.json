@@ -1,15 +1,15 @@
 [
     {
-        "id": "49236fc1.be095",
+        "id": "370e9e1.11b4462",
         "type": "tab",
         "label": "Weather Station",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "50b20884.15b328",
+        "id": "f29a669e.1b5348",
         "type": "udp in",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Weather Data Stream",
         "iface": "",
         "port": "22222",
@@ -17,407 +17,269 @@
         "multicast": "false",
         "group": "",
         "datatype": "utf8",
-        "x": 120,
-        "y": 40,
+        "x": 140,
+        "y": 60,
         "wires": [
             [
-                "f1078fe2.3455a"
+                "9a9df2d7.536cd"
             ]
         ]
     },
     {
-        "id": "94117af6.0f8d08",
-        "type": "debug",
-        "z": "49236fc1.be095",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "x": 610,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "7a68a01.0994c6",
-        "type": "inject",
-        "z": "49236fc1.be095",
-        "name": "Every 15 minutes",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "960",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "1",
-        "x": 130,
-        "y": 860,
-        "wires": [
-            [
-                "c8845962.d06e6"
-            ]
-        ]
-    },
-    {
-        "id": "d69a0e77.5e2eb8",
-        "type": "http request",
-        "z": "49236fc1.be095",
-        "name": "Req Real Time Push",
-        "method": "GET",
-        "ret": "obj",
-        "paytoqs": false,
-        "url": "http://10.10.10.220/v1/real_time?duration=3600",
-        "tls": "",
-        "proxy": "",
-        "authType": "",
-        "x": 360,
-        "y": 800,
-        "wires": [
-            [
-                "da5d4ce0.9b4b4"
-            ]
-        ]
-    },
-    {
-        "id": "f1078fe2.3455a",
+        "id": "9a9df2d7.536cd",
         "type": "json",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Parse JSON string",
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 350,
-        "y": 40,
+        "x": 370,
+        "y": 60,
         "wires": [
             [
-                "8dca5f0e.70d808"
+                "fc92311.51807d"
             ]
         ]
     },
     {
-        "id": "e63b4053.dcd72",
-        "type": "split",
-        "z": "49236fc1.be095",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 430,
-        "y": 160,
-        "wires": [
-            [
-                "839f99e7.7c8d88"
-            ]
-        ]
-    },
-    {
-        "id": "57baedfc.d72bf4",
-        "type": "change",
-        "z": "49236fc1.be095",
-        "name": "",
-        "rules": [
-            {
-                "t": "move",
-                "p": "payload.ts",
-                "pt": "msg",
-                "to": "ts",
-                "tot": "flow"
-            },
-            {
-                "t": "move",
-                "p": "payload.conditions",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 340,
+        "id": "fc92311.51807d",
+        "type": "function",
+        "z": "370e9e1.11b4462",
+        "name": "Translate Object",
+        "func": "const prefix = \"daviswx\";\nconst did = msg.payload.did;\nconst ts = msg.payload.ts;\nconst conditions = msg.payload.conditions;\n\nvar output = [\n    {\n        topic: prefix + \"/\" + did.toString() + \"/ts\",\n        payload: ts\n    }\n];\n\n// Iterate through each condition report\nconditions.forEach(function (c) {\n    const topic = prefix + \"/\" + did.toString() + \"/\" + c.txid.toString() + \"/\";\n    // Iterate values inside condition\n    for (const [key, value] of Object.entries(c)) {\n        if (key != \"data_structure_type\") {\n            output.push({\n                topic: topic + key,\n                payload: value\n            });\n        }\n    }\n});\n\nreturn [ output ];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 360,
         "y": 100,
         "wires": [
             [
-                "a743e9c0.4c6d7"
+                "4da15943.367078"
             ]
         ]
     },
     {
-        "id": "930213d4.a5c98",
-        "type": "mqtt out",
-        "z": "49236fc1.be095",
-        "name": "Publish weather/Live",
-        "topic": "vantage/live",
-        "qos": "0",
-        "retain": "false",
-        "broker": "44f24082.844728",
-        "x": 360,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "4b78f0b7.ab4598",
-        "type": "http request",
-        "z": "49236fc1.be095",
-        "name": "Req Conditions",
-        "method": "GET",
-        "ret": "obj",
-        "paytoqs": false,
-        "url": "http://10.10.10.220/v1/current_conditions",
-        "tls": "",
-        "proxy": "",
-        "authType": "",
-        "x": 340,
-        "y": 360,
-        "wires": [
-            [
-                "6dadffdf.91fe7"
-            ]
-        ]
-    },
-    {
-        "id": "506ff08e.a26f3",
-        "type": "inject",
-        "z": "49236fc1.be095",
-        "name": "Every minute",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "61",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "1",
-        "x": 120,
-        "y": 360,
-        "wires": [
-            [
-                "4b78f0b7.ab4598"
-            ]
-        ]
-    },
-    {
-        "id": "5aadabf6.27a3cc",
+        "id": "75bb6fa4.fd3f5",
         "type": "debug",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
         "x": 590,
-        "y": 600,
+        "y": 140,
         "wires": []
     },
     {
-        "id": "a75a820c.9a0f08",
-        "type": "split",
-        "z": "49236fc1.be095",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 310,
-        "y": 540,
-        "wires": [
-            [
-                "d533075e.9c80f8"
-            ]
-        ]
-    },
-    {
-        "id": "435a76e5.b04218",
-        "type": "change",
-        "z": "49236fc1.be095",
-        "name": "",
-        "rules": [
-            {
-                "t": "move",
-                "p": "payload.data.ts",
-                "pt": "msg",
-                "to": "ts",
-                "tot": "flow"
-            },
-            {
-                "t": "move",
-                "p": "payload.data.conditions",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 340,
-        "y": 480,
-        "wires": [
-            [
-                "a75a820c.9a0f08"
-            ]
-        ]
-    },
-    {
-        "id": "9de098dd.f4d378",
-        "type": "mqtt out",
-        "z": "49236fc1.be095",
-        "name": "Publish vantage/current_conditions",
-        "topic": "",
-        "qos": "0",
-        "retain": "true",
-        "broker": "44f24082.844728",
-        "x": 400,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "d533075e.9c80f8",
-        "type": "change",
-        "z": "49236fc1.be095",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.ts",
-                "pt": "msg",
-                "to": "ts",
-                "tot": "flow"
-            },
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "$string('vantage/current_conditions/' & payload.data_structure_type)",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 340,
-        "y": 600,
-        "wires": [
-            [
-                "9de098dd.f4d378",
-                "5aadabf6.27a3cc"
-            ]
-        ]
-    },
-    {
-        "id": "839f99e7.7c8d88",
-        "type": "change",
-        "z": "49236fc1.be095",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload.ts",
-                "pt": "msg",
-                "to": "ts",
-                "tot": "flow"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 350,
-        "y": 220,
-        "wires": [
-            [
-                "930213d4.a5c98",
-                "94117af6.0f8d08"
-            ]
-        ]
-    },
-    {
-        "id": "a743e9c0.4c6d7",
+        "id": "4da15943.367078",
         "type": "rbe",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "",
-        "func": "rbei",
+        "func": "rbe",
         "gap": "",
         "start": "",
         "inout": "out",
         "property": "payload",
-        "x": 310,
-        "y": 160,
+        "x": 330,
+        "y": 140,
         "wires": [
             [
-                "e63b4053.dcd72"
+                "75bb6fa4.fd3f5",
+                "5c5726d3.284e28",
+                "f8a59b4a.6618f8"
             ]
         ]
     },
     {
-        "id": "6dadffdf.91fe7",
-        "type": "switch",
-        "z": "49236fc1.be095",
-        "name": "Check payload is JSON",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "istype",
-                "v": "object",
-                "vt": "object"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 370,
-        "y": 420,
-        "wires": [
-            [
-                "435a76e5.b04218"
-            ]
-        ]
-    },
-    {
-        "id": "8dca5f0e.70d808",
-        "type": "switch",
-        "z": "49236fc1.be095",
-        "name": "Check payload is JSON",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "istype",
-                "v": "object",
-                "vt": "object"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 590,
-        "y": 40,
-        "wires": [
-            [
-                "57baedfc.d72bf4"
-            ]
-        ]
-    },
-    {
-        "id": "c8845962.d06e6",
+        "id": "3a3c4999.b29156",
         "type": "http request",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
+        "name": "Req Conditions",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://10.10.20.45/v1/current_conditions",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 360,
+        "y": 320,
+        "wires": [
+            [
+                "2296b91a.0a6a66",
+                "4d075e2c.a70a2"
+            ]
+        ]
+    },
+    {
+        "id": "a56cb8e.7eb9348",
+        "type": "inject",
+        "z": "370e9e1.11b4462",
+        "name": "Every minute",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "61",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "3a3c4999.b29156"
+            ]
+        ]
+    },
+    {
+        "id": "2296b91a.0a6a66",
+        "type": "function",
+        "z": "370e9e1.11b4462",
+        "name": "Translate Object",
+        "func": "if (!msg.payload.data) return\n\nconst prefix = \"daviswx\"\nconst did = msg.payload.data.did\nconst ts = msg.payload.data.ts\nconst conditions = msg.payload.data.conditions\n\nvar output = [\n    {\n        topic: prefix + \"/\" + did.toString() + \"/did\",\n        payload: did\n    },\n    {\n        topic: prefix + \"/\" + did.toString() + \"/ts\",\n        payload: ts\n    }\n]\n\n// Iterate through each condition report\nconditions.forEach(function (c) {\n    var topic = prefix + \"/\" + did.toString() + \"/\"\n    if (c.txid) topic += c.txid.toString() + \"/\"\n    // Iterate values inside condition\n    for (const [key, value] of Object.entries(c)) {\n        if (key != \"data_structure_type\") {\n            output.push({\n                topic: topic + key,\n                payload: value\n            })\n        }\n    }\n})\n\nreturn [ output ];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "4fdaa192.e622f",
+                "405eeff1.ecb1d",
+                "41e50547.2f575c"
+            ]
+        ]
+    },
+    {
+        "id": "4fdaa192.e622f",
+        "type": "debug",
+        "z": "370e9e1.11b4462",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "5c5726d3.284e28",
+        "type": "mqtt out",
+        "z": "370e9e1.11b4462",
+        "name": "Publish",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "broker": "87a27594.e70098",
+        "x": 580,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "405eeff1.ecb1d",
+        "type": "mqtt out",
+        "z": "370e9e1.11b4462",
+        "name": "Publish",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "87a27594.e70098",
+        "x": 580,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "7f84f019.d7af2",
+        "type": "http request",
+        "z": "370e9e1.11b4462",
+        "name": "Req Real Time Push",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://10.10.20.45/v1/real_time?duration=3600",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 380,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e5ae377c.8bd418",
+        "type": "inject",
+        "z": "370e9e1.11b4462",
+        "name": "Every 15 minutes",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "900",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 560,
+        "wires": [
+            [
+                "7f84f019.d7af2"
+            ]
+        ]
+    },
+    {
+        "id": "2b1d7626.dc109a",
+        "type": "inject",
+        "z": "370e9e1.11b4462",
+        "name": "Every 15 minutes",
+        "repeat": "960",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 640,
+        "wires": [
+            [
+                "cd8d58d0.0a6618"
+            ]
+        ]
+    },
+    {
+        "id": "cd8d58d0.0a6618",
+        "type": "http request",
+        "z": "370e9e1.11b4462",
         "name": "Req Current Forecast",
         "method": "GET",
         "ret": "obj",
@@ -426,18 +288,18 @@
         "tls": "",
         "proxy": "",
         "authType": "",
-        "x": 360,
-        "y": 860,
+        "x": 380,
+        "y": 640,
         "wires": [
             [
-                "f2469475.36a82"
+                "aa17fc99.652a1"
             ]
         ]
     },
     {
-        "id": "f2469475.36a82",
+        "id": "aa17fc99.652a1",
         "type": "switch",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Check payload is JSON",
         "property": "payload",
         "propertyType": "msg",
@@ -451,20 +313,20 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 370,
-        "y": 920,
+        "x": 390,
+        "y": 700,
         "wires": [
             [
-                "110a246d.ebd624",
-                "10167dca.67f46a",
-                "3cfc4746.7c2378"
+                "c11dcd8.0a84e3",
+                "18715655.7fd3ea",
+                "8e3a2d51.4178"
             ]
         ]
     },
     {
-        "id": "110a246d.ebd624",
+        "id": "c11dcd8.0a84e3",
         "type": "debug",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "",
         "active": false,
         "tosidebar": true,
@@ -472,82 +334,27 @@
         "tostatus": false,
         "complete": "true",
         "targetType": "full",
-        "x": 610,
-        "y": 920,
+        "x": 630,
+        "y": 700,
         "wires": []
     },
     {
-        "id": "1245697.88f4117",
+        "id": "3e2cb131.17583e",
         "type": "mqtt out",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Publish darksky",
         "topic": "",
         "qos": "0",
         "retain": "true",
-        "broker": "44f24082.844728",
-        "x": 600,
-        "y": 980,
+        "broker": "87a27594.e70098",
+        "x": 620,
+        "y": 760,
         "wires": []
     },
     {
-        "id": "d76e13b7.b503c8",
-        "type": "mqtt in",
-        "z": "49236fc1.be095",
-        "name": "Subscribe real_time",
-        "topic": "command/real_time",
-        "qos": "0",
-        "datatype": "utf8",
-        "broker": "44f24082.844728",
-        "x": 130,
-        "y": 740,
-        "wires": [
-            [
-                "74af44c8.3fa0f4"
-            ]
-        ]
-    },
-    {
-        "id": "74af44c8.3fa0f4",
-        "type": "delay",
-        "z": "49236fc1.be095",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "minute",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": true,
-        "x": 340,
-        "y": 740,
-        "wires": [
-            [
-                "d69a0e77.5e2eb8"
-            ]
-        ]
-    },
-    {
-        "id": "da5d4ce0.9b4b4",
-        "type": "debug",
-        "z": "49236fc1.be095",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "x": 610,
-        "y": 800,
-        "wires": []
-    },
-    {
-        "id": "10167dca.67f46a",
+        "id": "18715655.7fd3ea",
         "type": "change",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Currently",
         "rules": [
             {
@@ -570,18 +377,18 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 320,
-        "y": 980,
+        "x": 340,
+        "y": 760,
         "wires": [
             [
-                "1245697.88f4117"
+                "3e2cb131.17583e"
             ]
         ]
     },
     {
-        "id": "3cfc4746.7c2378",
+        "id": "8e3a2d51.4178",
         "type": "change",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "Today",
         "rules": [
             {
@@ -604,34 +411,91 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 310,
-        "y": 1020,
+        "x": 330,
+        "y": 800,
         "wires": [
             [
-                "6423898e.3da9b8"
+                "d54fce86.34ad3"
             ]
         ]
     },
     {
-        "id": "6423898e.3da9b8",
+        "id": "d54fce86.34ad3",
         "type": "rbe",
-        "z": "49236fc1.be095",
+        "z": "370e9e1.11b4462",
         "name": "",
         "func": "rbei",
         "gap": "",
         "start": "",
         "inout": "out",
         "property": "payload",
-        "x": 430,
-        "y": 1020,
+        "x": 450,
+        "y": 800,
         "wires": [
             [
-                "1245697.88f4117"
+                "3e2cb131.17583e"
             ]
         ]
     },
     {
-        "id": "44f24082.844728",
+        "id": "4d075e2c.a70a2",
+        "type": "function",
+        "z": "370e9e1.11b4462",
+        "name": "Autodiscovery",
+        "func": "const expire = 300;\nconst deviceid = msg.payload.data.did;\nconst txid = \"1\";\nconst prefix = \"daviswx/\" + deviceid;\nconst txprefix = prefix + \"/\" + txid;\nconst device =  {\n    \"ids\": [ deviceid ],\n    \"manufacturer\": \"Davis Instruments\",\n    \"name\": \"Vantage\",\n    \"model\": \"Vue\"\n};\nconst rain_size = msg.payload.data.conditions[0].rain_size;\nconst rain_convert = rain_size  == 1 ? 0.01\n                 : rain_size  == 2 ? 0.2\n                 : rain_size  == 3 ? 0.1 \n                 : rain_size  == 4 ? 0.001 \n                 : 0;\n\nreturn [[\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_temp/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Temperature\",\n            \"unique_id\": deviceid + \"_temp\",\n            \"state_topic\": txprefix + \"/temp\",\n            \"unit_of_measurement\": \"°F\",\n            \"expire_after\": expire,\n            \"icon\": \"mdi:thermometer\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_hum/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"humidity\",\n            \"name\": \"Current Humidity\",\n            \"unique_id\": deviceid + \"_hum\",\n            \"state_topic\": txprefix + \"/hum\",\n            \"unit_of_measurement\": \"%\",\n            \"expire_after\": expire,\n            \"icon\": \"mdi:water-percent\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_dew_point/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Dew Point\",\n            \"unique_id\": deviceid + \"_dew_point\",\n            \"state_topic\": txprefix + \"/dew_point\",\n            \"unit_of_measurement\": \"F\",\n            \"expire_after\": expire,\n            \"icon\": \"mdi:water\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_wet_bulb/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Web Bulb\",\n            \"unique_id\": deviceid + \"_wet_bulb\",\n            \"state_topic\": txprefix + \"/wet_bulb\",\n            \"unit_of_measurement\": \"F\",\n            \"expire_after\": expire,\n            \"icon\": \"mdi:water\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_heat_index/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Heat Index\",\n            \"unique_id\": deviceid + \"_heat_index\",\n            \"state_topic\": txprefix + \"/heat_index\",\n            \"unit_of_measurement\": \"F\",\n            \"expire_after\": expire\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_wind_chill/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Wind Chill\",\n            \"unique_id\": deviceid + \"_wind_chill\",\n            \"state_topic\": txprefix + \"/wind_chill\",\n            \"unit_of_measurement\": \"F\",\n            \"expire_after\": expire\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_thw_index/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"temperature\",\n            \"name\": \"Current Feels Like\",\n            \"unique_id\": deviceid + \"_thw_index\",\n            \"state_topic\": txprefix + \"/thw_index\",\n            \"unit_of_measurement\": \"F\",\n            \"expire_after\": expire\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_bar_sea_level/config\",\n        payload: {\n            \"device\": device,\n            \"device_class\": \"pressure\",\n            \"name\": \"Barometric Pressure (sea level)\",\n            \"unique_id\": deviceid + \"_bar_sea_level\",\n            \"state_topic\": prefix + \"/bar_sea_level\",\n            \"expire_after\": expire,\n            \"unit_of_measurement\": \"in\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_bar_trend/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Barometric Pressure Trend\",\n            \"unique_id\": deviceid + \"_bar_trend\",\n            \"state_topic\": prefix + \"/bar_trend\",\n            \"icon\": \"mdi:chart-line\",\n            \"expire_after\": expire\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_wind_speed_avg_last_1_min/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Average Wind Speed (last minute)\",\n            \"unique_id\": deviceid + \"_wind_speed_avg_last_1_min\",\n            \"state_topic\": txprefix + \"/wind_speed_avg_last_1_min\",\n            \"unit_of_measurement\": \"mph\",\n            \"icon\": \"mdi:wind-turbine\",\n            \"expire_after\": expire\n        }\n    },    \n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_wind_dir_scalar_avg_last_1_min/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Average Wind Direction (last minute)\",\n            \"unique_id\": deviceid + \"_wind_dir_scalar_avg_last_1_min\",\n            \"state_topic\": txprefix + \"/wind_dir_scalar_avg_last_1_min\",\n            \"unit_of_measurement\": \"°\",\n            \"icon\": \"mdi:compass-outline\",\n            \"expire_after\": expire\n        }\n    },    \n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_rain_rate_last/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Current Rainfall Rate\",\n            \"unique_id\": deviceid + \"_rain_rate_last\",\n            \"state_topic\": txprefix + \"/rain_rate_last\",\n            \"unit_of_measurement\": \"inHr\",\n            \"icon\": \"mdi:water\",\n            \"expire_after\": expire,\n            \"value_template\": \"{{ value | multiply(\" + rain_convert + \") | round(2) }}\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_rainfall_last_15_min/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Rainfall (last 15 minutes)\",\n            \"unique_id\": deviceid + \"_rainfall_last_15_min\",\n            \"state_topic\": txprefix + \"/rainfall_last_15_min\",\n            \"unit_of_measurement\": \"in\",\n            \"icon\": \"mdi:water\",\n            \"expire_after\": expire,\n            \"value_template\": \"{{ value | multiply(\" + rain_convert + \") | round(2) }}\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_rainfall_last_60_min/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Rainfall (last 60 minutes)\",\n            \"unique_id\": deviceid + \"_rainfall_last_60_min\",\n            \"state_topic\": txprefix + \"/rainfall_last_60_min\",\n            \"unit_of_measurement\": \"in\",\n            \"icon\": \"mdi:water\",\n            \"expire_after\": expire,\n            \"value_template\": \"{{ value | multiply(\" + rain_convert + \") | round(2) }}\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_rainfall_last_24_hr/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Rainfall (last 24 hours)\",\n            \"unique_id\": deviceid + \"_rainfall_last_24_hr\",\n            \"state_topic\": txprefix + \"/rainfall_last_24_hr\",\n            \"unit_of_measurement\": \"in\",\n            \"icon\": \"mdi:water\",\n            \"expire_after\": expire,\n            \"value_template\": \"{{ value | multiply(\" + rain_convert + \") | round(2) }}\"\n        }\n    },\n    {\n        topic: \"homeassistant/sensor/\" + deviceid + \"_rain_storm/config\",\n        payload: {\n            \"device\": device,\n            \"name\": \"Rainfall (current storm)\",\n            \"unique_id\": deviceid + \"_rain_storm\",\n            \"state_topic\": txprefix + \"/rain_storm\",\n            \"unit_of_measurement\": \"in\",\n            \"icon\": \"mdi:water\",\n            \"expire_after\": expire,\n            \"value_template\": \"{{ value | multiply(\" + rain_convert + \") | round(2) }}\"\n        }\n    }\n]];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 600,
+        "y": 320,
+        "wires": [
+            [
+                "c427c338.9df58"
+            ]
+        ]
+    },
+    {
+        "id": "c427c338.9df58",
+        "type": "mqtt out",
+        "z": "370e9e1.11b4462",
+        "name": "Publish",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "2738be24.981902",
+        "x": 780,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "f8a59b4a.6618f8",
+        "type": "mqtt out",
+        "z": "370e9e1.11b4462",
+        "name": "Publish",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "broker": "2738be24.981902",
+        "x": 580,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "41e50547.2f575c",
+        "type": "mqtt out",
+        "z": "370e9e1.11b4462",
+        "name": "Publish",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "broker": "2738be24.981902",
+        "x": 580,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "87a27594.e70098",
         "type": "mqtt-broker",
         "z": "",
         "name": "CloudMQTT",
@@ -640,6 +504,28 @@
         "clientid": "",
         "usetls": false,
         "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "2738be24.981902",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "MQTT",
+        "broker": "10.10.10.20",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
         "keepalive": "60",
         "cleansession": true,
         "birthTopic": "",
