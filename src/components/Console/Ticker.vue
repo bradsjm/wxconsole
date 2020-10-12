@@ -107,7 +107,7 @@ export default {
     }
   },
   timers: {
-    //scroll: { time: 4000, autostart: true, repeat: true }
+    scroll: { time: 4000, autostart: true, repeat: true }
   },
   watch: {
     position(newValue) {
