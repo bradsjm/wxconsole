@@ -1,5 +1,5 @@
 <template>
-  <div v-if="current.ready && now.ready">
+  <div>
     <!-- Line 1: Temperature and Barometric Pressure -->
     <Metric
       top="43px"
@@ -7,7 +7,7 @@
       width="80px"
       label="TEMP OUT"
       unit="&nbsp;&deg;F"
-      :value="now.temp"
+      :value="now.temp || 0"
       :decimals="1"
       :sup="true"
     />
@@ -17,7 +17,7 @@
       width="80px"
       label="HUM OUT"
       unit="&nbsp;%"
-      :value="now.hum"
+      :value="now.hum || 0"
       :sup="true"
     />
     <Metric
@@ -26,10 +26,10 @@
       width="105px"
       label="BAROMETER"
       unit="inHg"
-      :value="now.bar_sea_level"
+      :value="now.bar_sea_level || 0"
       :decimals="2"
       :sup="false"
-      :trend="trend(now.bar_trend)"
+      :trend="trend(now.bar_trend || 0)"
     />
     <!-- Line 2: Feels like and Dew Point -->
     <Metric
@@ -38,7 +38,7 @@
       width="80px"
       label="FEELS LIKE"
       unit="&nbsp;&deg;F"
-      :value="now.thw_index"
+      :value="now.thw_index || 0"
       :decimals="1"
       :sup="true"
     />
@@ -48,7 +48,7 @@
       width="80px"
       label="DEW POINT"
       unit="&nbsp;&deg;F"
-      :value="now.dew_point"
+      :value="now.dew_point || 0"
       :decimals="1"
       :sup="true"
     />
@@ -58,7 +58,7 @@
       width="105px"
       label="STORM WATCH"
       unit="&nbsp;mi"
-      :value="current.nearestStormDistance"
+      :value="current.nearestStormDistance || 0"
       :decimals="0"
     />
     <!-- Line 3: Rain Gauge -->
@@ -86,7 +86,7 @@
       width="105px"
       label="RAIN RATE"
       unit="in"
-      :value="now.rain_rate_last / 100"
+      :value="(now.rain_rate_last || 0) / 100"
       :decimals="2"
     />
   </div>
@@ -96,17 +96,17 @@
 export default {
   name: "ConsoleNow",
   components: {
-    Metric: () => import("./Metric.vue")
+    Metric: () => import("./Metric.vue"),
   },
   props: {
     now: {
       type: Object,
-      required: true
+      required: true,
     },
     current: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     trend(value) {
@@ -117,7 +117,7 @@ export default {
       if (value > 0.0 && value < 0.02) return 127;
       if (value >= 0.02) return 164;
       return 90;
-    }
-  }
+    },
+  },
 };
 </script>

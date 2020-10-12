@@ -1,116 +1,86 @@
 <template>
-  <div
-    id="console"
-  >
+  <div id="console">
     <div :class="{ 'backlight-on': backlight, 'backlight-off': !backlight }">
-      <div
-        style="top: 8px; left: 160px; width: 260px;"
-        v-if="now.ready && current.ready"
-      >
+      <div style="top: 8px; left: 160px; width: 260px">
         <!-- Indicators -->
         <ForecastIcon
           top="0px"
           left="0px"
-          :icon="current.icon"
+          :icon="darksky.current.icon"
+          v-if="darksky.current.icon"
         />
-        <MoonIcon
-          top="0px"
-          left="60px"
-          :ts="now.ts"
-        />
-        <DateTime
-          top="0px"
-          left="110px"
-          :ts="now.ts"
-        />
+        <MoonIcon top="0px" left="60px" :ts="daviswx.ts" v-if="daviswx.ts" />
+        <DateTime top="0px" left="110px" :ts="daviswx.ts" v-if="daviswx.ts" />
       </div>
       <!-- Anemometer -->
-      <div
-        style="top: 10px; left: 15px; width: 120px; height: 125px;"
-        v-if="now.ready"
-      >
+      <div style="top: 10px; left: 15px; width: 120px; height: 125px">
         <WindSpeed
           unit="MPH"
           top="0px"
           left="0px"
-          :value="now.wind_speed_last || 0"
+          :value="daviswx.wind_speed_last || 0"
         />
         <WindDirection
           top="14px"
           left="11px"
-          :value="now.wind_dir_at_hi_speed_last_10_min || 0"
+          :value="daviswx.wind_dir_at_hi_speed_last_10_min || 0"
           :outline="true"
         />
         <WindDirection
           v-if="'wind_dir_last' in now"
           top="14px"
           left="11px"
-          :value="now.wind_dir_last || 0"
+          :value="daviswx.wind_dir_last || 0"
           :outline="false"
         />
       </div>
       <!-- Metric Display -->
-      <CurrentMetrics
-        :now="now"
-        :current="current"
-      />
+      <CurrentMetrics :now="daviswx" :current="darksky.current" />
       <!-- Line Graph -->
-      <div
-        class="label"
-        style="top: 135px; left: 14px; font-size: 9px;"
-      >
+      <div class="label" style="top: 135px; left: 14px; font-size: 9px">
         Last minute
       </div>
-      <div
-        class="label"
-        style="top: 135px; right: 285px; font-size: 9px;"
-      >
+      <div class="label" style="top: 135px; right: 285px; font-size: 9px">
         Every 2s
       </div>
       <LineGraph
         class="graph"
         label="Wind Speed"
-        v-if="now.ready"
-        :value="now.wind_speed_last || 0"
+        :value="daviswx.wind_speed_last || 0"
         :seconds="60"
       />
-      <div
-        class="label"
-        style="top: 211px; left: 14px; font-size: 8px;"
-      >
+      <div class="label" style="top: 211px; left: 14px; font-size: 8px">
         Vertical Scale: Auto
       </div>
       <!-- Data Indicator -->
-      <div
-        class="antenna"
-        style="top: 223px; right: 10px;"
-      />
+      <div class="antenna" style="top: 223px; right: 10px" />
       <transition name="fade">
         <div
           v-show="indicator"
           class="antenna antenna-on"
-          style="top: 223px; right: 10px;"
+          style="top: 223px; right: 10px"
         />
       </transition>
       <!-- Information Ticker -->
       <Ticker
         top="223px"
         left="13px"
-        v-if="current.ready && today.ready && now.ready"
-        :current="current"
-        :today="today"
-        :now="now"
+        :current="darksky.current"
+        :today="darksky.today"
+        :now="daviswx"
       />
     </div>
     <button
       @click="toggleLight"
       class="button"
-      style="top: 28px; left: 600px;"
+      style="top: 28px; left: 600px"
     />
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Console",
   components: {
@@ -125,78 +95,44 @@ export default {
   },
   data() {
     return {
-      topics: [
-        "daviswx/001D0A710CBF/+", 
-        "daviswx/001D0A710CBF/1/+",
-        "darksky/#"
-      ],
       backlight: true,
       indicator: false,
       current: { ready: false },
       today: { ready: false },
-      now: { ready: false }
+      now: { ready: false },
     };
   },
+  computed: {
+    ...mapState(["daviswx", "darksky"]),
+  },
   mounted() {
-    this.$mqtt.subscribe(this.topics);
     if (localStorage.backlight) {
       this.backlight = localStorage.backlight == "true";
     }
   },
-  mqtt: {
-    "daviswx/#"(data, topic) {
-      this.pulse();
-      try {
-        const key = topic.split("/").pop()
-        this.now[key] = /^\d/.test(data) ? Number(data) : data;
-        this.now.ready = "ts" in this.now;
-      } catch (e) {
-        // eslint-disable-next-line
-        console.warn(topic + ": " + e + " (" + data.toString() + ")");
-      }
-    },
-    "darksky/#"(data, topic) {
-      this.pulse();
-      try {
-        const darksky = JSON.parse(data.toString());
-        switch (topic) {
-          case "darksky/currently":
-            this.current = darksky;
-            this.current.ready = "time" in darksky;
-            break;
-          case "darksky/today":
-            this.today = darksky;
-            this.today.ready = "time" in darksky;
-        }
-      } catch (e) {
-        // eslint-disable-next-line
-        console.warn(topic + ": " + e + " (" + data.toString() + ")");
-      }
-    }
-  },
   methods: {
-    toggleLight: function() {
+    toggleLight: function () {
       this.backlight = !this.backlight;
     },
-    pulse: function() {
+    pulse: function () {
       this.indicator = true;
       this.$timer.restart("reset");
     },
-    reset: function() {
+    reset: function () {
       this.indicator = false;
-    }
+    },
   },
   timers: {
-    reset: { time: 1500 }
+    reset: { time: 1500 },
   },
   watch: {
+    daviswx(newState) {
+      if (newState.ts) this.pulse();
+    },
     backlight(newState) {
       localStorage.backlight = newState;
-    }
+    },
   },
-  destroyed() {
-    this.$mqtt.unsubscribe(this.topics);
-  }
 };
 </script>
 

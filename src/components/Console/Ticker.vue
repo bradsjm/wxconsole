@@ -17,24 +17,34 @@
     <li v-if="heatAdvisory">
       <b>HEAT ADVISORY!</b>
     </li>
-    <li v-if="rainingCatsAndDogs">
-      IT'S RAINING CATS AND DOGS!
-    </li>
+    <li v-if="rainingCatsAndDogs">IT'S RAINING CATS AND DOGS!</li>
     <!-- Current Conditions -->
-    <li>Currently: {{ current.summary }}</li>
-    <li>Cloud cover: {{ (current.cloudCover * 100).toFixed() }}%</li>
-    <li>Visibility: {{ current.visibility.toFixed() }} miles</li>
+    <li v-if="current.summary">Currently: {{ current.summary }}</li>
+    <li v-if="current.cloudCover">
+      Cloud cover: {{ (current.cloudCover * 100).toFixed() }}%
+    </li>
+    <li v-if="current.visibility">
+      Visibility: {{ current.visibility.toFixed() }} miles
+    </li>
     <li v-if="current.uvIndex">
       UV Index: {{ current.uvIndex }} - {{ uvIndexLevel(current.uvIndex) }}
     </li>
     <li v-if="current.ozone">
-      Ozone level: {{ current.ozone.toFixed() }} - {{ ozoneLevel(current.ozone) }}
+      Ozone level: {{ current.ozone.toFixed() }} -
+      {{ ozoneLevel(current.ozone) }}
     </li>
     <!-- Forecasted Conditions -->
-    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}F at {{ format(today.temperatureLowTime) }}</li>
-    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}F at {{ format(today.temperatureHighTime) }}</li>
+    <li v-if="today.temperatureLow">
+      Forecast Low today: {{ today.temperatureLow.toFixed() }}F at
+      {{ format(today.temperatureLowTime) }}
+    </li>
+    <li v-if="today.temperatureHigh">
+      Forecast High today: {{ today.temperatureHigh.toFixed() }}F at
+      {{ format(today.temperatureHighTime) }}
+    </li>
     <li v-if="current.precipProbability">
-      Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
+      Chance of {{ current.precipType }}:
+      {{ (current.precipProbability * 100).toFixed() }}%
     </li>
     <li v-if="current.nearestStormDistance > 0">
       Nearest storm: {{ current.nearestStormDistance }} miles away
@@ -43,39 +53,39 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from "moment";
 
 export default {
   name: "Ticker",
   props: {
     top: {
       type: String,
-      required: true
+      required: true,
     },
     left: {
       type: String,
-      required: true
+      required: true,
     },
     speed: {
       type: Number,
-      default: 500
+      default: 500,
     },
     current: {
       type: Object,
-      required: true
+      required: true,
     },
     today: {
       type: Object,
-      required: true
+      required: true,
     },
     now: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      position: 0
+      position: 0,
     };
   },
   computed: {
@@ -104,10 +114,10 @@ export default {
     },
     rainingCatsAndDogs() {
       return this.now.rain_rate_last >= 30;
-    }
+    },
   },
   timers: {
-    scroll: { time: 4000, autostart: true, repeat: true }
+    scroll: { time: 4000, autostart: true, repeat: true },
   },
   watch: {
     position(newValue) {
@@ -117,11 +127,11 @@ export default {
         .slice(0, newValue)
         .reduce((total, item) => total + item.scrollHeight, 0);
       this.$SmoothScroll(height, this.speed, null, ctx, "y");
-    }
+    },
   },
   methods: {
     format(ts) {
-      return moment(ts).format("LT")
+      return moment(ts).format("LT");
     },
     scroll() {
       let pos = this.position + 1;
@@ -131,7 +141,7 @@ export default {
       }
       this.position = pos;
     },
-    direction: function(bearing) {
+    direction: function (bearing) {
       const arr = [
         "NORTH",
         "NNE",
@@ -148,12 +158,12 @@ export default {
         "WEST",
         "WNW",
         "NW",
-        "NNW"
+        "NNW",
       ];
       const val = Math.floor(bearing / 22.5 + 0.5);
       return arr[val % 16];
     },
-    uvIndexLevel: function(level) {
+    uvIndexLevel: function (level) {
       switch (level) {
         case 0:
           return "";
@@ -175,15 +185,15 @@ export default {
           return "Extreme";
       }
     },
-    ozoneLevel: function(level) {
+    ozoneLevel: function (level) {
       if (level <= 50) return "Good";
       if (level <= 100) return "Moderate";
       if (level <= 150) return "Potentially Unhealthy";
       if (level <= 200) return "Unhealthy";
       if (level <= 300) return "Very Unhealthy";
       return "Hazardous";
-    }
-  }
+    },
+  },
 };
 </script>
 
