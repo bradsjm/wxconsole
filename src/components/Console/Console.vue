@@ -71,7 +71,7 @@
         class="graph"
         label="Wind Speed"
         v-if="now.ready"
-        :value="now.wind_speed_last"
+        :value="now.wind_speed_last || 0"
         :seconds="60"
       />
       <div
@@ -125,6 +125,11 @@ export default {
   },
   data() {
     return {
+      topics: [
+        "daviswx/001D0A710CBF/+", 
+        "daviswx/001D0A710CBF/1/+",
+        "darksky/#"
+      ],
       backlight: true,
       indicator: false,
       current: { ready: false },
@@ -133,20 +138,17 @@ export default {
     };
   },
   mounted() {
-    this.$mqtt.subscribe([
-      "daviswx/001D0A710CBF/#", 
-      "darksky/#"
-    ]);
+    this.$mqtt.subscribe(this.topics);
     if (localStorage.backlight) {
       this.backlight = localStorage.backlight == "true";
     }
   },
   mqtt: {
-    "daviswx/001D0A710CBF/#"(data, topic) {
+    "daviswx/#"(data, topic) {
+      this.pulse();
       try {
         const key = topic.split("/").pop()
         this.now[key] = /^\d/.test(data) ? Number(data) : data;
-        this.pulse();
         this.now.ready = "ts" in this.now;
       } catch (e) {
         // eslint-disable-next-line
@@ -154,8 +156,8 @@ export default {
       }
     },
     "darksky/#"(data, topic) {
+      this.pulse();
       try {
-        this.pulse();
         const darksky = JSON.parse(data.toString());
         switch (topic) {
           case "darksky/currently":
@@ -193,10 +195,7 @@ export default {
     }
   },
   destroyed() {
-    this.$mqtt.unsubscribe([
-      "daviswx/001D0A710CBF/#",
-      "darksky/#"
-    ]);
+    this.$mqtt.unsubscribe(this.topics);
   }
 };
 </script>
