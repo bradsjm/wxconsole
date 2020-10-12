@@ -31,8 +31,8 @@
       Ozone level: {{ current.ozone.toFixed() }} - {{ ozoneLevel(current.ozone) }}
     </li>
     <!-- Forecasted Conditions -->
-    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}&deg;F at {{ format(today.temperatureLowTime) }}</li>
-    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}&deg;F at {{ format(today.temperatureHighTime) }}</li>
+    <li>Forecast Low today: {{ today.temperatureLow.toFixed() }}F at {{ format(today.temperatureLowTime) }}</li>
+    <li>Forecast High today: {{ today.temperatureHigh.toFixed() }}F at {{ format(today.temperatureHighTime) }}</li>
     <li v-if="current.precipProbability">
       Chance of {{ current.precipType }}: {{ (current.precipProbability * 100).toFixed() }}%
     </li>
