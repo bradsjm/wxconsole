@@ -152,6 +152,7 @@ export default {
   width: 684px;
   height: 431px;
   position: absolute;
+  line-height: 1;
 }
 
 #console div {

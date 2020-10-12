@@ -1,5 +1,8 @@
 module.exports = {
-  productionSourceMap: false,
-  outputDir: 'docs',
-  publicPath: ''
+  "productionSourceMap": false,
+  "outputDir": "docs",
+  "publicPath": "",
+  "transpileDependencies": [
+    "vuetify"
+  ]
 }
