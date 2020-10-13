@@ -27,7 +27,6 @@
           :outline="true"
         />
         <WindDirection
-          v-if="'wind_dir_last' in now"
           top="14px"
           left="11px"
           :value="daviswx.wind_dir_last || 0"
@@ -97,9 +96,6 @@ export default {
     return {
       backlight: true,
       indicator: false,
-      current: { ready: false },
-      today: { ready: false },
-      now: { ready: false },
     };
   },
   computed: {
@@ -126,8 +122,11 @@ export default {
     reset: { time: 1500 },
   },
   watch: {
-    daviswx(newState) {
-      if (newState.ts) this.pulse();
+    daviswx: {
+      deep: true,
+      handler() {
+        this.pulse();
+      },
     },
     backlight(newState) {
       localStorage.backlight = newState;

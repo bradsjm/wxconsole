@@ -24,7 +24,6 @@ const mqttPlugin = store => {
       topic: topic,
       message: data.toString()
     })
-    client.end()
   })
 }
 
@@ -41,16 +40,16 @@ export default new Vuex.Store({
     daviswx(state, payload) {
       const key = payload.topic.split("/").pop()
       const value = /^\d/.test(payload.message) ? Number(payload.message) : payload.message
-      state.daviswx[key] = value
+      Vue.set(state.daviswx, key, value)
     },
     darksky(state, payload) {
       const darksky = JSON.parse(payload.message)
       switch (payload.topic) {
         case "darksky/currently":
-          state.darksky.current = darksky
+          Vue.set(state.darksky, "current", darksky)
           break
         case "darksky/today":
-          state.darksky.today = darksky
+          Vue.set(state.darksky, "today", darksky)
           break
       }
     }
