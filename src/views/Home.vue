@@ -1,5 +1,13 @@
 <template>
-  <Console />
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-card>
+          <Console />
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
