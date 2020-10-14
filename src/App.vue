@@ -8,7 +8,7 @@
 
     <v-main>
       <v-container fluid>
-        <Console />
+        <router-view></router-view>
       </v-container>
     </v-main>
 
@@ -28,13 +28,5 @@
 <script>
 export default {
   name: "App",
-
-  components: {
-    Console: () => import("@/components/Console/Console.vue"),
-  },
-
-  data: () => ({
-    //
-  }),
 };
 </script>
