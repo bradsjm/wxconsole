@@ -1,28 +1,28 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
-import Home from "../views/Home.vue"
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    redirect: "/console"
+    redirect: "/console",
   },
   {
     path: "/console",
     name: "Live Console",
-    component: Home
+    component: Home,
   },
   {
     path: "/dashboard",
     name: "Weather Dashboard",
-    component: () => import("../views/Dashboard.vue")
-  }
-]
+    component: () => import("../views/Dashboard.vue"),
+  },
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
