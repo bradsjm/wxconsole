@@ -28,6 +28,11 @@ function toBoolean(value) {
     }
 }
 
+function toNumber(value) {
+    if (undefined === value) return value;
+    return Number(value)
+}
+
 export default {
   name: "Radial",
   props: {
@@ -71,7 +76,10 @@ export default {
     fractionalScaleDecimals: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -88,7 +96,10 @@ export default {
     fullScaleDeflectionTime: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     // TYPE1 through TYPE5
     gaugeType: {
@@ -121,7 +132,10 @@ export default {
     lcdDecimals: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     lcdVisible: {
       default: undefined,
@@ -146,7 +160,10 @@ export default {
     maxValue: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     minMeasuredValueVisible: {
       default: undefined,
@@ -156,7 +173,10 @@ export default {
     minValue: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     niceScale: {
       default: undefined,
@@ -176,7 +196,10 @@ export default {
     odometerValue: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     playAlarm: {
       default: undefined,
@@ -205,7 +228,10 @@ export default {
     thresHold: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
     thresholdRising: {
       default: undefined,
@@ -259,7 +285,10 @@ export default {
     },
     value: {
       required: true,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      },
     },
   },
   data() {
@@ -277,32 +306,32 @@ export default {
         digitalFont: this.digitalFont,
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
-        fractionalScaleDecimals: this.fractionalScaleDecimals,
+        fractionalScaleDecimals: toNumber(this.fractionalScaleDecimals),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
-        fullScaleDeflectionTime: this.fullScaleDeflectionTime,
+        fullScaleDeflectionTime: toNumber(this.fullScaleDeflectionTime),
         gaugeType: GaugeType[this.gaugeType],
         knobStyle: KnobStyle[this.knobStyle],
         knobType: KnobType[this.knobType],
         labelNumberFormat: LabelNumberFormat[this.labelNumberFormat],
         lcdColor: LcdColor[this.lcdColor],
-        lcdDecimals: this.lcdDecimals,
+        lcdDecimals: toNumber(this.lcdDecimals),
         lcdVisible: toBoolean(this.lcdVisible),
         ledColor: LedColor[this.ledColor],
         ledVisible: toBoolean(this.ledVisible),
-        maxMeasuredValueVisible: this.maxMeasuredValueVisible,
-        maxValue: this.maxValue,
-        minMeasuredValueVisible: this.minMeasuredValueVisible,
-        minValue: this.minValue,
-        niceScale: this.niceScale,
+        maxMeasuredValueVisible: toBoolean(this.maxMeasuredValueVisible),
+        maxValue: toNumber(this.maxValue),
+        minMeasuredValueVisible: toBoolean(this.minMeasuredValueVisible),
+        minValue: toNumber(this.minValue),
+        niceScale: toNumber(this.niceScale),
         odometerParams: this.odometerParams,
-        odometerUseValue: this.odometerUseValue,
+        odometerUseValue: toBoolean(this.odometerUseValue),
         playAlarm: this.playAlarm,
         pointerColor: ColorDef[this.pointerColor],
         pointerType: PointerType[this.pointerType],
-        size: Number(this.size),
-        threshold: this.threshold,
-        thresholdRising: this.thresholdRising,
+        size: undefined === this.size ? undefined : Number(this.size),
+        threshold: toNumber(this.threshold),
+        thresholdRising: toBoolean(this.thresholdRising),
         thresholdVisible: toBoolean(this.thresholdVisible),
         tickLabelOrientation: TickLabelOrientation[this.tickLabelOrientation],
         titleString: this.titleString,
@@ -313,8 +342,8 @@ export default {
         userLedColor: LedColor[this.userLedColor],
         userLedVisible: toBoolean(this.userLedVisible),
       });
-      this.value && this.gauge.setValue(this.value);
-      this.odometerValue && this.gauge.setOdoValue(this.odometerValue);
+      this.value && this.gauge.setValue(toNumber(this.value));
+      this.odometerValue && this.gauge.setOdoValue(toNumber(this.odometerValue));
     },
   },
   mounted() {

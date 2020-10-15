@@ -51,7 +51,7 @@ export default {
   methods: {
     draw: function () {
       this.gauge = new Led(this.$refs["view"], {
-        size: Number(this.size),
+        size: undefined === this.size ? undefined : Number(this.size),
         ledColor: LedColor[this.ledColor]
       });
       this.gauge.setLedOnOff(toBoolean(this.value));
@@ -66,6 +66,8 @@ export default {
       this.gauge && this.gauge.blink(toBoolean(newValue));
     },
     size() {
+      this.gauge.setLedOnOff(false);
+      this.gauge.blink(false);
       this.draw();
     },
     ledColor(newValue) {

@@ -5,7 +5,15 @@
         <v-card elevation="2" outlined>
           <v-card-title>Led</v-card-title>
           <v-card-text>
-            <Led size="200" value="false" blink="true" />
+            <Led size="80" value="false" blink="true" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>Odometer</v-card-title>
+          <v-card-text>
+            <Odometer size="80" digits="3" value="50"/>
           </v-card-text>
         </v-card>
       </v-col>
@@ -92,6 +100,7 @@ export default {
     Clock: () => import("@/components/Gauges/Clock.vue"),
     Compass: () => import("@/components/Gauges/Compass.vue"),
     Led: () => import("@/components/Gauges/Led.vue"),
+    Odometer: () => import("@/components/Gauges/Odometer.vue"),
     Radial: () => import("@/components/Gauges/Radial.vue"),
     WindDirection: () => import("@/components/Gauges/WindDirection.vue"),
   },

@@ -21,6 +21,11 @@ function toBoolean(value) {
     }
 }
 
+function toNumber(value) {
+    if (undefined === value) return value;
+    return Number(value)
+}
+
 export default {
   name: "Clock",
   props: {
@@ -66,7 +71,10 @@ export default {
     hour: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     isAutomatic: {
       default: undefined,
@@ -76,7 +84,10 @@ export default {
     minute: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     pointerColor: {
       default: undefined,
@@ -100,7 +111,10 @@ export default {
     second: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     secondMovesContinuous: {
       default: undefined,
@@ -115,12 +129,18 @@ export default {
     timeZoneOffsetHour: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     timeZoneOffsetMinute: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number,String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
   },
   data() {
@@ -138,17 +158,17 @@ export default {
         foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
-        hour: this.hour,
+        hour: toNumber(this.hour),
         isAutomatic: toBoolean(this.isAutomatic),
-        minute: this.minute,
+        minute: toNumber(this.minute),
         pointerColor: ColorDef[this.pointerColor],
         pointerType: PointerType[this.pointerTypeLatest],
-        second: this.second,
+        second: toNumber(this.second),
         secondMovesContinuous: toBoolean(this.secondMovesContinuous),
         secondPointerVisible: toBoolean(this.secondPointerVisible),
-        size: Number(this.size),
-        timeZoneOffsetHour: this.timeZoneOffsetHour,
-        timeZoneOffsetMinute: this.timeZoneOffsetMinute,
+        size: toNumber(this.size),
+        timeZoneOffsetHour: toNumber(this.timeZoneOffsetHour),
+        timeZoneOffsetMinute: toNumber(this.timeZoneOffsetMinute),
       });
     },
   },

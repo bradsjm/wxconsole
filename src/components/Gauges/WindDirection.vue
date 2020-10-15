@@ -215,7 +215,7 @@ export default {
         pointSymbols: this.pointSymbols,
         pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
         roseVisible: toBoolean(this.roseVisible),
-        size: Number(this.size),
+        size: undefined === this.size ? undefined : Number(this.size),
         titleString: this.titleString,
         useColorLabels: toBoolean(this.useColorLabels),
       });

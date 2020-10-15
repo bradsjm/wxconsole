@@ -151,8 +151,8 @@ export default {
         pointSymbols: this.pointSymbols,
         pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
         roseVisible: toBoolean(this.roseVisible),
-        rotateFace: this.rotateFace,
-        size: Number(this.size),
+        rotateFace: toBoolean(this.rotateFace),
+        size: undefined === this.size ? undefined : Number(this.size),
       });
       this.value && this.gauge.setValue(this.value);
     },

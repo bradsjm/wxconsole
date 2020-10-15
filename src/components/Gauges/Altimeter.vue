@@ -22,6 +22,11 @@ function toBoolean(value) {
     }
 }
 
+function toNumber(value) {
+    if (undefined === value) return value;
+    return Number(value)
+}
+
 export default {
   name: "Altimeter",
   props: {
@@ -110,12 +115,17 @@ export default {
     unitAltPos: {
       default: undefined,
       required: false,
-      type: Number,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     value: {
-      default: undefined,
       required: true,
-      type: Number,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
   },
   data() {
@@ -138,12 +148,12 @@ export default {
         knobType: KnobType[this.knobType],
         lcdColor: LcdColor[this.lcdColor],
         lcdVisible: toBoolean(this.lcdVisible),
-        size: Number(this.size),
+        size: toNumber(this.size),
         titleString: this.title,
-        unitAltPos: this.unitAltPos,
+        unitAltPos: toNumber(this.unitAltPos),
         unitString: this.unit,
       });
-      this.value && this.gauge.setValue(this.value);
+      this.value && this.gauge.setValue(toNumber(this.value));
     },
   },
   mounted() {

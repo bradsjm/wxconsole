@@ -20,7 +20,10 @@ export default {
     },
     value: {
       required: true,
-      type: Number
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     }
   },
   data() {
@@ -31,8 +34,8 @@ export default {
   methods: {
     draw: function () {
       this.gauge = new Battery(this.$refs["view"], {
-        size: Number(this.size),
-        value: this.value
+        size: undefined === this.size ? undefined : Number(this.size),
+        value: undefined === this.value ? undefined : Number(this.value)
       });
     },
   },
