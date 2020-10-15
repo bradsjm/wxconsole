@@ -4,11 +4,10 @@
 
 <script>
 import {
-  Altimeter,
+  StopWatch,
   BackgroundColor,
   ColorDef,
   FrameDesign,
-  PointerType,
   ForegroundType
 } from "steelseries";
 
@@ -27,7 +26,7 @@ function toNumber(value) {
 }
 
 export default {
-  name: "Altimeter",
+  name: "StopWatch",
   props: {
     // DARK_GRAY, SATIN_GRAY, LIGHT_GRAY, WHITE, BLACK, BEIGE, BROWN, RED, GREEN, BLUE, TURNED,
     // ANTHRACITE, MUD, PUNCHED_SHEET, CARBON, STAINLESS, BRUSHED_METAL, BRUSHED_STAINLESS
@@ -39,7 +38,7 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String]
     },
     customLayer: {
       default: undefined,
@@ -54,7 +53,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String]
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -66,18 +65,22 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String]
     },
     pointerColor: {
       default: undefined,
       required: false,
       type: String,
     },
-    // TYPE1 through TYPE16
-    pointerType: {
+    reset: {
       default: undefined,
       required: false,
-      type: String,
+      type: [Boolean,String]
+    },
+    run: {
+      default: undefined,
+      required: false,
+      type: [Boolean,String]
     },
     size: {
       default: undefined,
@@ -95,22 +98,42 @@ export default {
   },
   methods: {
     draw: function () {
-      this.gauge = new Altimeter(this.$refs["view"], {
+      this.gauge = new StopWatch(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
-        backgroundVisible: this.backgroundVisible,
+        backgroundVisible: toBoolean(this.backgroundVisible),
         customLayer: this.customLayer,
         foregroundType: ForegroundType[this.foregroundType],
-        foregroundVisible: this.foregroundVisible,
+        foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
-        frameVisible: this.frameVisible,
+        frameVisible: toBoolean(this.frameVisible),
         pointerColor: ColorDef[this.pointerColor],
-        pointerType: PointerType[this.pointerTypeLatest],
         size: toNumber(this.size),
       });
+      if (toBoolean(this.run)) this.startWatch();
+    },
+    startWatch: function() {
+      this.gauge && this.gauge.start();
+    },
+    stopWatch: function() {
+      this.gauge && this.gauge.stop();
+    },
+    resetWatch: function() {
+      this.gauge && this.gauge.reset();
+    },
+    lapWatch: function() {
+      this.gauge && this.gauge.lap();
     },
   },
   mounted() {
     this.draw();
+  },
+  calculated: {
+    measuredTime() {
+      return this.gauge.getMeasuredTime();
+    },
+    isRunning() {
+      return this.gauge.isRunning();
+    }
   },
   watch: {
     backgroundColor(newValue) {
@@ -125,8 +148,11 @@ export default {
     pointerColor(newValue) {
       this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
     },
-    pointerType(newValue) {
-      this.gauge && this.gauge.setPointerType(PointerType[newValue]);
+    reset(newValue) {
+      if (toBoolean(newValue)) this.resetWatch();
+    },
+    run(newValue) {
+      toBoolean(newValue) ? this.startWatch() : this.stopWatch();
     },
     size() {
       this.draw();

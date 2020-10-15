@@ -17,6 +17,14 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>Traffic Light</v-card-title>
+          <v-card-text>
+            <TrafficLight width="80" height="80" green="1"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
 
     <v-row>
@@ -29,6 +37,17 @@
         </v-card>
       </v-col>
 
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>StopWatch</v-card-title>
+          <v-card-text>
+            <StopWatch size="200" run="1"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
       <v-col cols="4">
         <v-card elevation="2" outlined>
           <v-card-title>Altimeter</v-card-title>
@@ -102,6 +121,8 @@ export default {
     Led: () => import("@/components/Gauges/Led.vue"),
     Odometer: () => import("@/components/Gauges/Odometer.vue"),
     Radial: () => import("@/components/Gauges/Radial.vue"),
+    StopWatch: () => import("@/components/Gauges/StopWatch.vue"),
+    TrafficLight: () => import("@/components/Gauges/TrafficLight.vue"),
     WindDirection: () => import("@/components/Gauges/WindDirection.vue"),
   },
   computed: {
