@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "moment": "^2.29.1",
     "mqtt": "^4.2.1",
+    "steelseries": "^1.0.7",
     "suncalc": "^1.8.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
