@@ -15,6 +15,15 @@ import {
   ForegroundType,
 } from "steelseries";
 
+function toBoolean(value) {
+    if (undefined === value) return value;
+    switch(value.toString().toLowerCase().trim()){
+        case "true": case "yes": case "1": return true;
+        case "false": case "no": case "0": case null: return false;
+        default: return Boolean(value);
+    }
+}
+
 export default {
   name: "WindDirection",
   props: {
@@ -35,7 +44,7 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     customLayer: {
       default: undefined,
@@ -44,17 +53,17 @@ export default {
     degreeScale: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     degreeScaleHalf: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     digitalFont: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     // TYPE1 to TYPE5
     foregroundType: {
@@ -65,7 +74,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -77,7 +86,7 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     fullScaleDeflectionTime: {
       default: undefined,
@@ -112,7 +121,7 @@ export default {
     lcdVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     pointerColor: {
       default: undefined,
@@ -144,12 +153,12 @@ export default {
     pointSymbolsVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     roseVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     size: {
       default: undefined,
@@ -166,7 +175,7 @@ export default {
     },
     useColorLabels: {
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     // 1-360 are used for directions
     // 0 is used as a special case to indicate 'calm'
@@ -184,31 +193,31 @@ export default {
     draw: function () {
       this.gauge = new WindDirection(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
-        backgroundVisible: this.backgroundVisible,
+        backgroundVisible: toBoolean(this.backgroundVisible),
         customLayer: this.customLayer,
         degreeScale: this.degreeScale,
         degreeScaleHalf: this.degreeScaleHalf,
         digitalFont: this.digitalFont,
         foregroundType: ForegroundType[this.foregroundType],
-        foregroundVisible: this.foregroundVisible,
+        foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
-        frameVisible: this.frameVisible,
+        frameVisible: toBoolean(this.frameVisible),
         fullScaleDeflectionTime: this.fullScaleDeflectionTime,
         knobStyle: KnobStyle[this.knobStyle],
         knobType: KnobType[this.knobType],
         lcdColor: LcdColor[this.lcdColor],
         lcdTitleStrings: this.lcdTitleStrings,
-        lcdVisible: this.lcdVisible,
+        lcdVisible: toBoolean(this.lcdVisible),
         pointerColor: ColorDef[this.pointerColor],
         pointerColorAverage: ColorDef[this.pointerColorAverage],
         pointerTypeAverage: PointerType[this.pointerTypeAverage],
         pointerTypeLatest: PointerType[this.pointerTypeLatest],
         pointSymbols: this.pointSymbols,
-        pointSymbolsVisible: this.pointSymbolsVisible,
-        roseVisible: this.roseVisible,
+        pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
+        roseVisible: toBoolean(this.roseVisible),
         size: Number(this.size),
         titleString: this.titleString,
-        useColorLabels: this.useColorLabels,
+        useColorLabels: toBoolean(this.useColorLabels),
       });
       this.value && this.gauge.setValueLatest(this.value);
       this.average && this.gauge.setValueAverage(this.average);

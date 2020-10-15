@@ -4,14 +4,12 @@
 
 <script>
 import {
-  Compass,
+  Clock,
   BackgroundColor,
   ColorDef,
-  KnobType,
-  KnobStyle,
   FrameDesign,
   PointerType,
-  ForegroundType,
+  ForegroundType
 } from "steelseries";
 
 function toBoolean(value) {
@@ -24,7 +22,7 @@ function toBoolean(value) {
 }
 
 export default {
-  name: "Compass",
+  name: "Clock",
   props: {
     // DARK_GRAY, SATIN_GRAY, LIGHT_GRAY, WHITE, BLACK, BEIGE, BROWN, RED, GREEN, BLUE, TURNED,
     // ANTHRACITE, MUD, PUNCHED_SHEET, CARBON, STAINLESS, BRUSHED_METAL, BRUSHED_STAINLESS
@@ -36,16 +34,11 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     customLayer: {
       default: undefined,
       required: false,
-    },
-    degreeScale: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
     },
     // TYPE1 to TYPE5
     foregroundType: {
@@ -56,7 +49,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -68,19 +61,22 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
-    // BLACK, BRASS, SILVER
-    knobStyle: {
+    hour: {
       default: undefined,
       required: false,
-      type: String,
+      type: Number,
     },
-    // STANDARD_KNOB, METAL_KNOB
-    knobType: {
+    isAutomatic: {
       default: undefined,
       required: false,
-      type: String,
+      type: [Boolean, String],
+    },
+    minute: {
+      default: undefined,
+      required: false,
+      type: Number,
     },
     pointerColor: {
       default: undefined,
@@ -93,38 +89,37 @@ export default {
       required: false,
       type: String,
     },
-    pointSymbols: {
-      default: undefined,
-      required: false,
-      type: Array,
-    },
-    pointSymbolsVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
-    },
-    roseVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
-    },
-    rotateFace: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
-    },
     size: {
       default: undefined,
       required: false,
       type: [Number, String],
       validator: function (value) {
         return !Number.isNaN(value);
-      },
+      }
     },
-    // 1-360 are used for directions
-    // 0 is used as a special case to indicate 'calm'
-    value: {
-      required: true,
+    second: {
+      default: undefined,
+      required: false,
+      type: Number,
+    },
+    secondMovesContinuous: {
+      default: undefined,
+      required: false,
+      type: [Boolean, String],
+    },
+    secondPointerVisible: {
+      default: undefined,
+      required: false,
+      type: [Boolean, String],
+    },
+    timeZoneOffsetHour: {
+      default: undefined,
+      required: false,
+      type: Number,
+    },
+    timeZoneOffsetMinute: {
+      default: undefined,
+      required: false,
       type: Number,
     },
   },
@@ -135,26 +130,26 @@ export default {
   },
   methods: {
     draw: function () {
-      this.gauge = new Compass(this.$refs["view"], {
+      this.gauge = new Clock(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
         backgroundVisible: toBoolean(this.backgroundVisible),
         customLayer: this.customLayer,
-        degreeScale: this.degreeScale,
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
-        knobStyle: KnobStyle[this.knobStyle],
-        knobType: KnobType[this.knobType],
+        hour: this.hour,
+        isAutomatic: toBoolean(this.isAutomatic),
+        minute: this.minute,
         pointerColor: ColorDef[this.pointerColor],
         pointerType: PointerType[this.pointerTypeLatest],
-        pointSymbols: this.pointSymbols,
-        pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
-        roseVisible: toBoolean(this.roseVisible),
-        rotateFace: this.rotateFace,
+        second: this.second,
+        secondMovesContinuous: toBoolean(this.secondMovesContinuous),
+        secondPointerVisible: toBoolean(this.secondPointerVisible),
         size: Number(this.size),
+        timeZoneOffsetHour: this.timeZoneOffsetHour,
+        timeZoneOffsetMinute: this.timeZoneOffsetMinute,
       });
-      this.value && this.gauge.setValue(this.value);
     },
   },
   mounted() {
@@ -170,8 +165,14 @@ export default {
     frameDesign(newValue) {
       this.gauge && this.gauge.setFrameDesign(FrameDesign[newValue]);
     },
-    pointSymbols(newValue) {
-      this.gauge && this.gauge.setPointSymbols(newValue);
+    hour(newValue) {
+      this.gauge && this.gauge.setHour(newValue);
+    },
+    isAutomatic(newValue) {
+      this.gauge && this.gauge.setAutomatic(toBoolean(newValue));
+    },
+    minute(newValue) {
+      this.gauge && this.gauge.setMinute(newValue);
     },
     pointerColor(newValue) {
       this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
@@ -179,12 +180,24 @@ export default {
     pointerType(newValue) {
       this.gauge && this.gauge.setPointerType(PointerType[newValue]);
     },
+    second(newValue) {
+      this.gauge && this.gauge.setSecond(newValue);
+    },
+    secondMovesContinuous(newValue) {
+      this.gauge && this.gauge.setSecondMovesContinuous(toBoolean(newValue));
+    },
+    secondPointerVisible(newValue) {
+      this.gauge && this.gauge.setSecondPointerVisible(toBoolean(newValue));
+    },
     size() {
       this.draw();
     },
-    value(newValue) {
-      this.gauge && this.gauge.setValueAnimated(newValue);
+    timeZoneOffsetHour(newValue) {
+      this.gauge && this.gauge.setTimeZoneOffsetHour(newValue);
     },
+    timeZoneOffsetMinute(newValue) {
+      this.gauge && this.gauge.setTimeZoneOffsetMinute(newValue);
+    }
   },
 };
 </script>

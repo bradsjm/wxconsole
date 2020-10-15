@@ -4,14 +4,13 @@
 
 <script>
 import {
-  Compass,
+  Altimeter,
   BackgroundColor,
-  ColorDef,
+  LcdColor,
   KnobType,
   KnobStyle,
   FrameDesign,
-  PointerType,
-  ForegroundType,
+  ForegroundType
 } from "steelseries";
 
 function toBoolean(value) {
@@ -24,7 +23,7 @@ function toBoolean(value) {
 }
 
 export default {
-  name: "Compass",
+  name: "Altimeter",
   props: {
     // DARK_GRAY, SATIN_GRAY, LIGHT_GRAY, WHITE, BLACK, BEIGE, BROWN, RED, GREEN, BLUE, TURNED,
     // ANTHRACITE, MUD, PUNCHED_SHEET, CARBON, STAINLESS, BRUSHED_METAL, BRUSHED_STAINLESS
@@ -36,16 +35,16 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     customLayer: {
       default: undefined,
       required: false,
     },
-    degreeScale: {
+    digitalFont: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: String,
     },
     // TYPE1 to TYPE5
     foregroundType: {
@@ -56,7 +55,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -68,50 +67,27 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
-    // BLACK, BRASS, SILVER
     knobStyle: {
       default: undefined,
       required: false,
       type: String,
     },
-    // STANDARD_KNOB, METAL_KNOB
     knobType: {
       default: undefined,
       required: false,
       type: String,
     },
-    pointerColor: {
+    lcdColor: {
       default: undefined,
       required: false,
       type: String,
     },
-    // TYPE1 through TYPE16
-    pointerType: {
+    lcdVisible: {
       default: undefined,
       required: false,
-      type: String,
-    },
-    pointSymbols: {
-      default: undefined,
-      required: false,
-      type: Array,
-    },
-    pointSymbolsVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
-    },
-    roseVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
-    },
-    rotateFace: {
-      default: undefined,
-      required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     size: {
       default: undefined,
@@ -119,11 +95,25 @@ export default {
       type: [Number, String],
       validator: function (value) {
         return !Number.isNaN(value);
-      },
+      }
     },
-    // 1-360 are used for directions
-    // 0 is used as a special case to indicate 'calm'
+    title: {
+      default: undefined,
+      required: false,
+      type: String,
+    },
+    unit: {
+      default: undefined,
+      required: false,
+      type: String,
+    },
+    unitAltPos: {
+      default: undefined,
+      required: false,
+      type: Number,
+    },
     value: {
+      default: undefined,
       required: true,
       type: Number,
     },
@@ -135,24 +125,23 @@ export default {
   },
   methods: {
     draw: function () {
-      this.gauge = new Compass(this.$refs["view"], {
+      this.gauge = new Altimeter(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
         backgroundVisible: toBoolean(this.backgroundVisible),
         customLayer: this.customLayer,
-        degreeScale: this.degreeScale,
+        digitalFont: this.digitalFont,
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
-        knobStyle: KnobStyle[this.knobStyle],
+        knobStyle: KnobStyle[this.knowStyle],
         knobType: KnobType[this.knobType],
-        pointerColor: ColorDef[this.pointerColor],
-        pointerType: PointerType[this.pointerTypeLatest],
-        pointSymbols: this.pointSymbols,
-        pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
-        roseVisible: toBoolean(this.roseVisible),
-        rotateFace: this.rotateFace,
+        lcdColor: LcdColor[this.lcdColor],
+        lcdVisible: toBoolean(this.lcdVisible),
         size: Number(this.size),
+        titleString: this.title,
+        unitAltPos: this.unitAltPos,
+        unitString: this.unit,
       });
       this.value && this.gauge.setValue(this.value);
     },
@@ -170,21 +159,21 @@ export default {
     frameDesign(newValue) {
       this.gauge && this.gauge.setFrameDesign(FrameDesign[newValue]);
     },
-    pointSymbols(newValue) {
-      this.gauge && this.gauge.setPointSymbols(newValue);
-    },
-    pointerColor(newValue) {
-      this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
-    },
-    pointerType(newValue) {
-      this.gauge && this.gauge.setPointerType(PointerType[newValue]);
+    lcdColor(newValue) {
+      this.gauage && this.gauge.setLcdColor(LcdColor[newValue]);
     },
     size() {
       this.draw();
     },
-    value(newValue) {
-      this.gauge && this.gauge.setValueAnimated(newValue);
+    title(newValue) {
+      this.gauge && this.gauge.setTitleString(newValue);
     },
+    unit(newValue) {
+      this.gauge && this.gauge.setUnitString(newValue);
+    },
+    value(newValue) {
+      this.gauge && this.gauge.setValueAnimated(newValue)
+    }
   },
 };
 </script>
