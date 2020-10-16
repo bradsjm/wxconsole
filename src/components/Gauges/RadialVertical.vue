@@ -4,19 +4,17 @@
 
 <script>
 import {
-  Radial,
+  RadialVertical,
   BackgroundColor,
-  LcdColor,
   ColorDef,
   LedColor,
-  GaugeType,
+  Orientation,
   KnobType,
   KnobStyle,
   FrameDesign,
   PointerType,
   ForegroundType,
   LabelNumberFormat,
-  TickLabelOrientation,
 } from "steelseries";
 
 function toBoolean(value) {
@@ -47,7 +45,7 @@ function toNumber(value) {
 }
 
 export default {
-  name: "Radial",
+  name: "RadialVertical",
   props: {
     alarmSound: {
       default: undefined,
@@ -66,15 +64,6 @@ export default {
       required: false,
       type: [Boolean, String],
     },
-    customLayer: {
-      default: undefined,
-      required: false,
-    },
-    digitalFont: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
     // TYPE1 to TYPE5
     foregroundType: {
       default: undefined,
@@ -85,14 +74,6 @@ export default {
       default: undefined,
       required: false,
       type: [Boolean, String],
-    },
-    fractionalScaleDecimals: {
-      default: undefined,
-      required: false,
-      type: [Number, String],
-      validator: function(value) {
-        return !Number.isNaN(value);
-      },
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -114,12 +95,6 @@ export default {
         return !Number.isNaN(value);
       },
     },
-    // TYPE1 through TYPE5
-    gaugeType: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
     // BLACK, BRASS, SILVER
     knobStyle: {
       default: undefined,
@@ -136,24 +111,6 @@ export default {
       default: undefined,
       required: false,
       type: String,
-    },
-    lcdColor: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
-    lcdDecimals: {
-      default: undefined,
-      required: false,
-      type: [Number, String],
-      validator: function(value) {
-        return !Number.isNaN(value);
-      },
-    },
-    lcdVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean, String],
     },
     ledColor: {
       default: undefined,
@@ -196,23 +153,10 @@ export default {
       required: false,
       type: [Boolean, String],
     },
-    odometerParams: {
+    orientation: {
       default: undefined,
       required: false,
-      type: Object,
-    },
-    odometerUseValue: {
-      default: undefined,
-      required: false,
-      type: [Boolean, String],
-    },
-    odometerValue: {
-      default: undefined,
-      required: false,
-      type: [Number, String],
-      validator: function(value) {
-        return !Number.isNaN(value);
-      },
+      type: String,
     },
     playAlarm: {
       default: undefined,
@@ -256,45 +200,15 @@ export default {
       required: false,
       type: [Boolean, String],
     },
-    tickLabelOrientation: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
     titleString: {
       default: undefined,
       required: false,
       type: String,
     },
-    trendColors: {
-      default: undefined,
-      required: false,
-      type: Array,
-    },
-    trendVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean, String],
-    },
     unitString: {
       default: undefined,
       required: false,
       type: String,
-    },
-    useOdometer: {
-      default: undefined,
-      required: false,
-      type: [Boolean, String],
-    },
-    userLedColor: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
-    userLedVisible: {
-      default: undefined,
-      required: false,
-      type: [Boolean, String],
     },
     value: {
       required: true,
@@ -311,25 +225,18 @@ export default {
   },
   methods: {
     draw() {
-      this.gauge = new Radial(this.$refs["view"], {
+      this.gauge = new RadialVertical(this.$refs["view"], {
         alarmSound: this.alarmSound,
         backgroundColor: this.backgroundColor,
         backgroundVisible: toBoolean(this.backgroundVisible),
-        customLayer: this.customLayer,
-        digitalFont: this.digitalFont,
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
-        fractionalScaleDecimals: toNumber(this.fractionalScaleDecimals),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
         fullScaleDeflectionTime: toNumber(this.fullScaleDeflectionTime),
-        gaugeType: GaugeType[this.gaugeType],
         knobStyle: KnobStyle[this.knobStyle],
         knobType: KnobType[this.knobType],
         labelNumberFormat: LabelNumberFormat[this.labelNumberFormat],
-        lcdColor: LcdColor[this.lcdColor],
-        lcdDecimals: toNumber(this.lcdDecimals),
-        lcdVisible: toBoolean(this.lcdVisible),
         ledColor: LedColor[this.ledColor],
         ledVisible: toBoolean(this.ledVisible),
         maxMeasuredValueVisible: toBoolean(this.maxMeasuredValueVisible),
@@ -337,8 +244,7 @@ export default {
         minMeasuredValueVisible: toBoolean(this.minMeasuredValueVisible),
         minValue: toNumber(this.minValue),
         niceScale: toNumber(this.niceScale),
-        odometerParams: this.odometerParams,
-        odometerUseValue: toBoolean(this.odometerUseValue),
+        orientation: Orientation[this.orientation],
         playAlarm: toBoolean(this.playAlarm),
         pointerColor: ColorDef[this.pointerColor],
         pointerType: PointerType[this.pointerType],
@@ -346,18 +252,10 @@ export default {
         threshold: toNumber(this.threshold),
         thresholdRising: toBoolean(this.thresholdRising),
         thresholdVisible: toBoolean(this.thresholdVisible),
-        tickLabelOrientation: TickLabelOrientation[this.tickLabelOrientation],
         titleString: this.titleString,
-        trendColors: this.trendColors,
-        trendVisible: toBoolean(this.trendVisible),
         unitString: this.unitString,
-        useOdometer: toBoolean(this.useOdometer),
-        userLedColor: LedColor[this.userLedColor],
-        userLedVisible: toBoolean(this.userLedVisible),
       });
       this.value && this.gauge.setValue(toNumber(this.value));
-      this.odometerValue &&
-        this.gauge.setOdoValue(toNumber(this.odometerValue));
     },
   },
   mounted() {
@@ -366,9 +264,6 @@ export default {
   watch: {
     backgroundColor(newValue) {
       this.gauge && this.gauge.setBackgroundColor(BackgroundColor[newValue]);
-    },
-    fractionalScaleDecimals(newValue) {
-      this.gauge && this.gauge.setFractionalScaleDecimals(newValue);
     },
     frameDesign(newValue) {
       this.gauge && this.gauge.setFrameDesign(FrameDesign[newValue]);
@@ -379,12 +274,6 @@ export default {
     labelNumberFormat(newValue) {
       this.gauge &&
         this.gauge.setLabelNumberFormat(LabelNumberFormat[newValue]);
-    },
-    lcdColor(newValue) {
-      this.gauge && this.gauge.setLcdColor(LcdColor[newValue]);
-    },
-    lcdDecimals(newValue) {
-      this.gauge && this.gauge.setLcdDecimals(newValue);
     },
     ledColor(newValue) {
       this.gauge && this.gauge.setLedColor(LedColor[newValue]);
@@ -407,9 +296,6 @@ export default {
     minValue(newValue) {
       this.gauge && this.gauge.setMinValue(newValue);
     },
-    odometerValue(newValue) {
-      this.gauge && this.gauge.setOdoValue(newValue);
-    },
     pointerColor(newValue) {
       this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
     },
@@ -431,17 +317,8 @@ export default {
     titleString(newValue) {
       this.gauge && this.gauge.setTitleString(newValue);
     },
-    trendVisible(newValue) {
-      this.gauge && this.gauge.setTrendVisible(toBoolean(newValue));
-    },
     unitString(newValue) {
       this.gauge && this.gauge.setUnitString(newValue);
-    },
-    userLedColor(newValue) {
-      this.gauge && this.gauge.setUserLedColor(LedColor[newValue]);
-    },
-    userLedVisible(newValue) {
-      this.gauge && this.gauge.setUserLedVisible(toBoolean(newValue));
     },
     value(newValue) {
       this.gauge && this.gauge.setValueAnimated(newValue);
