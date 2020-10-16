@@ -9,6 +9,7 @@
           </v-card-text>
         </v-card>
       </v-col>
+
       <v-col cols="4">
         <v-card elevation="2" outlined>
           <v-card-title>Odometer</v-card-title>
@@ -17,6 +18,7 @@
           </v-card-text>
         </v-card>
       </v-col>
+
       <v-col cols="4">
         <v-card elevation="2" outlined>
           <v-card-title>Traffic Light</v-card-title>
@@ -42,6 +44,34 @@
           <v-card-title>StopWatch</v-card-title>
           <v-card-text>
             <StopWatch size="200" run="1"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>Lightbulb</v-card-title>
+          <v-card-text>
+            <LightBulb height="200" width="200" value="0" />
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>Level</v-card-title>
+          <v-card-text>
+            <Level size="200" value="45" rotateFace="1"/>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="4">
+        <v-card elevation="2" outlined>
+          <v-card-title>Horizon</v-card-title>
+          <v-card-text>
+            <Horizon size="200" roll="45" pitch="10"/>
           </v-card-text>
         </v-card>
       </v-col>
@@ -118,7 +148,10 @@ export default {
     Battery: () => import("@/components/Gauges/Battery.vue"),
     Clock: () => import("@/components/Gauges/Clock.vue"),
     Compass: () => import("@/components/Gauges/Compass.vue"),
+    Horizon: () => import("@/components/Gauges/Horizon.vue"),
     Led: () => import("@/components/Gauges/Led.vue"),
+    Level: () => import("@/components/Gauges/Level.vue"),
+    LightBulb: () => import("@/components/Gauges/LightBulb.vue"),
     Odometer: () => import("@/components/Gauges/Odometer.vue"),
     Radial: () => import("@/components/Gauges/Radial.vue"),
     StopWatch: () => import("@/components/Gauges/StopWatch.vue"),

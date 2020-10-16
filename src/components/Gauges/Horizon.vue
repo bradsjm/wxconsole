@@ -4,11 +4,9 @@
 
 <script>
 import {
-  Altimeter,
-  BackgroundColor,
+  Horizon,
   ColorDef,
   FrameDesign,
-  PointerType,
   ForegroundType
 } from "steelseries";
 
@@ -27,24 +25,8 @@ function toNumber(value) {
 }
 
 export default {
-  name: "Altimeter",
+  name: "Horizon",
   props: {
-    // DARK_GRAY, SATIN_GRAY, LIGHT_GRAY, WHITE, BLACK, BEIGE, BROWN, RED, GREEN, BLUE, TURNED,
-    // ANTHRACITE, MUD, PUNCHED_SHEET, CARBON, STAINLESS, BRUSHED_METAL, BRUSHED_STAINLESS
-    backgroundColor: {
-      default: undefined,
-      required: false,
-      type: String,
-    },
-    backgroundVisible: {
-      default: undefined,
-      required: false,
-      type: Boolean,
-    },
-    customLayer: {
-      default: undefined,
-      required: false,
-    },
     // TYPE1 to TYPE5
     foregroundType: {
       default: undefined,
@@ -73,11 +55,27 @@ export default {
       required: false,
       type: String,
     },
-    // TYPE1 through TYPE16
-    pointerType: {
+    roll: {
+      required: true,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
+    },
+    pitch: {
+      required: true,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
+    },
+    pitchOffset: {
       default: undefined,
       required: false,
-      type: String,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
     },
     size: {
       default: undefined,
@@ -95,28 +93,23 @@ export default {
   },
   methods: {
     draw: function () {
-      this.gauge = new Altimeter(this.$refs["view"], {
-        backgroundColor: BackgroundColor[this.backgroundColor],
-        backgroundVisible: toBoolean(this.backgroundVisible),
-        customLayer: this.customLayer,
+      this.gauge = new Horizon(this.$refs["view"], {
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
         pointerColor: ColorDef[this.pointerColor],
-        pointerType: PointerType[this.pointerTypeLatest],
-        size: toNumber(this.size),
         size: toNumber(this.size),
       });
+      this.roll && this.gauge.setRoll(this.roll);
+      this.pitch && this.gauge.setPitch(this.pitch);
+      this.pitchOffset && this.gauge.setPitchOffset(this.pitchOffset);
     },
   },
   mounted() {
     this.draw();
   },
   watch: {
-    backgroundColor(newValue) {
-      this.gauge && this.gauge.setBackgroundColor(BackgroundColor[newValue]);
-    },
     foregroundType(newValue) {
       this.gauge && this.gauge.setForegroundType(ForegroundType[newValue]);
     },
@@ -126,8 +119,14 @@ export default {
     pointerColor(newValue) {
       this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
     },
-    pointerType(newValue) {
-      this.gauge && this.gauge.setPointerType(PointerType[newValue]);
+    roll(newValue) {
+      this.gauge && this.gauge.setRollAnimated(newValue);
+    },
+    pitch(newValue) {
+      this.gauge && this.gauge.setPitchAnimated(newValue);
+    },
+    pitchOffset(newValue) {
+      this.gauge && this.gauge.setPitchOffset(newValue);
     },
     size() {
       this.draw();

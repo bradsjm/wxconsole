@@ -4,11 +4,10 @@
 
 <script>
 import {
-  Altimeter,
+  Level,
   BackgroundColor,
   ColorDef,
   FrameDesign,
-  PointerType,
   ForegroundType
 } from "steelseries";
 
@@ -27,7 +26,7 @@ function toNumber(value) {
 }
 
 export default {
-  name: "Altimeter",
+  name: "Level",
   props: {
     // DARK_GRAY, SATIN_GRAY, LIGHT_GRAY, WHITE, BLACK, BEIGE, BROWN, RED, GREEN, BLUE, TURNED,
     // ANTHRACITE, MUD, PUNCHED_SHEET, CARBON, STAINLESS, BRUSHED_METAL, BRUSHED_STAINLESS
@@ -39,11 +38,17 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     customLayer: {
       default: undefined,
       required: false,
+      type: [Boolean,String],
+    },
+    decimalsVisible: {
+      default: undefined,
+      required: false,
+      type: [Boolean,String],
     },
     // TYPE1 to TYPE5
     foregroundType: {
@@ -54,7 +59,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -66,18 +71,17 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: Boolean,
+      type: [Boolean,String],
     },
     pointerColor: {
       default: undefined,
       required: false,
       type: String,
     },
-    // TYPE1 through TYPE16
-    pointerType: {
+    rotateFace: {
       default: undefined,
       required: false,
-      type: String,
+      type: [Boolean,String],
     },
     size: {
       default: undefined,
@@ -87,6 +91,18 @@ export default {
         return !Number.isNaN(value);
       }
     },
+    textOrientationFixed: {
+      default: undefined,
+      required: false,
+      type: [Boolean,String],
+    },
+    value: {
+      required: true,
+      type: [Number, String],
+      validator: function (value) {
+        return !Number.isNaN(value);
+      }
+    }
   },
   data() {
     return {
@@ -95,19 +111,21 @@ export default {
   },
   methods: {
     draw: function () {
-      this.gauge = new Altimeter(this.$refs["view"], {
+      this.gauge = new Level(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
         backgroundVisible: toBoolean(this.backgroundVisible),
         customLayer: this.customLayer,
+        decimalsVisible: toBoolean(this.decimalsVisible),
         foregroundType: ForegroundType[this.foregroundType],
         foregroundVisible: toBoolean(this.foregroundVisible),
         frameDesign: FrameDesign[this.frameDesign],
         frameVisible: toBoolean(this.frameVisible),
         pointerColor: ColorDef[this.pointerColor],
-        pointerType: PointerType[this.pointerTypeLatest],
+        rotateFace: toBoolean(this.rotateFace),
         size: toNumber(this.size),
-        size: toNumber(this.size),
+        textOrientationFixed: toBoolean(this.textOrientationFixed)
       });
+      this.value && this.gauge.setValue(this.value)
     },
   },
   mounted() {
@@ -126,12 +144,12 @@ export default {
     pointerColor(newValue) {
       this.gauge && this.gauge.setPointerColor(ColorDef[newValue]);
     },
-    pointerType(newValue) {
-      this.gauge && this.gauge.setPointerType(PointerType[newValue]);
-    },
     size() {
       this.draw();
     },
+    value(newValue) {
+      this.gauge && this.gauge.setValueAnimated(newValue);
+    }
   },
 };
 </script>
