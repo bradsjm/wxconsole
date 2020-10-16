@@ -16,12 +16,25 @@ import {
 } from "steelseries";
 
 function toBoolean(value) {
-    if (undefined === value) return value;
-    switch(value.toString().toLowerCase().trim()){
-        case "true": case "yes": case "1": return true;
-        case "false": case "no": case "0": case null: return false;
-        default: return Boolean(value);
-    }
+  if (undefined === value) return value;
+  switch (
+    value
+      .toString()
+      .toLowerCase()
+      .trim()
+  ) {
+    case "true":
+    case "yes":
+    case "1":
+      return true;
+    case "false":
+    case "no":
+    case "0":
+    case null:
+      return false;
+    default:
+      return Boolean(value);
+  }
 }
 
 export default {
@@ -44,7 +57,7 @@ export default {
     backgroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     customLayer: {
       default: undefined,
@@ -53,17 +66,17 @@ export default {
     degreeScale: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     degreeScaleHalf: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     digitalFont: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     // TYPE1 to TYPE5
     foregroundType: {
@@ -74,7 +87,7 @@ export default {
     foregroundVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     // BLACK_METAL, METAL, SHINY_METAL, BRASS, STEEL, CHROME, GOLD, ANTHRACITE, TILTED_GRAY,
     // TILTED_BLACK, GLOSSY_METAL
@@ -86,7 +99,7 @@ export default {
     frameVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     fullScaleDeflectionTime: {
       default: undefined,
@@ -121,7 +134,7 @@ export default {
     lcdVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     pointerColor: {
       default: undefined,
@@ -153,29 +166,29 @@ export default {
     pointSymbolsVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     roseVisible: {
       default: undefined,
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     size: {
       default: undefined,
       required: false,
       type: [Number, String],
-      validator: function (value) {
+      validator: function(value) {
         return !Number.isNaN(value);
       },
     },
-    titleString: {
+    title: {
       default: undefined,
       required: false,
       type: String,
     },
     useColorLabels: {
       required: false,
-      type: [Boolean,String],
+      type: [Boolean, String],
     },
     // 1-360 are used for directions
     // 0 is used as a special case to indicate 'calm'
@@ -190,7 +203,7 @@ export default {
     };
   },
   methods: {
-    draw: function () {
+    draw: function() {
       this.gauge = new WindDirection(this.$refs["view"], {
         backgroundColor: BackgroundColor[this.backgroundColor],
         backgroundVisible: toBoolean(this.backgroundVisible),
@@ -216,7 +229,7 @@ export default {
         pointSymbolsVisible: toBoolean(this.pointSymbolsVisible),
         roseVisible: toBoolean(this.roseVisible),
         size: undefined === this.size ? undefined : Number(this.size),
-        titleString: this.titleString,
+        titleString: this.title,
         useColorLabels: toBoolean(this.useColorLabels),
       });
       this.value && this.gauge.setValueLatest(this.value);

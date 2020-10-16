@@ -261,7 +261,7 @@ export default {
       required: false,
       type: String,
     },
-    titleString: {
+    title: {
       default: undefined,
       required: false,
       type: String,
@@ -347,7 +347,7 @@ export default {
         thresholdRising: toBoolean(this.thresholdRising),
         thresholdVisible: toBoolean(this.thresholdVisible),
         tickLabelOrientation: TickLabelOrientation[this.tickLabelOrientation],
-        titleString: this.titleString,
+        titleString: this.title,
         trendColors: this.trendColors,
         trendVisible: toBoolean(this.trendVisible),
         unitString: this.unitString,
@@ -428,7 +428,7 @@ export default {
     thresholdVisible(newValue) {
       this.gauge && this.gauge.setThresholdVisible(newValue);
     },
-    titleString(newValue) {
+    title(newValue) {
       this.gauge && this.gauge.setTitleString(newValue);
     },
     trendVisible(newValue) {

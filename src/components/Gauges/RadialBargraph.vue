@@ -202,7 +202,7 @@ export default {
       required: false,
       type: String,
     },
-    titleString: {
+    title: {
       default: undefined,
       required: false,
       type: String,
@@ -217,7 +217,7 @@ export default {
       required: false,
       type: [Boolean, String],
     },
-    unitString: {
+    unit: {
       default: undefined,
       required: false,
       type: String,
@@ -279,10 +279,10 @@ export default {
         threshold: toNumber(this.threshold),
         thresholdRising: toBoolean(this.thresholdRising),
         tickLabelOrientation: TickLabelOrientation[this.tickLabelOrientation],
-        titleString: this.titleString,
+        titleString: this.title,
         trendColors: this.trendColors,
         trendVisible: toBoolean(this.trendVisible),
-        unitString: this.unitString,
+        unitString: this.unit,
         userLedColor: LedColor[this.userLedColor],
         userLedVisible: toBoolean(this.userLedVisible),
         valueColor: ColorDef[this.valueColor],
@@ -342,13 +342,13 @@ export default {
     thresholdRising(newValue) {
       this.gauge && this.gauge.setThresholdRising(newValue);
     },
-    titleString(newValue) {
+    title(newValue) {
       this.gauge && this.gauge.setTitleString(newValue);
     },
     trendVisible(newValue) {
       this.gauge && this.gauge.setTrendVisible(toBoolean(newValue));
     },
-    unitString(newValue) {
+    unit(newValue) {
       this.gauge && this.gauge.setUnitString(newValue);
     },
     userLedColor(newValue) {

@@ -200,12 +200,12 @@ export default {
       required: false,
       type: [Boolean, String],
     },
-    titleString: {
+    title: {
       default: undefined,
       required: false,
       type: String,
     },
-    unitString: {
+    unit: {
       default: undefined,
       required: false,
       type: String,
@@ -252,8 +252,8 @@ export default {
         threshold: toNumber(this.threshold),
         thresholdRising: toBoolean(this.thresholdRising),
         thresholdVisible: toBoolean(this.thresholdVisible),
-        titleString: this.titleString,
-        unitString: this.unitString,
+        titleString: this.title,
+        unitString: this.unit,
       });
       this.value && this.gauge.setValue(toNumber(this.value));
     },
@@ -314,10 +314,10 @@ export default {
     thresholdVisible(newValue) {
       this.gauge && this.gauge.setThresholdVisible(newValue);
     },
-    titleString(newValue) {
+    title(newValue) {
       this.gauge && this.gauge.setTitleString(newValue);
     },
-    unitString(newValue) {
+    unit(newValue) {
       this.gauge && this.gauge.setUnitString(newValue);
     },
     value(newValue) {
