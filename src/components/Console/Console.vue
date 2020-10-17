@@ -107,14 +107,14 @@ export default {
     }
   },
   methods: {
-    toggleLight: function () {
+    toggleLight: function() {
       this.backlight = !this.backlight;
     },
-    pulse: function () {
+    pulse: function() {
       this.indicator = true;
       this.$timer.restart("reset");
     },
-    reset: function () {
+    reset: function() {
       this.indicator = false;
     },
   },

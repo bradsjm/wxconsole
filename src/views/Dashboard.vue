@@ -14,7 +14,7 @@
         <v-card elevation="2" outlined>
           <v-card-title>Odometer</v-card-title>
           <v-card-text>
-            <Odometer size="80" digits="3" value="50"/>
+            <Odometer size="80" digits="3" value="50" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -23,7 +23,7 @@
         <v-card elevation="2" outlined>
           <v-card-title>Traffic Light</v-card-title>
           <v-card-text>
-            <TrafficLight width="80" height="80" green="1"/>
+            <TrafficLight width="80" height="80" green="1" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -43,7 +43,7 @@
         <v-card elevation="2" outlined>
           <v-card-title>StopWatch</v-card-title>
           <v-card-text>
-            <StopWatch size="200" run="1"/>
+            <StopWatch size="200" run="1" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -63,7 +63,7 @@
         <v-card elevation="2" outlined>
           <v-card-title>Level</v-card-title>
           <v-card-text>
-            <Level size="200" value="45" rotateFace="1"/>
+            <Level size="200" value="45" rotateFace="1" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -71,7 +71,7 @@
         <v-card elevation="2" outlined>
           <v-card-title>Horizon</v-card-title>
           <v-card-text>
-            <Horizon size="200" roll="45" pitch="10"/>
+            <Horizon size="200" roll="45" pitch="10" />
           </v-card-text>
         </v-card>
       </v-col>
@@ -109,7 +109,7 @@
 
       <v-col cols="4">
         <v-card elevation="2" outlined>
-          <v-card-title>Wind Direction</v-card-title>
+          <v-card-title>Compass</v-card-title>
           <v-card-text>
             <Compass
               :size="200"
@@ -140,23 +140,38 @@
 
 <script>
 import { mapState } from "vuex";
+import {
+  Altimeter,
+  Battery,
+  Clock,
+  Compass,
+  Horizon,
+  Led,
+  Level,
+  LightBulb,
+  Odometer,
+  Radial,
+  StopWatch,
+  TrafficLight,
+  WindDirection,
+} from "vue-steelseries";
 
 export default {
   name: "Dashboard",
   components: {
-    Altimeter: () => import("@/components/Gauges/Altimeter.vue"),
-    Battery: () => import("@/components/Gauges/Battery.vue"),
-    Clock: () => import("@/components/Gauges/Clock.vue"),
-    Compass: () => import("@/components/Gauges/Compass.vue"),
-    Horizon: () => import("@/components/Gauges/Horizon.vue"),
-    Led: () => import("@/components/Gauges/Led.vue"),
-    Level: () => import("@/components/Gauges/Level.vue"),
-    LightBulb: () => import("@/components/Gauges/LightBulb.vue"),
-    Odometer: () => import("@/components/Gauges/Odometer.vue"),
-    Radial: () => import("@/components/Gauges/Radial.vue"),
-    StopWatch: () => import("@/components/Gauges/StopWatch.vue"),
-    TrafficLight: () => import("@/components/Gauges/TrafficLight.vue"),
-    WindDirection: () => import("@/components/Gauges/WindDirection.vue"),
+    Altimeter,
+    Battery,
+    Clock,
+    Compass,
+    Horizon,
+    Led,
+    Level,
+    LightBulb,
+    Odometer,
+    Radial,
+    StopWatch,
+    TrafficLight,
+    WindDirection,
   },
   computed: {
     ...mapState(["daviswx"]),
