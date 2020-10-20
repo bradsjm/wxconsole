@@ -11,7 +11,9 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">Weather Station</v-list-item-title>
-          <v-list-item-subtitle>Oldsmar, FL</v-list-item-subtitle>
+          <v-list-item-subtitle
+            >Oldsmar, FL ({{ daviswx.temp }}&deg;F)</v-list-item-subtitle
+          >
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
@@ -47,6 +49,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "App",
   data() {
@@ -56,6 +60,9 @@ export default {
         { text: "Dashboard", icon: "mdi-view-dashboard", route: "/dashboard" },
       ],
     };
+  },
+  computed: {
+    ...mapState(["daviswx"]),
   },
 };
 </script>

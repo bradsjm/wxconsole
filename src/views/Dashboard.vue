@@ -1,38 +1,35 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-card elevation="2" outlined>
           <v-card-title>Temperature</v-card-title>
           <v-card-text>
-            <Radial size="200" :value="daviswx.temp || 0" />
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="4">
-        <v-card elevation="2" outlined>
-          <v-card-title>Compass</v-card-title>
-          <v-card-text>
-            <Compass
-              :size="200"
-              :value="daviswx.wind_dir_last + 1 || 0"
-              :rotateFace="true"
-            />
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="4">
-        <v-card elevation="2" outlined>
-          <v-card-title>Wind Direction</v-card-title>
-          <v-card-text>
-            <WindDirection
-              :size="200"
-              frameDesign="GOLD"
-              :value="daviswx.wind_dir_last + 1 || 0"
-              :average="daviswx.wind_dir_at_hi_speed_last_10_min + 1 || 0"
-              :lcdVisible="true"
+            <Radial
+              backgroundColor="BEIGE"
+              foregroundType="TYPE1"
+              frameDesign="TILTED_GRAY"
+              fullScaleDeflectionTime="4"
+              gaugeType="TYPE4"
+              knobStyle="SILVER"
+              knobType="STANDARD_KNOB"
+              labelFormat="STANDARD"
+              lcdDecimals="1"
+              lcdColor="STANDARD"
+              ledVisible="false"
+              minValue="0"
+              minMeasuredValueVisible="false"
+              maxValue="120"
+              maxMeasuredValueVisible="false"
+              niceScale="true"
+              pointerColor="RED"
+              pointerType="TYPE8"
+              size="221"
+              title="Temperature"
+              thresholdVisible="false"
+              trendVisible="false"
+              unit="°F"
+              :value="daviswx.temp || 0"
             />
           </v-card-text>
         </v-card>
@@ -43,14 +40,12 @@
 
 <script>
 import { mapState } from "vuex";
-import { Compass, Radial, WindDirection } from "vue-steelseries";
+import { Radial } from "vue-steelseries";
 
 export default {
   name: "Dashboard",
   components: {
-    Compass,
     Radial,
-    WindDirection,
   },
   computed: {
     ...mapState(["daviswx"]),
