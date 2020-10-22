@@ -39,9 +39,9 @@ export default new Vuex.Store({
   mutations: {
     daviswx(state, payload) {
       const key = payload.topic.split("/").pop();
-      const value = /^\d/.test(payload.message)
-        ? Number(payload.message)
-        : payload.message;
+      const value = isNaN(payload.message)
+        ? payload.message
+        : Number(payload.message);
       Vue.set(state.daviswx, key, value);
     },
     darksky(state, payload) {
