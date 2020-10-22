@@ -38,7 +38,7 @@
     "x": 14,
     "y": 259,
     "w": 852,
-    "h": 422
+    "h": 382
   },
   {
     "id": "9b54b59f.03ba18",
@@ -489,7 +489,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "15-Min Average",
-    "func": "// determines the average of all numeric payload values \n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst mins = 15\nconst range = mins * 60 * 1000;   // window time millisecs\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: now, value: value});\nlet total = 0\nbuffer.forEach(b => { total += b.value });\ncontext.set(msg.topic, { buffer, total });\n\nmsg.topic += `_avg_last_${mins}_min`;\nmsg.payload = Number((total/buffer.length).toFixed(3));\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.topic} = ${msg.payload}`});\n\nreturn msg;",
+    "func": "// determines the average of all numeric payload values \n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst mins = 15\nconst range = mins * 60 * 1000;   // window time millisecs\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: now, value: value});\n\nlet total = 0\nbuffer.forEach(b => { total += b.value });\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = `${topic}_avg_last_${mins}_min`;\nmsg.payload = Number((total/buffer.length).toFixed(3));\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -504,13 +504,13 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "24-Hour Min",
-    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\nlet min = ctx.min || Number.MAX_SAFE_INTEGER;\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\ncontext.set(topic, { buffer, min });\n\n// determine minimum value left in buffer\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\nmsg.topic = `${topic}_min_last_${hours}_hr`;\nmsg.payload = min\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.topic} = ${msg.payload}`});\n\nreturn msg;",
+    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\n// determine minimum value left in buffer\nlet min = Number.MAX_SAFE_INTEGER;\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\ncontext.set(topic, { buffer, min });\nmsg.topic = `${topic}_min_last_${hours}_hr`;\nmsg.payload = min\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "x": 370,
-    "y": 580,
+    "y": 560,
     "wires": [["3ba91740.ca7818"]]
   },
   {
@@ -519,13 +519,13 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "24-Hour Max",
-    "func": "// determines the max of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\nlet max = ctx.max || 0;\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\ncontext.set(topic, { buffer, max });\n\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\nmsg.topic = `${topic}_max_last_${hours}_hr`;\nmsg.payload = max\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.topic} = ${msg.payload}`});\n\nreturn msg;",
+    "func": "// determines the max of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\nlet max = 0;\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\ncontext.set(topic, { buffer, max });\nmsg.topic = `${topic}_max_last_${hours}_hr`;\nmsg.payload = max\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "x": 370,
-    "y": 640,
+    "y": 600,
     "wires": [["3ba91740.ca7818"]]
   },
   {
