@@ -1,27 +1,31 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="auto">
         <v-card elevation="2" outlined>
           <v-card-title>Wind Direction</v-card-title>
           <v-card-text>
             <Compass
-              size="240"
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
               backgroundColor="BEIGE"
               foregroundType="TYPE1"
               frameDesign="TILTED_GRAY"
               degreeScale="true"
               rotateFace="true"
-              :value="daviswx.wind_dir_last"
+              :value="daviswx.wind_dir_last || 0"
             />
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+
+      <v-col cols="auto">
         <v-card elevation="2" outlined>
           <v-card-title>Temperature</v-card-title>
           <v-card-text>
             <Radial
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
               backgroundColor="BEIGE"
               foregroundType="TYPE1"
               frameDesign="TILTED_GRAY"
@@ -40,7 +44,6 @@
               niceScale="true"
               pointerColor="RED"
               pointerType="TYPE8"
-              size="240"
               title="Temperature"
               thresholdVisible="false"
               trendVisible="true"
@@ -69,11 +72,13 @@
         </v-card>
       </v-col>
 
-      <v-col cols="3">
+      <v-col cols="auto">
         <v-card elevation="2" outlined>
           <v-card-title>Wind Speed</v-card-title>
           <v-card-text>
             <Radial
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
               backgroundColor="BEIGE"
               foregroundType="TYPE1"
               frameDesign="TILTED_GRAY"
@@ -92,7 +97,6 @@
               niceScale="true"
               pointerColor="RED"
               pointerType="TYPE8"
-              size="240"
               title="Wind Speed"
               thresholdVisible="false"
               trendVisible="false"
@@ -114,12 +118,14 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="3">
+
+      <v-col cols="auto">
         <v-card elevation="2" outlined>
           <v-card-title>Wind Rose</v-card-title>
           <v-card-text>
             <WindRose
-              size="240"
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
               title="Wind Rose"
               backgroundColor="BEIGE"
               foregroundType="TYPE1"
