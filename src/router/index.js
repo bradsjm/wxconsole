@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
@@ -12,16 +11,19 @@ const routes = [
   {
     path: "/console",
     name: "Live Console",
-    component: Home,
+    icon: "mdi-radio-tower",
+    component: () => import("../views/Home.vue"),
   },
   {
-    path: "/dashboard",
-    name: "Weather Dashboard",
-    component: () => import("../views/Dashboard.vue"),
+    path: "/gauges",
+    name: "Live Gauges",
+    icon: "mdi-view-dashboard",
+    component: () => import("../views/Gauges.vue"),
   },
 ];
 
 const router = new VueRouter({
+  mode: "history",
   routes,
 });
 

@@ -19,7 +19,7 @@
     "vue-mixin-tween": "^0.1.3",
     "vue-router": "^3.4.7",
     "vue-smoothscroll": "^0.2.0",
-    "vue-steelseries": "latest",
+    "vue-steelseries": "github:bradsjm/vue-steelseries",
     "vue-timers": "^2.0.4",
     "vue-windrose-graph": "github:bradsjm/vue-windrose-graph",
     "vue2-animate": "^2.1.4",

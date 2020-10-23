@@ -18,18 +18,18 @@
           unit="MPH"
           top="0px"
           left="0px"
-          :value="daviswx.wind_speed_last || 0"
+          :value="daviswx.wind_speed_last"
         />
         <WindDirection
           top="14px"
           left="11px"
-          :value="daviswx.wind_dir_at_hi_speed_last_10_min || 0"
+          :value="daviswx.wind_dir_at_hi_speed_last_10_min"
           :outline="true"
         />
         <WindDirection
           top="14px"
           left="11px"
-          :value="daviswx.wind_dir_last || 0"
+          :value="daviswx.wind_dir_last"
           :outline="false"
         />
       </div>
@@ -45,7 +45,7 @@
       <LineGraph
         class="graph"
         label="Wind Speed"
-        :value="daviswx.wind_speed_last || 0"
+        :value="daviswx.wind_speed_last"
         :seconds="60"
       />
       <div class="label" style="top: 211px; left: 14px; font-size: 8px">

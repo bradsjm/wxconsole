@@ -18,12 +18,12 @@
       </v-list-item>
       <v-divider></v-divider>
       <v-list nav>
-        <v-list-item link v-for="(item, i) in items" :key="i" :to="item.route">
+        <v-list-item link v-for="(item, i) in routes" :key="i" :to="item.path">
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
+            <v-list-item-title v-text="item.name"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -54,15 +54,19 @@ import { mapState } from "vuex";
 export default {
   name: "App",
   data() {
-    return {
-      items: [
-        { text: "Live Console", icon: "mdi-radio-tower", route: "/console" },
-        { text: "Dashboard", icon: "mdi-view-dashboard", route: "/dashboard" },
-      ],
-    };
+    return {};
   },
   computed: {
     ...mapState(["daviswx"]),
+    routes() {
+      let routes = [];
+      this.$router.options.routes.forEach((route) => {
+        if ("icon" in route) {
+          routes.push(route);
+        }
+      });
+      return routes;
+    },
   },
 };
 </script>
