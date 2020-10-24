@@ -28,6 +28,7 @@ export default new Vuex.Store({
       wind_dir_at_hi_speed_last_10_min: 0,
       wind_dir_last: 0,
       wind_rose_last_1_hr: [],
+      wind_run_last_24_hr: 0,
       wind_speed_avg_last_10_min: 0,
       wind_speed_hi_last_10_min: 0,
       wind_speed_last: 0,

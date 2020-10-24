@@ -185,13 +185,15 @@
           <v-card-title>Wind Rose</v-card-title>
           <v-card-text>
             <WindRose
-              style="display: block; margin: auto; padding: 0px;"
+              style="display: block; position:relative; margin: auto; padding: 0px;"
               size="201"
               title="Wind Rose"
               backgroundColor="BEIGE"
-              foregroundType="TYPE1"
+              foregroundType="TYPE4"
               frameDesign="TILTED_GRAY"
+              odometerVisible="true"
               :value="daviswx.wind_rose_last_1_hr"
+              :odometerValue="daviswx.wind_run_last_24_hr"
             />
           </v-card-text>
         </v-card>
@@ -241,13 +243,107 @@
           </v-card-text>
         </v-card>
       </v-col>
+
+      <v-col cols="auto">
+        <v-card elevation="2" outlined>
+          <v-card-title>Daily Rainfall</v-card-title>
+          <v-card-text>
+            <RadialBargraph
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
+              backgroundColor="BEIGE"
+              foregroundType="TYPE4"
+              frameDesign="TILTED_GRAY"
+              fractionalScaleDecimals="1"
+              fullScaleDeflectionTime="4"
+              gaugeType="TYPE4"
+              labelNumberFormat="FRACTIONAL"
+              labelFormat="STANDARD"
+              lcdDecimals="2"
+              lcdColor="STANDARD"
+              ledVisible="false"
+              maxValue="4"
+              minMeasuredValueVisible="false"
+              maxMeasuredValueVisible="false"
+              niceScale="false"
+              title="Rainfall"
+              thresholdVisible="false"
+              trendVisible="true"
+              unit="in"
+              :value="daviswx.rainfall_daily / 100"
+            >
+              <Section start="0" end="0.5" color="rgba(25, 112, 210, 0.4)" />
+              <Section start="0.5" end="1" color="rgba(9, 150, 224, 0.4)" />
+              <Section start="1" end="1.5" color="rgba(2, 170, 209, 0.4)" />
+              <Section start="1.5" end="2" color="rgba(0, 162, 145, 0.4)" />
+              <Section start="2" end="2.5" color="rgba(0, 158, 122, 0.4)" />
+              <Section start="2.5" end="4" color="rgba(54, 177, 56, 0.4)" />
+              <Section start="4" end="5.5" color="rgba(111, 202, 56, 0.4)" />
+              <Section start="5.5" end="6" color="rgba(248, 233, 45, 0.4)" />
+              <Section start="6" end="6.5" color="rgba(253, 142, 42, 0.4)" />
+              <Section start="6.5" end="8" color="rgba(236, 45, 45, 0.4)" />
+              <Section start="8" end="100" color="rgba(245, 109, 205, 0.4)" />
+            </RadialBargraph>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="auto">
+        <v-card elevation="2" outlined>
+          <v-card-title>Rainfall Rate</v-card-title>
+          <v-card-text>
+            <RadialBargraph
+              style="display: block; margin: auto; padding: 0px;"
+              size="201"
+              backgroundColor="BEIGE"
+              foregroundType="TYPE4"
+              frameDesign="TILTED_GRAY"
+              fractionalScaleDecimals="1"
+              fullScaleDeflectionTime="4"
+              gaugeType="TYPE4"
+              labelNumberFormat="FRACTIONAL"
+              labelFormat="STANDARD"
+              lcdDecimals="2"
+              lcdColor="STANDARD"
+              ledVisible="false"
+              maxValue="4"
+              minMeasuredValueVisible="false"
+              maxMeasuredValueVisible="true"
+              niceScale="false"
+              title="Rainfall"
+              thresholdVisible="false"
+              trendVisible="true"
+              unit="inHr"
+              :value="daviswx.rain_rate_last / 100"
+            >
+              <Section start="0" end="0.5" color="rgba(25, 112, 210, 0.4)" />
+              <Section start="0.5" end="1" color="rgba(9, 150, 224, 0.4)" />
+              <Section start="1" end="1.5" color="rgba(2, 170, 209, 0.4)" />
+              <Section start="1.5" end="2" color="rgba(0, 162, 145, 0.4)" />
+              <Section start="2" end="2.5" color="rgba(0, 158, 122, 0.4)" />
+              <Section start="2.5" end="4" color="rgba(54, 177, 56, 0.4)" />
+              <Section start="4" end="5.5" color="rgba(111, 202, 56, 0.4)" />
+              <Section start="5.5" end="6" color="rgba(248, 233, 45, 0.4)" />
+              <Section start="6" end="6.5" color="rgba(253, 142, 42, 0.4)" />
+              <Section start="6.5" end="8" color="rgba(236, 45, 45, 0.4)" />
+              <Section start="8" end="100" color="rgba(245, 109, 205, 0.4)" />
+            </RadialBargraph>
+          </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import { Area, Compass, Radial, Section } from "vue-steelseries";
+import {
+  Area,
+  Compass,
+  Radial,
+  RadialBargraph,
+  Section,
+} from "vue-steelseries";
 import WindRose from "vue-windrose-graph";
 
 export default {
@@ -256,6 +352,7 @@ export default {
     Area,
     Compass,
     Radial,
+    RadialBargraph,
     Section,
     WindRose,
   },
