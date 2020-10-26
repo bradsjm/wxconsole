@@ -192,8 +192,9 @@
               foregroundType="TYPE4"
               frameDesign="TILTED_GRAY"
               odometerVisible="true"
+              odometerDigits="4"
               :value="daviswx.wind_rose_last_1_hr"
-              :odometerValue="daviswx.wind_run_last_24_hr"
+              :odometerValue="daviswx.wind_run_today"
             />
           </v-card-text>
         </v-card>
