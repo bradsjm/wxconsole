@@ -20,6 +20,12 @@ const routes = [
     icon: "mdi-view-dashboard",
     component: () => import("../views/Gauges.vue"),
   },
+  {
+    path: "/lightning",
+    name: "Lightning Map",
+    icon: "mdi-weather-lightning",
+    component: () => import("../views/Lightning.vue"),
+  },
 ];
 
 const router = new VueRouter({
