@@ -10,33 +10,31 @@
     "id": "1bd9bc23.a9eab4",
     "type": "group",
     "z": "370e9e1.11b4462",
+    "name": "Pull Full Weather Data for MQTT Publish",
     "style": {
-      "stroke": "#999999",
-      "stroke-opacity": "1",
-      "fill": "none",
-      "fill-opacity": "1",
+      "stroke": "#0070c0",
       "label": true,
-      "label-position": "nw",
-      "color": "#a4a4a4"
+      "label-position": "n",
+      "color": "#3f3f3f"
     },
     "nodes": [
       "3a3c4999.b29156",
       "a56cb8e.7eb9348",
       "2296b91a.0a6a66",
-      "405eeff1.ecb1d",
       "4d075e2c.a70a2",
-      "c427c338.9df58",
-      "41e50547.2f575c",
       "cf5fe08.79a112",
       "83332eec.dba97",
-      "b6911347.24da6",
       "85f09747.cbbae8",
-      "3ba91740.ca7818",
       "99c1650f.dadde8",
-      "ef2a1cda.e0547"
+      "ef2a1cda.e0547",
+      "12a998f6.e862d7",
+      "c057b3a4.fa39b",
+      "422acfaf.56eb4",
+      "7380c3a5.67200c",
+      "39021eb8.7adb32"
     ],
     "x": 14,
-    "y": 259,
+    "y": 279,
     "w": 852,
     "h": 382
   },
@@ -64,22 +62,20 @@
       "d54fce86.34ad3"
     ],
     "x": 14,
-    "y": 719,
-    "w": 872,
+    "y": 699,
+    "w": 732,
     "h": 242
   },
   {
     "id": "e9b4a844.821958",
     "type": "group",
     "z": "370e9e1.11b4462",
+    "name": "Publish UDP Weather Data to MQTT",
     "style": {
-      "stroke": "#999999",
-      "stroke-opacity": "1",
-      "fill": "none",
-      "fill-opacity": "1",
       "label": true,
-      "label-position": "nw",
-      "color": "#a4a4a4"
+      "stroke": "#ffC000",
+      "label-position": "n",
+      "color": "#3f3f3f"
     },
     "nodes": [
       "f29a669e.1b5348",
@@ -90,12 +86,14 @@
       "5c5726d3.284e28",
       "f8a59b4a.6618f8",
       "e5ae377c.8bd418",
-      "7f84f019.d7af2"
+      "7f84f019.d7af2",
+      "20c24ac6.b067d6",
+      "31e96dc8.823452"
     ],
     "x": 14,
-    "y": 39,
+    "y": 19,
     "w": 852,
-    "h": 182
+    "h": 242
   },
   {
     "id": "f29a669e.1b5348",
@@ -110,7 +108,7 @@
     "group": "",
     "datatype": "utf8",
     "x": 140,
-    "y": 80,
+    "y": 140,
     "wires": [["9a9df2d7.536cd"]]
   },
   {
@@ -123,7 +121,7 @@
     "action": "obj",
     "pretty": false,
     "x": 370,
-    "y": 80,
+    "y": 140,
     "wires": [["fc92311.51807d"]]
   },
   {
@@ -138,7 +136,7 @@
     "initialize": "",
     "finalize": "",
     "x": 360,
-    "y": 123,
+    "y": 183,
     "wires": [["4da15943.367078"]]
   },
   {
@@ -156,7 +154,7 @@
     "statusVal": "",
     "statusType": "auto",
     "x": 770,
-    "y": 80,
+    "y": 60,
     "wires": []
   },
   {
@@ -164,15 +162,15 @@
     "type": "rbe",
     "z": "370e9e1.11b4462",
     "g": "e9b4a844.821958",
-    "name": "",
+    "name": "Dupe Filter",
     "func": "rbe",
     "gap": "",
     "start": "",
     "inout": "out",
     "property": "payload",
-    "x": 570,
-    "y": 123,
-    "wires": [["75bb6fa4.fd3f5", "5c5726d3.284e28", "f8a59b4a.6618f8"]]
+    "x": 350,
+    "y": 220,
+    "wires": [["20c24ac6.b067d6"]]
   },
   {
     "id": "3a3c4999.b29156",
@@ -189,7 +187,7 @@
     "proxy": "",
     "authType": "",
     "x": 140,
-    "y": 360,
+    "y": 400,
     "wires": [
       ["2296b91a.0a6a66", "4d075e2c.a70a2", "99c1650f.dadde8", "ef2a1cda.e0547"]
     ]
@@ -217,7 +215,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 140,
-    "y": 300,
+    "y": 320,
     "wires": [["3a3c4999.b29156"]]
   },
   {
@@ -231,9 +229,9 @@
     "noerr": 0,
     "initialize": "",
     "finalize": "",
-    "x": 380,
-    "y": 460,
-    "wires": [["85f09747.cbbae8", "3ba91740.ca7818"]]
+    "x": 140,
+    "y": 480,
+    "wires": [["85f09747.cbbae8", "422acfaf.56eb4"]]
   },
   {
     "id": "5c5726d3.284e28",
@@ -243,24 +241,10 @@
     "name": "Publish",
     "topic": "",
     "qos": "0",
-    "retain": "false",
-    "broker": "87a27594.e70098",
-    "x": 780,
-    "y": 124,
-    "wires": []
-  },
-  {
-    "id": "405eeff1.ecb1d",
-    "type": "mqtt out",
-    "z": "370e9e1.11b4462",
-    "g": "1bd9bc23.a9eab4",
-    "name": "Publish",
-    "topic": "",
-    "qos": "0",
     "retain": "true",
     "broker": "87a27594.e70098",
     "x": 780,
-    "y": 420,
+    "y": 120,
     "wires": []
   },
   {
@@ -277,7 +261,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 150,
-    "y": 760,
+    "y": 740,
     "wires": [["cd8d58d0.0a6618"]]
   },
   {
@@ -294,7 +278,7 @@
     "proxy": "",
     "authType": "",
     "x": 400,
-    "y": 760,
+    "y": 740,
     "wires": [["aa17fc99.652a1"]]
   },
   {
@@ -316,7 +300,7 @@
     "repair": false,
     "outputs": 1,
     "x": 410,
-    "y": 820,
+    "y": 800,
     "wires": [["c11dcd8.0a84e3", "18715655.7fd3ea", "8e3a2d51.4178"]]
   },
   {
@@ -332,7 +316,7 @@
     "complete": "true",
     "targetType": "full",
     "x": 650,
-    "y": 820,
+    "y": 800,
     "wires": []
   },
   {
@@ -345,8 +329,8 @@
     "qos": "0",
     "retain": "true",
     "broker": "87a27594.e70098",
-    "x": 780,
-    "y": 880,
+    "x": 640,
+    "y": 860,
     "wires": []
   },
   {
@@ -377,7 +361,7 @@
     "to": "",
     "reg": false,
     "x": 360,
-    "y": 880,
+    "y": 860,
     "wires": [["3e2cb131.17583e"]]
   },
   {
@@ -408,7 +392,7 @@
     "to": "",
     "reg": false,
     "x": 350,
-    "y": 920,
+    "y": 900,
     "wires": [["d54fce86.34ad3"]]
   },
   {
@@ -423,7 +407,7 @@
     "inout": "out",
     "property": "payload",
     "x": 470,
-    "y": 920,
+    "y": 900,
     "wires": [["3e2cb131.17583e"]]
   },
   {
@@ -438,22 +422,8 @@
     "initialize": "",
     "finalize": "",
     "x": 380,
-    "y": 300,
-    "wires": [["c427c338.9df58"]]
-  },
-  {
-    "id": "c427c338.9df58",
-    "type": "mqtt out",
-    "z": "370e9e1.11b4462",
-    "g": "1bd9bc23.a9eab4",
-    "name": "Publish",
-    "topic": "",
-    "qos": "0",
-    "retain": "true",
-    "broker": "2738be24.981902",
-    "x": 780,
-    "y": 300,
-    "wires": []
+    "y": 320,
+    "wires": [["39021eb8.7adb32"]]
   },
   {
     "id": "f8a59b4a.6618f8",
@@ -463,24 +433,10 @@
     "name": "Publish",
     "topic": "",
     "qos": "0",
-    "retain": "false",
-    "broker": "2738be24.981902",
-    "x": 780,
-    "y": 180,
-    "wires": []
-  },
-  {
-    "id": "41e50547.2f575c",
-    "type": "mqtt out",
-    "z": "370e9e1.11b4462",
-    "g": "1bd9bc23.a9eab4",
-    "name": "Publish",
-    "topic": "",
-    "qos": "0",
     "retain": "true",
     "broker": "2738be24.981902",
     "x": 780,
-    "y": 500,
+    "y": 182,
     "wires": []
   },
   {
@@ -495,45 +451,30 @@
     "initialize": "",
     "finalize": "",
     "x": 380,
-    "y": 520,
-    "wires": [["3ba91740.ca7818"]]
+    "y": 540,
+    "wires": [["7380c3a5.67200c"]]
   },
   {
     "id": "83332eec.dba97",
     "type": "function",
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
-    "name": "24-Hour Min",
-    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\n// determine minimum value left in buffer\nlet min = Number.MAX_SAFE_INTEGER;\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\ncontext.set(topic, { buffer, min });\nmsg.topic = `${topic}_min_last_${hours}_hr`;\nmsg.payload = min\n\nreturn msg;",
+    "name": "24-Hour Min/Max",
+    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\n// determine minimum value left in buffer\nlet min = Number.MAX_SAFE_INTEGER;\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\nlet max = 0;\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\ncontext.set(topic, { buffer, min, max });\n\nvar output = [\n    {\n        topic: `${topic}_min_last_${hours}_hr`,\n        payload: min ? min.toString() : \"\"\n    },\n    {\n        topic: `${topic}_max_last_${hours}_hr`,\n        payload: max ? max.toString() : \"\"\n    }\n]\n\nreturn [ output ];",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
-    "x": 370,
-    "y": 560,
-    "wires": [["3ba91740.ca7818"]]
-  },
-  {
-    "id": "b6911347.24da6",
-    "type": "function",
-    "z": "370e9e1.11b4462",
-    "g": "1bd9bc23.a9eab4",
-    "name": "24-Hour Max",
-    "func": "// determines the max of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\nlet max = 0;\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\ncontext.set(topic, { buffer, max });\nmsg.topic = `${topic}_max_last_${hours}_hr`;\nmsg.payload = max\n\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "x": 370,
-    "y": 600,
-    "wires": [["3ba91740.ca7818"]]
+    "x": 390,
+    "y": 580,
+    "wires": [["7380c3a5.67200c"]]
   },
   {
     "id": "85f09747.cbbae8",
     "type": "switch",
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
-    "name": "Filter",
+    "name": "Filter Objects",
     "property": "key",
     "propertyType": "msg",
     "rules": [
@@ -542,29 +483,19 @@
         "v": "dew_point.*|heat_index.*|hum.*|temp.*|thw_index|wet_bulb|wind_chill|bar_absolute|bar_sea_level|wind_speed_last",
         "vt": "str",
         "case": true
+      },
+      {
+        "t": "eq",
+        "v": "wind_speed_avg_last_1_min",
+        "vt": "str"
       }
     ],
     "checkall": "true",
     "repair": false,
-    "outputs": 1,
+    "outputs": 2,
     "x": 130,
-    "y": 520,
-    "wires": [["cf5fe08.79a112", "83332eec.dba97", "b6911347.24da6"]]
-  },
-  {
-    "id": "3ba91740.ca7818",
-    "type": "function",
-    "z": "370e9e1.11b4462",
-    "g": "1bd9bc23.a9eab4",
-    "name": "Join",
-    "func": "\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "x": 630,
-    "y": 460,
-    "wires": [["405eeff1.ecb1d", "41e50547.2f575c"]]
+    "y": 540,
+    "wires": [["cf5fe08.79a112", "83332eec.dba97"], ["12a998f6.e862d7"]]
   },
   {
     "id": "99c1650f.dadde8",
@@ -578,8 +509,8 @@
     "initialize": "",
     "finalize": "",
     "x": 400,
-    "y": 342,
-    "wires": [["3ba91740.ca7818"]]
+    "y": 362,
+    "wires": [["39021eb8.7adb32"]]
   },
   {
     "id": "ef2a1cda.e0547",
@@ -593,8 +524,8 @@
     "initialize": "",
     "finalize": "",
     "x": 400,
-    "y": 397,
-    "wires": [["3ba91740.ca7818"]]
+    "y": 417,
+    "wires": [["39021eb8.7adb32"]]
   },
   {
     "id": "e5ae377c.8bd418",
@@ -619,7 +550,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 150,
-    "y": 180,
+    "y": 80,
     "wires": [["7f84f019.d7af2"]]
   },
   {
@@ -637,8 +568,99 @@
     "proxy": "",
     "authType": "",
     "x": 380,
-    "y": 180,
+    "y": 80,
     "wires": [[]]
+  },
+  {
+    "id": "12a998f6.e862d7",
+    "type": "function",
+    "z": "370e9e1.11b4462",
+    "g": "1bd9bc23.a9eab4",
+    "name": "Wind Run Today",
+    "func": "// determines the wind run from 1 minute wind averages\n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || !msg.topic.includes(\"wind_speed_avg_last_1_min\")) return null;\n\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nlet today = new Date();\ntoday.setHours(0, 0, 0, 0);\nwhile (buffer[0] && buffer[0].timestamp < today) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: new Date(), value: value});\n\nlet total = 0\nbuffer.forEach( (b, i) => {\n    const minutes = i > 0 ? (b.timestamp - buffer[i-1].timestamp) / 60000 : 1;\n    const periods = 60 / minutes;\n    total += b.value / periods;\n});\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = msg.topic.replace(\"wind_speed_avg_last_1_min\", \"wind_run_today\");\nmsg.payload = total.toFixed(1).toString();\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}`});\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 380,
+    "y": 620,
+    "wires": [["7380c3a5.67200c"]]
+  },
+  {
+    "id": "c057b3a4.fa39b",
+    "type": "influxdb out",
+    "z": "370e9e1.11b4462",
+    "g": "1bd9bc23.a9eab4",
+    "influxdb": "9a9dcd14.d91a8",
+    "name": "InfluxDB",
+    "measurement": "",
+    "precision": "",
+    "retentionPolicy": "",
+    "x": 780,
+    "y": 480,
+    "wires": []
+  },
+  {
+    "id": "422acfaf.56eb4",
+    "type": "function",
+    "z": "370e9e1.11b4462",
+    "g": "1bd9bc23.a9eab4",
+    "name": "Set Measure",
+    "func": "if (!msg.payload) return null;\n\nmsg.measurement = msg.key\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 370,
+    "y": 480,
+    "wires": [["c057b3a4.fa39b"]]
+  },
+  {
+    "id": "20c24ac6.b067d6",
+    "type": "link out",
+    "z": "370e9e1.11b4462",
+    "g": "e9b4a844.821958",
+    "name": "Publish",
+    "links": ["31e96dc8.823452"],
+    "x": 540,
+    "y": 220,
+    "wires": [],
+    "l": true
+  },
+  {
+    "id": "31e96dc8.823452",
+    "type": "link in",
+    "z": "370e9e1.11b4462",
+    "g": "e9b4a844.821958",
+    "name": "to MQTT",
+    "links": ["20c24ac6.b067d6", "7380c3a5.67200c", "39021eb8.7adb32"],
+    "x": 635,
+    "y": 120,
+    "wires": [["75bb6fa4.fd3f5", "5c5726d3.284e28", "f8a59b4a.6618f8"]]
+  },
+  {
+    "id": "7380c3a5.67200c",
+    "type": "link out",
+    "z": "370e9e1.11b4462",
+    "g": "1bd9bc23.a9eab4",
+    "name": "Publish",
+    "links": ["31e96dc8.823452"],
+    "x": 780,
+    "y": 580,
+    "wires": [],
+    "l": true
+  },
+  {
+    "id": "39021eb8.7adb32",
+    "type": "link out",
+    "z": "370e9e1.11b4462",
+    "g": "1bd9bc23.a9eab4",
+    "name": "Publish",
+    "links": ["31e96dc8.823452"],
+    "x": 780,
+    "y": 360,
+    "wires": [],
+    "l": true
   },
   {
     "id": "87a27594.e70098",
@@ -681,5 +703,16 @@
     "willTopic": "",
     "willQos": "0",
     "willPayload": ""
+  },
+  {
+    "id": "9a9dcd14.d91a8",
+    "type": "influxdb",
+    "hostname": "10.10.10.20",
+    "port": "8086",
+    "protocol": "http",
+    "database": "weather",
+    "name": "WeatherDB",
+    "usetls": false,
+    "tls": ""
   }
 ]
