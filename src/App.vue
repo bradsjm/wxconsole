@@ -5,6 +5,11 @@
         class="hidden-sm-and-down font-weight-bold"
         v-text="$route.name"
       />
+      <v-spacer />
+      <WindCircle
+        :value="daviswx.wind_dir_last"
+        style="width: 50px; height: 50px;"
+      />
     </v-app-bar>
 
     <v-navigation-drawer app permanent width="200">
@@ -50,9 +55,13 @@
 
 <script>
 import { mapState } from "vuex";
+import WindCircle from "@/components/WindCircle.vue";
 
 export default {
   name: "App",
+  components: {
+    WindCircle,
+  },
   data() {
     return {};
   },
