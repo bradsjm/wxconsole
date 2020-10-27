@@ -21,6 +21,12 @@ const routes = [
     component: () => import("../views/Gauges.vue"),
   },
   {
+    path: "/radar",
+    name: "Radar Map",
+    icon: "mdi-radar",
+    component: () => import("../views/Radar.vue"),
+  },
+  {
     path: "/lightning",
     name: "Lightning Map",
     icon: "mdi-weather-lightning",
