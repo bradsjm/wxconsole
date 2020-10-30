@@ -32,6 +32,16 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2 text-center">
+          <v-icon>mdi-github</v-icon>&nbsp;
+          <a
+            style="text-decoration: none"
+            href="https://github.com/bradsjm/wxconsole"
+            >Source Code</a
+          >
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-main>
@@ -39,17 +49,6 @@
       <router-view :key="$route.path" />
       <!-- </transition> -->
     </v-main>
-
-    <v-footer app padless class="font-weight-small">
-      <v-col class="text-right" cols="12">
-        <v-icon>mdi-github</v-icon>&nbsp;
-        <a
-          style="text-decoration: none"
-          href="https://github.com/bradsjm/wxconsole"
-          >Source Code</a
-        >
-      </v-col>
-    </v-footer>
   </v-app>
 </template>
 

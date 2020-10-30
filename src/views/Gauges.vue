@@ -2,8 +2,12 @@
   <v-container fluid>
     <v-row>
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Temperature</v-card-title>
+        <v-card>
+          <v-card-title>
+            Temperature
+            <v-spacer />
+            <v-icon>mdi-thermometer</v-icon>
+          </v-card-title>
           <v-card-text>
             <Radial
               style="display: block; margin: auto; padding: 0px;"
@@ -55,8 +59,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Humidity</v-card-title>
+        <v-card>
+          <v-card-title>
+            Humidity
+            <v-spacer />
+            <v-icon>mdi-water-percent</v-icon>
+          </v-card-title>
           <v-card-text>
             <Radial
               style="display: block; margin: auto; padding: 0px;"
@@ -107,8 +115,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Wind Direction</v-card-title>
+        <v-card>
+          <v-card-title>
+            Wind Direction
+            <v-spacer />
+            <v-icon>mdi-compass</v-icon>
+          </v-card-title>
           <v-card-text>
             <Compass
               style="display: block; margin: auto; padding: 0px;"
@@ -127,8 +139,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Wind Speed</v-card-title>
+        <v-card>
+          <v-card-title>
+            Wind Speed
+            <v-spacer />
+            <v-icon>mdi-weather-windy</v-icon>
+          </v-card-title>
           <v-card-text>
             <Radial
               style="display: block; margin: auto; padding: 0px;"
@@ -181,8 +197,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Wind Rose</v-card-title>
+        <v-card>
+          <v-card-title>
+            Wind Rose
+            <v-spacer />
+            <v-icon>mdi-weather-windy-variant</v-icon>
+          </v-card-title>
           <v-card-text>
             <WindRose
               style="display: block; position:relative; margin: auto; padding: 0px;"
@@ -201,8 +221,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Barometer</v-card-title>
+        <v-card>
+          <v-card-title>
+            Barometer
+            <v-spacer />
+            <v-icon>mdi-gauge</v-icon>
+          </v-card-title>
           <v-card-text>
             <Radial
               style="display: block; margin: auto; padding: 0px;"
@@ -246,8 +270,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Daily Rainfall</v-card-title>
+        <v-card>
+          <v-card-title>
+            Daily Rainfall
+            <v-spacer />
+            <v-icon>mdi-weather-rainy</v-icon>
+          </v-card-title>
           <v-card-text>
             <RadialBargraph
               style="display: block; margin: auto; padding: 0px;"
@@ -290,8 +318,12 @@
       </v-col>
 
       <v-col cols="auto">
-        <v-card elevation="2" outlined>
-          <v-card-title>Rainfall Rate</v-card-title>
+        <v-card>
+          <v-card-title>
+            Rainfall Rate
+            <v-spacer />
+            <v-icon>mdi-weather-pouring</v-icon>
+          </v-card-title>
           <v-card-text>
             <RadialBargraph
               style="display: block; margin: auto; padding: 0px;"

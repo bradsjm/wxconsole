@@ -5,11 +5,9 @@
       style="max-width: 100%; max-height: 100%;"
       :style="style"
     />
-    <transition name="fade">
-      <span class="centered" style="font-size: small;">
-        {{ direction }}
-      </span>
-    </transition>
+    <span class="centered" style="font-size: small;">
+      {{ direction }}
+    </span>
   </div>
 </template>
 
