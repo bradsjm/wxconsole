@@ -198,15 +198,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "Every minute",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "61",
     "crontab": "",
     "once": true,
@@ -289,13 +281,7 @@
     "name": "Check payload is JSON",
     "property": "payload",
     "propertyType": "msg",
-    "rules": [
-      {
-        "t": "istype",
-        "v": "object",
-        "vt": "object"
-      }
-    ],
+    "rules": [{ "t": "istype", "v": "object", "vt": "object" }],
     "checkall": "true",
     "repair": false,
     "outputs": 1,
@@ -445,7 +431,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "15-Min Average",
-    "func": "// determines the average of all numeric payload values \n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst mins = 15\nconst range = mins * 60 * 1000;   // window time millisecs\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: now, value: value});\n\nlet total = 0\nbuffer.forEach(b => { total += b.value });\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = `${topic}_avg_last_${mins}_min`;\nmsg.payload = Number((total/buffer.length).toFixed(3));\n\nreturn msg;",
+    "func": "// determines the average of all numeric payload values \n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst mins = 15\nconst range = mins * 60 * 1000;   // window time millisecs\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst buffer = ctx.buffer || [];\nconst now = new Date().getTime();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer.length && buffer[0].timestamp < now - range) {\n    node.warn(`removing oldest ${buffer[0].timestamp}`);\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: now, value: value});\n\nlet total = 0\nbuffer.forEach(b => { total += b.value });\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = `${topic}_avg_last_${mins}_min`;\nmsg.payload = Number((total/buffer.length).toFixed(3));\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -460,7 +446,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "24-Hour Min/Max",
-    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\n// determine minimum value left in buffer\nlet min = Number.MAX_SAFE_INTEGER;\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\nlet max = 0;\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\ncontext.set(topic, { buffer, min, max });\n\nvar output = [\n    {\n        topic: `${topic}_min_last_${hours}_hr`,\n        payload: min ? min.toString() : \"\"\n    },\n    {\n        topic: `${topic}_max_last_${hours}_hr`,\n        payload: max ? max.toString() : \"\"\n    }\n]\n\nreturn [ output ];",
+    "func": "// determines the min of all numeric payload \n// values passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || msg.topic.includes(\"avg\")) return null;\n\nconst hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\nconst topic = msg.topic.replace(\"_last\", \"\");\nconst ctx = context.get(topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst now = new Date().getTime();\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nwhile (buffer.length && buffer[0].timestamp < now - range) {\n    buffer.shift();\n}\n\n// add the new sample to the end, eliminate duplicates\nif (buffer.length && buffer[buffer.length-1].value == value) {\n    buffer[buffer.length-1].timestamp = now\n} else {\n    buffer.push({timestamp: now, value: value});\n}\n\n// determine minimum value left in buffer\nlet min = Number.MAX_SAFE_INTEGER;\nbuffer.forEach(e => {\n    if (e.value < min) min = e.value\n})\n\nlet max = 0;\n// determine the maximum value left in the buffer\nbuffer.forEach(e => {\n    if (e.value > max) max = e.value\n})\n\ncontext.set(topic, { buffer, min, max });\n\nvar output = [\n    {\n        topic: `${topic}_min_last_${hours}_hr`,\n        payload: min ? min.toString() : \"\"\n    },\n    {\n        topic: `${topic}_max_last_${hours}_hr`,\n        payload: max ? max.toString() : \"\"\n    }\n]\n\nreturn [ output ];",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -484,11 +470,7 @@
         "vt": "str",
         "case": true
       },
-      {
-        "t": "eq",
-        "v": "wind_speed_avg_last_1_min",
-        "vt": "str"
-      }
+      { "t": "eq", "v": "wind_speed_avg_last_1_min", "vt": "str" }
     ],
     "checkall": "true",
     "repair": false,
@@ -503,7 +485,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "1 Hour Rose Gauge",
-    "func": "const hours = 1\nconst range = hours * 3600 * 1000;   // window time millisecs\n\nconst conditions = msg.payload.data.conditions[0];\nconst txid = conditions.txid;\nconst did = msg.payload.data.did;\n\nconst buffer = context.get(\"buffer\") || [];\nconst now = new Date();\nconst dir = conditions.wind_dir_scalar_avg_last_1_min;\nconst speed = conditions.wind_speed_avg_last_1_min;\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    //node.warn(`removing oldest ${buffer[0].timestamp}`);\n    buffer.shift();\n}\n\n// calculate bucket (convert to 16 positions)\nconst bucket = Math.floor((dir / 22.5) + 0.5) % 16;\n\n// add the new sample to the end\nbuffer.push({timestamp: now, bucket, speed});\ncontext.set(\"buffer\", buffer);\n\n// calculate 16 directions\nconst result = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\nbuffer.forEach(e => {\n    if (e.speed > result[e.bucket]) result[e.bucket] = e.speed; \n})\n\nmsg.topic = `daviswx/${did}/${txid}/wind_rose_last_${hours}_hr`;\nmsg.payload = result.toString()\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}`});\n\nreturn msg;",
+    "func": "const hours = 1\nconst range = hours * 3600 * 1000;   // window time millisecs\n\nconst conditions = msg.payload.data.conditions[0];\nconst txid = conditions.txid;\nconst did = msg.payload.data.did;\n\nconst buffer = context.get(\"buffer\") || [];\nconst now = new Date().getTime();\nconst dir = conditions.wind_dir_scalar_avg_last_1_min;\nconst speed = conditions.wind_speed_avg_last_1_min;\n\n// remove any samples that are too old\nwhile (buffer.length && buffer[0].timestamp < now - range) {\n    node.warn(`removing oldest ${buffer[0].timestamp}`);\n    buffer.shift();\n}\n\n// calculate bucket (convert to 16 positions)\nconst bucket = Math.floor((dir / 22.5) + 0.5) % 16;\n\n// add the new sample to the end\nbuffer.push({timestamp: now, bucket, speed});\ncontext.set(\"buffer\", buffer);\n\n// calculate 16 directions\nconst result = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\nbuffer.forEach(e => {\n    if (e.speed > result[e.bucket]) result[e.bucket] = e.speed; \n})\n\nmsg.topic = `daviswx/${did}/${txid}/wind_rose_last_${hours}_hr`;\nmsg.payload = result.toString()\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}`});\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -518,7 +500,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "24 Hour Rose Gauge",
-    "func": "const hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\n\nconst conditions = msg.payload.data.conditions[0];\nconst txid = conditions.txid;\nconst did = msg.payload.data.did;\n\nconst buffer = context.get(\"buffer\") || [];\nconst now = new Date();\nconst dir = conditions.wind_dir_scalar_avg_last_1_min;\nconst speed = conditions.wind_speed_avg_last_1_min;\n\n// remove any samples that are too old\nwhile (buffer[0] && buffer[0].timestamp < now - range) {\n    //node.warn(`removing oldest ${buffer[0].timestamp}`);\n    buffer.shift();\n}\n\n// calculate bucket (convert to 16 positions)\nconst bucket = Math.floor((dir / 22.5) + 0.5) % 16;\n\n// add the new sample to the end\nbuffer.push({timestamp: now, bucket, speed});\ncontext.set(\"buffer\", buffer);\n\n// calculate 16 directions\nconst result = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\nbuffer.forEach(e => {\n    if (e.speed > result[e.bucket]) result[e.bucket] = e.speed; \n})\n\nmsg.topic = `daviswx/${did}/${txid}/wind_rose_last_${hours}_hr`;\nmsg.payload = result.toString()\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}`});\n\nreturn msg;",
+    "func": "const hours = 24\nconst range = hours * 3600 * 1000;   // window time millisecs\n\nconst conditions = msg.payload.data.conditions[0];\nconst txid = conditions.txid;\nconst did = msg.payload.data.did;\n\nconst buffer = context.get(\"buffer\") || [];\nconst now = new Date().getTime();\nconst dir = conditions.wind_dir_scalar_avg_last_1_min;\nconst speed = conditions.wind_speed_avg_last_1_min;\n\n// remove any samples that are too old\nwhile (buffer.length && buffer[0].timestamp < now - range) {\n    //node.warn(`removing oldest ${buffer[0].timestamp}`);\n    buffer.shift();\n}\n\n// calculate bucket (convert to 16 positions)\nconst bucket = Math.floor((dir / 22.5) + 0.5) % 16;\n\n// add the new sample to the end\nbuffer.push({timestamp: now, bucket, speed});\ncontext.set(\"buffer\", buffer);\n\n// calculate 16 directions\nconst result = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]\nbuffer.forEach(e => {\n    if (e.speed > result[e.bucket]) result[e.bucket] = e.speed; \n})\n\nmsg.topic = `daviswx/${did}/${txid}/wind_rose_last_${hours}_hr`;\nmsg.payload = result.toString()\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}`});\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
@@ -533,15 +515,7 @@
     "z": "370e9e1.11b4462",
     "g": "e9b4a844.821958",
     "name": "Every 15 minutes",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "900",
     "crontab": "",
     "once": true,
@@ -577,7 +551,7 @@
     "z": "370e9e1.11b4462",
     "g": "1bd9bc23.a9eab4",
     "name": "Wind Run Today",
-    "func": "// determines the wind run from 1 minute wind averages\n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || !msg.topic.includes(\"wind_speed_avg_last_1_min\")) return null;\n\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nlet today = new Date();\ntoday.setHours(0, 0, 0, 0);\nwhile (buffer[0] && buffer[0].timestamp < today) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: new Date(), value: value});\n\nvar total = 0\nbuffer.forEach( (b, i) => {\n    const minutes = i > 0 ? (b.timestamp - buffer[i-1].timestamp) / 60000 : 1;\n    if (minutes) {\n        const periods = 60 / minutes;\n        total += b.value / periods;\n    }\n});\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = msg.topic.replace(\"wind_speed_avg_last_1_min\", \"wind_run_today\");\nmsg.payload = total.toFixed(1).toString();\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}` });\n\nreturn msg;",
+    "func": "// determines the wind run from 1 minute wind averages\n// passed in over the specified time range\n\nif (Number.isNaN(msg.payload) || !msg.topic.includes(\"wind_speed_avg_last_1_min\")) return null;\n\nconst ctx = context.get(msg.topic || \"default\") || {};\nconst buffer = ctx.buffer || [];\nconst value = Number(msg.payload);\n\n// remove any samples that are too old\nlet today = new Date();\ntoday.setHours(0, 0, 0, 0);\ntoday = today.getTime();\nwhile (buffer.length && buffer[0].timestamp < today) {\n    buffer.shift();\n}\n\n// add the new sample to the end\nbuffer.push({timestamp: new Date().getTime(), value: value});\n\nvar total = 0\nbuffer.forEach( (b, i) => {\n    const minutes = i > 0 ? (b.timestamp - buffer[i-1].timestamp) / 60000 : 1;\n    if (minutes) {\n        const periods = 60 / minutes;\n        total += b.value / periods;\n    }\n});\n\ncontext.set(msg.topic, { buffer, total });\nmsg.topic = msg.topic.replace(\"wind_speed_avg_last_1_min\", \"wind_run_today\");\nmsg.payload = total.toFixed(1).toString();\nnode.status({fill:\"green\", shape:\"dot\", text: `${msg.payload}` });\n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "initialize": "",
