@@ -1,25 +1,25 @@
 <template>
-  <v-container fluid>
-    <v-row>
-      <div v-for="card in cards" :key="card.name">
-        <v-col cols="auto">
-          <v-card>
-            <v-card-title>
-              {{ card.name }}
-              <v-spacer />
-              <v-icon>{{ card.icon }}</v-icon>
-            </v-card-title>
-            <v-card-text>
-              <component v-bind:is="card.component"></component>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </div>
-    </v-row>
+  <v-container>
+    <draggable v-model="cards" class="row wrap">
+      <v-col cols="auto" v-for="card in cards" :key="card.name">
+        <v-card>
+          <v-card-title>
+            {{ card.name }}
+            <v-spacer />
+            <v-icon>{{ card.icon }}</v-icon>
+          </v-card-title>
+          <v-card-text>
+            <component v-bind:is="card.component"></component>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </draggable>
   </v-container>
 </template>
 
 <script>
+import draggable from "vuedraggable";
+
 import TemperatureCard from "@/components/Cards/TemperatureCard";
 import HumidityCard from "@/components/Cards/HumidityCard";
 import WindDirectionCard from "@/components/Cards/WindDirectionCard";
@@ -32,6 +32,7 @@ import RainfallRateCard from "@/components/Cards/RainfallRateCard";
 export default {
   name: "Dashboard",
   components: {
+    draggable,
     BarometerCard,
     DailyRainCard,
     HumidityCard,
