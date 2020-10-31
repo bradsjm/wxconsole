@@ -18,7 +18,7 @@ import { mapState } from "vuex";
 import { Compass } from "vue-steelseries";
 
 export default {
-  name: "WindDirection",
+  name: "WindDirectionCard",
   components: {
     Compass,
   },

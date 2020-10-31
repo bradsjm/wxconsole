@@ -51,7 +51,7 @@ import { mapState } from "vuex";
 import { Area, Radial, Section } from "vue-steelseries";
 
 export default {
-  name: "Temperature",
+  name: "TemperatureCard",
   components: {
     Area,
     Radial,

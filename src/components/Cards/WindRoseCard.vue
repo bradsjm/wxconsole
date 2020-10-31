@@ -18,7 +18,7 @@ import { mapState } from "vuex";
 import WindRose from "vue-windrose-graph";
 
 export default {
-  name: "WindRose",
+  name: "WindRoseCard",
   components: {
     WindRose,
   },

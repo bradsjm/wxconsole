@@ -43,7 +43,7 @@ import { mapState } from "vuex";
 import { Area, Radial } from "vue-steelseries";
 
 export default {
-  name: "Barometer",
+  name: "BarometerCard",
   components: {
     Area,
     Radial,

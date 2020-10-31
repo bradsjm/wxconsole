@@ -15,13 +15,13 @@
     ledVisible="false"
     maxValue="4"
     minMeasuredValueVisible="false"
-    maxMeasuredValueVisible="false"
+    maxMeasuredValueVisible="true"
     niceScale="false"
     title="Rainfall"
     thresholdVisible="false"
     trendVisible="true"
-    unit="in"
-    :value="daviswx.rainfall_daily / 100"
+    unit="inHr"
+    :value="daviswx.rain_rate_last / 100"
   >
     <Section start="0" end="0.5" color="rgba(25, 112, 210, 0.4)" />
     <Section start="0.5" end="1" color="rgba(9, 150, 224, 0.4)" />
@@ -42,7 +42,7 @@ import { mapState } from "vuex";
 import { Section, RadialBargraph } from "vue-steelseries";
 
 export default {
-  name: "DailyRain",
+  name: "RainfallRateCard",
   components: {
     Section,
     RadialBargraph,

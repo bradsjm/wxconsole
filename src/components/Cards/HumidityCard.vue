@@ -50,7 +50,7 @@ import { mapState } from "vuex";
 import { Area, Radial, Section } from "vue-steelseries";
 
 export default {
-  name: "Humidity",
+  name: "HumidityCard",
   components: {
     Area,
     Radial,

@@ -52,7 +52,7 @@ import { mapState } from "vuex";
 import { Area, Radial, Section } from "vue-steelseries";
 
 export default {
-  name: "WindSpeed",
+  name: "WindSpeedCard",
   components: {
     Area,
     Radial,
