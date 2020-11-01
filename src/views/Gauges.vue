@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <draggable v-model="cards" class="row wrap">
+    <draggable v-model="cards" class="row wrap" @end="save">
       <v-col cols="auto" v-for="card in cards" :key="card.name">
         <v-card>
           <v-card-title>
@@ -48,41 +48,65 @@ export default {
         {
           name: "Temperature",
           icon: "mdi-thermometer",
-          component: TemperatureCard,
+          component: "TemperatureCard",
         },
         {
           name: "Humidity",
           icon: "mdi-water-percent",
-          component: HumidityCard,
+          component: "HumidityCard",
         },
         {
           name: "Wind Direction",
           icon: "mdi-compass",
-          component: WindDirectionCard,
+          component: "WindDirectionCard",
         },
         {
           name: "Wind Speed",
           icon: "mdi-weather-windy",
-          component: WindSpeedCard,
+          component: "WindSpeedCard",
         },
         {
           name: "Wind Rose",
           icon: "mdi-weather-windy-variant",
-          component: WindRoseCard,
+          component: "WindRoseCard",
         },
-        { name: "Barometer", icon: "mdi-gauge", component: BarometerCard },
+        {
+          name: "Barometer",
+          icon: "mdi-gauge",
+          component: "BarometerCard",
+        },
         {
           name: "Daily Rain",
           icon: "mdi-weather-rainy",
-          component: DailyRainCard,
+          component: "DailyRainCard",
         },
         {
           name: "Rainfall Rate",
           icon: "mdi-weather-pouring",
-          component: RainfallRateCard,
+          component: "RainfallRateCard",
         },
       ],
     };
+  },
+  methods: {
+    load(cards) {
+      if (cards.length != this.cards.length) return;
+      this.cards = cards
+        .map((name) => {
+          return this.cards.find((c) => c.name == name);
+        })
+        .filter((v) => v); // remove any non-matches
+    },
+    save() {
+      localStorage.dashboardCards = JSON.stringify(
+        this.cards.map((c) => c.name)
+      );
+    },
+  },
+  mounted() {
+    if (localStorage.dashboardCards) {
+      this.load(JSON.parse(localStorage.dashboardCards));
+    }
   },
 };
 </script>
