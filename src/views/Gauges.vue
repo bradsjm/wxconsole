@@ -3,7 +3,7 @@
     <draggable v-model="cards" class="row wrap" @end="save">
       <v-col cols="auto" v-for="card in cards" :key="card.name">
         <v-card>
-          <v-card-title>
+          <v-card-title :class="card.titleClass">
             {{ card.name }}
             <v-spacer />
             <v-icon>{{ card.icon }}</v-icon>
@@ -49,41 +49,49 @@ export default {
           name: "Temperature",
           icon: "mdi-thermometer",
           component: "TemperatureCard",
+          titleClass: "primary--text",
         },
         {
           name: "Humidity",
           icon: "mdi-water-percent",
           component: "HumidityCard",
+          titleClass: "primary--text",
         },
         {
           name: "Wind Direction",
           icon: "mdi-compass",
           component: "WindDirectionCard",
+          titleClass: "primary--text",
         },
         {
           name: "Wind Speed",
           icon: "mdi-weather-windy",
           component: "WindSpeedCard",
+          titleClass: "primary--text",
         },
         {
           name: "Wind Rose",
           icon: "mdi-weather-windy-variant",
           component: "WindRoseCard",
+          titleClass: "primary--text",
         },
         {
           name: "Barometer",
           icon: "mdi-gauge",
           component: "BarometerCard",
+          titleClass: "primary--text",
         },
         {
           name: "Daily Rain",
           icon: "mdi-weather-rainy",
           component: "DailyRainCard",
+          titleClass: "blue--text",
         },
         {
           name: "Rainfall Rate",
           icon: "mdi-weather-pouring",
           component: "RainfallRateCard",
+          titleClass: "blue--text",
         },
       ],
     };

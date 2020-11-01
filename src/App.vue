@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app height="67">
+    <v-app-bar app dense>
       <v-toolbar-title
-        class="hidden-sm-and-down font-weight-bold"
+        class="hidden-sm-and-down font-weight-bold primary--text"
         v-text="$route.name"
       />
       <v-spacer />
@@ -12,11 +12,13 @@
       />
     </v-app-bar>
 
-    <v-navigation-drawer app permanent width="200">
+    <v-navigation-drawer app permanent>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title">Weather Station</v-list-item-title>
-          <v-list-item-subtitle
+          <v-list-item-title class="title secondary--text"
+            >Weather Station</v-list-item-title
+          >
+          <v-list-item-subtitle class="info--text"
             >Oldsmar, FL ({{ daviswx.temp }}&deg;F)</v-list-item-subtitle
           >
         </v-list-item-content>
